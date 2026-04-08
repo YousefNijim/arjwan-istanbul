@@ -1,0 +1,142 @@
+export type Language = 'ar' | 'en' | 'tr';
+
+export const translations = {
+  // Navigation
+  nav: {
+    home: { ar: 'الرئيسية', en: 'Home', tr: 'Ana Sayfa' },
+    perfumes: { ar: 'العطور', en: 'Perfumes', tr: 'Parfümler' },
+    aboutUs: { ar: 'من نحن', en: 'About Us', tr: 'Hakkımızda' },
+    aboutOils: { ar: 'عن الزيوت', en: 'About Oils', tr: 'Yağlar Hakkında' },
+    contact: { ar: 'اتصل بنا', en: 'Contact', tr: 'İletişim' },
+    cart: { ar: 'السلة', en: 'Cart', tr: 'Sepet' },
+  },
+  // Hero
+  hero: {
+    tagline: {
+      ar: 'روح إسطنبول في كل قطرة',
+      en: 'The Spirit of Istanbul in Every Drop',
+      tr: 'Her Damlada İstanbul\'un Ruhu',
+    },
+    shopNow: { ar: 'تسوق الآن', en: 'Shop Now', tr: 'Şimdi Alışveriş Yap' },
+    discover: { ar: 'اكتشف المجموعة', en: 'Discover Collection', tr: 'Koleksiyonu Keşfet' },
+  },
+  // Sections
+  sections: {
+    featured: { ar: 'العطور المميزة', en: 'Featured Perfumes', tr: 'Öne Çıkan Parfümler' },
+    categories: { ar: 'التصنيفات', en: 'Categories', tr: 'Kategoriler' },
+    men: { ar: 'رجالي', en: 'Men', tr: 'Erkek' },
+    women: { ar: 'نسائي', en: 'Women', tr: 'Kadın' },
+    inspired: { ar: 'مستوحاة من أرقى العطور العالمية', en: 'Inspired by Global Fragrances', tr: 'Dünya Parfümlerinden İlham Alındı' },
+    inspiredDesc: {
+      ar: 'نختار أجود المكونات من جميع أنحاء العالم لنصنع عطوراً تنافس أشهر العلامات التجارية الفاخرة',
+      en: 'We select the finest ingredients from around the world to craft fragrances that rival the most prestigious luxury brands',
+      tr: 'Dünyanın en prestijli lüks markalarıyla yarışan kokular yaratmak için dünyanın dört bir yanından en kaliteli malzemeleri seçiyoruz',
+    },
+    brandStory: { ar: 'قصة العلامة', en: 'Brand Story', tr: 'Marka Hikayesi' },
+    brandStoryTitle: { ar: 'روح إسطنبول', en: 'The Spirit of Istanbul', tr: 'İstanbul\'un Ruhu' },
+    brandStoryText: {
+      ar: 'أرجوان إسطنبول ولدت من شغف بالعطور الفاخرة وحب لمدينة إسطنبول الساحرة. نمزج بين التراث الشرقي العريق وأناقة العصر الحديث لنقدم لكم عطوراً استثنائية تحكي قصة كل لحظة',
+      en: 'Arjwan Istanbul was born from a passion for luxury fragrances and a love for the enchanting city of Istanbul. We blend the rich Eastern heritage with modern elegance to present you exceptional perfumes that tell the story of every moment',
+      tr: 'Arjwan İstanbul, lüks parfümlere olan tutkudan ve büyüleyici İstanbul şehrine olan sevgiden doğdu. Zengin Doğu mirasını modern zarafetle harmanlayarak her anın hikayesini anlatan olağanüstü parfümler sunuyoruz',
+    },
+    newsletter: { ar: 'النشرة البريدية', en: 'Newsletter', tr: 'Bülten' },
+    newsletterDesc: { ar: 'اشترك للحصول على أحدث العروض', en: 'Subscribe for latest offers', tr: 'En son teklifler için abone olun' },
+    subscribe: { ar: 'اشترك', en: 'Subscribe', tr: 'Abone Ol' },
+    email: { ar: 'بريدك الإلكتروني', en: 'Your email', tr: 'E-posta adresiniz' },
+    testimonials: { ar: 'آراء العملاء', en: 'Testimonials', tr: 'Müşteri Yorumları' },
+  },
+  // Products
+  products: {
+    viewDetails: { ar: 'عرض التفاصيل', en: 'View Details', tr: 'Detayları Gör' },
+    addToCart: { ar: 'أضف إلى السلة', en: 'Add to Cart', tr: 'Sepete Ekle' },
+    concentration: { ar: 'التركيز', en: 'Concentration', tr: 'Konsantrasyon' },
+    heavy: { ar: 'ثقيل (35% زيت)', en: 'Heavy (35% oil)', tr: 'Ağır (35% yağ)' },
+    medium: { ar: 'متوسط (25% زيت)', en: 'Medium (25% oil)', tr: 'Orta (25% yağ)' },
+    light: { ar: 'خفيف (20% زيت)', en: 'Light (20% oil)', tr: 'Hafif (20% yağ)' },
+    size: { ar: 'الحجم', en: 'Size', tr: 'Boyut' },
+    quantity: { ar: 'الكمية', en: 'Quantity', tr: 'Miktar' },
+    notes: { ar: 'المكونات', en: 'Notes', tr: 'Notalar' },
+    topNotes: { ar: 'المقدمة', en: 'Top Notes', tr: 'Üst Notalar' },
+    middleNotes: { ar: 'القلب', en: 'Middle Notes', tr: 'Orta Notalar' },
+    baseNotes: { ar: 'القاعدة', en: 'Base Notes', tr: 'Alt Notalar' },
+    filterAll: { ar: 'الكل', en: 'All', tr: 'Tümü' },
+    search: { ar: 'ابحث عن عطر...', en: 'Search perfume...', tr: 'Parfüm ara...' },
+    description: { ar: 'الوصف', en: 'Description', tr: 'Açıklama' },
+  },
+  // Brands sidebar
+  brands: {
+    filterBy: { ar: 'تصفية حسب', en: 'Filter By', tr: 'Filtrele' },
+    inspiration: { ar: 'الإلهام', en: 'Inspiration', tr: 'İlham' },
+    allBrands: { ar: 'جميع العلامات', en: 'All Brands', tr: 'Tüm Markalar' },
+    brandsBtn: { ar: 'العلامات', en: 'Brands', tr: 'Markalar' },
+    clear: { ar: 'مسح', en: 'Clear', tr: 'Temizle' },
+    selected: { ar: 'المحدد', en: 'Selected', tr: 'Seçili' },
+    forMen: { ar: 'للرجال', en: 'FOR MEN', tr: 'ERKEKLER İÇİN' },
+    forWomen: { ar: 'للنساء', en: 'FOR WOMEN', tr: 'KADINLAR İÇİN' },
+    inspiredBy: { ar: 'مستوحى من', en: 'Inspired by', tr: 'İlham Alınan' },
+    comingSoon: { ar: 'قريباً', en: 'Coming Soon', tr: 'Yakında' },
+    comingSoonDesc: { ar: 'نعمل على عطور جديدة مستوحاة من', en: "We're working on new fragrances inspired by", tr: 'Yeni parfümler üzerinde çalışıyoruz, ilham kaynağı:' },
+    viewAll: { ar: 'عرض جميع العطور', en: 'View all fragrances', tr: 'Tüm parfümleri gör' },
+    noResults: { ar: 'لم يتم العثور على عطور', en: 'No perfumes found', tr: 'Parfüm bulunamadı' },
+    adjustFilters: { ar: 'حاول تعديل البحث أو التصفية', en: 'Try adjusting your search or filters', tr: 'Arama veya filtrelerinizi ayarlamayı deneyin' },
+  },
+  // Cart
+  cart: {
+    title: { ar: 'سلة التسوق', en: 'Shopping Cart', tr: 'Alışveriş Sepeti' },
+    empty: { ar: 'سلتك فارغة', en: 'Your cart is empty', tr: 'Sepetiniz boş' },
+    total: { ar: 'المجموع', en: 'Total', tr: 'Toplam' },
+    checkout: { ar: 'إتمام الطلب عبر واتساب', en: 'Checkout via WhatsApp', tr: 'WhatsApp ile Sipariş Ver' },
+    remove: { ar: 'إزالة', en: 'Remove', tr: 'Kaldır' },
+    continueShopping: { ar: 'متابعة التسوق', en: 'Continue Shopping', tr: 'Alışverişe Devam' },
+    name: { ar: 'الاسم', en: 'Name', tr: 'İsim' },
+    enterName: { ar: 'أدخل اسمك', en: 'Enter your name', tr: 'Adınızı girin' },
+  },
+  // About
+  about: {
+    title: { ar: 'من نحن', en: 'About Us', tr: 'Hakkımızda' },
+    vision: { ar: 'رؤيتنا', en: 'Our Vision', tr: 'Vizyonumuz' },
+    visionText: {
+      ar: 'نسعى لأن نكون العلامة التجارية الرائدة في تقديم العطور الفاخرة المستوحاة من أرقى العطور العالمية بأسعار منافسة',
+      en: 'We strive to be the leading brand in offering luxury fragrances inspired by the finest global perfumes at competitive prices',
+      tr: 'En kaliteli küresel parfümlerden ilham alan lüks kokuları rekabetçi fiyatlarla sunan lider marka olmayı hedefliyoruz',
+    },
+  },
+  // About Oils
+  aboutOils: {
+    title: { ar: 'عن الزيوت العطرية', en: 'About Fragrance Oils', tr: 'Parfüm Yağları Hakkında' },
+    qualityTitle: { ar: 'جودة لا مثيل لها', en: 'Unmatched Quality', tr: 'Eşsiz Kalite' },
+    qualityText: {
+      ar: 'نستخدم أجود أنواع الزيوت العطرية المستوردة من فرنسا وسويسرا لضمان ثبات العطر وانتشاره',
+      en: 'We use the finest fragrance oils imported from France and Switzerland to ensure longevity and projection',
+      tr: 'Kalıcılığı ve yayılımı sağlamak için Fransa ve İsviçre\'den ithal edilen en kaliteli parfüm yağlarını kullanıyoruz',
+    },
+    concentrationTitle: { ar: 'الفرق بين التركيزات', en: 'Concentration Differences', tr: 'Konsantrasyon Farkları' },
+    heavyDesc: {
+      ar: 'تركيز ثقيل: 35% زيت عطري / 65% كحول - ثبات يدوم طوال اليوم مع انتشار قوي',
+      en: 'Heavy: 35% oil / 65% alcohol - All-day lasting with strong projection',
+      tr: 'Ağır: %35 yağ / %65 alkol - Güçlü yayılımla gün boyu kalıcı',
+    },
+    mediumDesc: {
+      ar: 'تركيز متوسط: 25% زيت عطري / 75% كحول - توازن مثالي بين الثبات والانتشار',
+      en: 'Medium: 25% oil / 75% alcohol - Perfect balance of lasting and projection',
+      tr: 'Orta: %25 yağ / %75 alkol - Kalıcılık ve yayılım arasında mükemmel denge',
+    },
+    lightDesc: {
+      ar: 'تركيز خفيف: 20% زيت عطري / 80% كحول - مثالي للاستخدام اليومي',
+      en: 'Light: 20% oil / 80% alcohol - Perfect for daily use',
+      tr: 'Hafif: %20 yağ / %80 alkol - Günlük kullanım için ideal',
+    },
+  },
+  // Contact
+  contact: {
+    title: { ar: 'تواصل معنا', en: 'Contact Us', tr: 'Bize Ulaşın' },
+    whatsapp: { ar: 'تواصل عبر واتساب', en: 'Chat on WhatsApp', tr: 'WhatsApp\'tan Yazın' },
+    followUs: { ar: 'تابعنا', en: 'Follow Us', tr: 'Bizi Takip Edin' },
+  },
+  // Footer
+  footer: {
+    rights: { ar: 'جميع الحقوق محفوظة', en: 'All rights reserved', tr: 'Tüm hakları saklıdır' },
+  },
+} as const;
+
+export type TranslationKey = keyof typeof translations;

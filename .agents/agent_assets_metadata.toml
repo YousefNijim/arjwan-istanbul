@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "OWnwphzh_yQOBlBxOcP_U"
+uri = "file://arjwan-istanbul.tar.gz"
+type = "unspecified"
+title = "ARJWAN Istanbul — المشروع كامل"
