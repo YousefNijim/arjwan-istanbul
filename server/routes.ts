@@ -1,25 +1,13 @@
 import { Express, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-import { eq, desc, and, or, isNull, lte, gte } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import { db } from './db';
 import { adminUsers, perfumes, offers, orders, siteSettings } from '../shared/schema';
 import { signToken, requireAuth } from './auth';
+import { uploadImage } from './storage';
 
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    const dir = path.join(process.cwd(), 'public', 'uploads');
-    fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
-  },
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`);
-  },
-});
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
 export function registerRoutes(app: Express) {
 
@@ -254,10 +242,16 @@ export function registerRoutes(app: Express) {
   });
 
   // ─── Admin: Upload ────────────────────────────────────────────────────
-  app.post('/api/admin/upload', requireAuth, upload.single('image'), (req, res) => {
+  app.post('/api/admin/upload', requireAuth, upload.single('image'), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-    const url = `/uploads/${req.file.filename}`;
-    res.json({ url });
+    try {
+      const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}-${req.file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+      const url = await uploadImage(req.file.buffer, filename, req.file.mimetype);
+      res.json({ url });
+    } catch (e: any) {
+      console.error('Upload error:', e);
+      res.status(500).json({ error: 'Upload failed: ' + e.message });
+    }
   });
 
   // ─── Admin: Dashboard Stats ───────────────────────────────────────────
