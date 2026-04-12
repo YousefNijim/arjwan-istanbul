@@ -146,29 +146,17 @@ const CartPage = () => {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-            <h1 className="font-display text-5xl text-primary tracking-widest mb-3">{t('cart', 'thankYouTitle')}</h1>
+            <h1 className="font-display text-5xl text-primary tracking-widest mb-3">
+              {t('cart', 'thankYouTitle')}
+            </h1>
             <p className="text-foreground text-lg mb-2">{t('cart', 'thankYouSubtitle')}</p>
             <p className="text-muted-foreground text-sm mb-10">{t('cart', 'thankYouDesc')}</p>
-
-            {/* Thank you in all 3 languages */}
-            <div className="flex justify-center items-center gap-0 mb-10 border border-border rounded-sm overflow-hidden">
-              {[
-                { lang: 'عربي', word: 'شكراً' },
-                { lang: 'English', word: 'Thank You' },
-                { lang: 'Türkçe', word: 'Teşekkürler' },
-              ].map((item, i) => (
-                <div key={i} className={`flex-1 py-4 text-center ${i !== 2 ? 'border-r border-border' : ''}`}>
-                  <p className="text-xs text-muted-foreground mb-1.5">{item.lang}</p>
-                  <p className="font-display text-primary text-sm tracking-wider">{item.word}</p>
-                </div>
-              ))}
-            </div>
 
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => window.open(whatsappUrl, '_blank')}
-              className="w-full bg-[#25D366] text-white py-4 text-sm tracking-widest uppercase hover:bg-[#25D366]/90 transition-all flex items-center justify-center gap-3 rounded-sm mb-4 font-medium"
+              className="w-full bg-[#25D366] text-white py-4 text-sm tracking-widest uppercase hover:bg-[#1da851] transition-all flex items-center justify-center gap-3 rounded-sm mb-4 font-medium"
             >
               <MessageCircle size={20} />
               {t('cart', 'openWhatsapp')}
