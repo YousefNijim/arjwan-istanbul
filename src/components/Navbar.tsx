@@ -58,9 +58,12 @@ const Navbar = () => {
           </button>
 
           {/* Logo */}
-          <Link to="/" className="flex flex-col items-center">
-            <span className="text-primary font-display text-lg md:text-xl tracking-[0.3em]">ARJWAN</span>
-            <span className="text-foreground/60 text-[9px] tracking-[0.5em] uppercase">Istanbul</span>
+          <Link to="/" className="flex items-center">
+            <img
+              src="/arjwan_logo_transparent.png"
+              alt="Arjwan Istanbul"
+              className="h-12 md:h-14 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop nav */}
