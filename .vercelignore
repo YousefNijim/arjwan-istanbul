@@ -1,0 +1,2 @@
+# Exclude TS source from Vercel — the compiled api/index.js is generated during build
+api/index.ts

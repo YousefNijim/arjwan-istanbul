@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "build:api": "esbuild api/index.ts --bundle --platform=node --target=node18 --outfile=api/index.js --external:pg-native --format=cjs",
+    "build": "vite build && npm run build:api",
+    "build:api": "esbuild server/entry.ts --bundle --platform=node --target=node18 --outfile=api/index.js --external:pg-native --format=cjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
