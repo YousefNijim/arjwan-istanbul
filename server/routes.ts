@@ -11,6 +11,16 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 *
 
 export function registerRoutes(app: Express) {
 
+  // ─── Health Check ─────────────────────────────────────────────────────
+  app.get('/api/health', async (_req, res) => {
+    try {
+      await db.select().from(adminUsers).limit(1);
+      res.json({ status: 'ok', db: 'connected' });
+    } catch (e: any) {
+      res.status(500).json({ status: 'error', db: e.message });
+    }
+  });
+
   // ─── Public: Perfumes ────────────────────────────────────────────────
   app.get('/api/perfumes', async (_req, res) => {
     try {
