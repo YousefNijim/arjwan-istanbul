@@ -54,11 +54,11 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
           >
-            <p className="text-primary/80 font-arabic text-lg mb-2">أرجوان</p>
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-primary tracking-[0.2em] mb-2">
-              ARJWAN
-            </h1>
-            <p className="text-foreground/50 text-sm tracking-[0.5em] uppercase mb-8">Istanbul</p>
+            <img
+              src="/arjwan_logo_transparent.png"
+              alt="Arjwan Istanbul"
+              className="h-40 md:h-56 lg:h-64 w-auto object-contain mx-auto mb-8 drop-shadow-2xl"
+            />
             <p className="text-foreground/70 text-lg md:text-xl max-w-md mx-auto mb-10 font-body">
               {t('hero', 'tagline')}
             </p>
