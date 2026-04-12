@@ -3,6 +3,7 @@ import { useTranslation } from '@/i18n/useTranslation';
 import { Product } from '@/data/products';
 import { motion } from 'framer-motion';
 import { useOffers, getDiscountForProduct } from '@/hooks/useOffers';
+import { SHOW_PRICES } from '@/lib/config';
 
 interface ProductCardProps {
   product: Product;
@@ -62,21 +63,23 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             </div>
             <p className="text-muted-foreground text-sm line-clamp-2 flex-1">{product.description[lang]}</p>
             <div className="mt-3 flex items-center justify-between pt-3 border-t border-border/50">
-              {discount > 0 ? (
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-muted-foreground/50 text-xs line-through">
+              {SHOW_PRICES && (
+                discount > 0 ? (
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-muted-foreground/50 text-xs line-through">
+                      {product.price50ml} – {product.price100ml} TL
+                    </span>
+                    <span className="text-[hsl(43_76%_52%)] text-sm font-semibold">
+                      {discountedPrice50} – {discountedPrice100} TL
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-primary text-sm font-medium">
                     {product.price50ml} – {product.price100ml} TL
                   </span>
-                  <span className="text-[hsl(43_76%_52%)] text-sm font-semibold">
-                    {discountedPrice50} – {discountedPrice100} TL
-                  </span>
-                </div>
-              ) : (
-                <span className="text-primary text-sm font-medium">
-                  {product.price50ml} – {product.price100ml} TL
-                </span>
+                )
               )}
-              <span className="text-xs text-muted-foreground tracking-wider uppercase group-hover:text-primary transition-colors">
+              <span className="text-xs text-muted-foreground tracking-wider uppercase group-hover:text-primary transition-colors ms-auto">
                 {t('products', 'viewDetails')} →
               </span>
             </div>

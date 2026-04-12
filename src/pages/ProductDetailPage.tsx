@@ -7,6 +7,7 @@ import { useCartStore } from '@/store/cartStore';
 import { Minus, Plus, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { SHOW_PRICES } from '@/lib/config';
 
 type Concentration = 'heavy' | 'medium' | 'light';
 type Size = '50ml' | '100ml';
@@ -163,14 +164,16 @@ const ProductDetailPage = () => {
 
             {/* Price + Add to cart */}
             <div className="mt-auto">
-              {discount > 0 ? (
-                <div className="flex items-baseline gap-3 mb-4">
-                  <span className="text-muted-foreground/50 line-through text-lg">{originalPrice * quantity} TL</span>
-                  <span className="text-2xl text-[hsl(43_76%_52%)] font-display">{price * quantity} TL</span>
-                  <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded-sm font-bold">-{discount}%</span>
-                </div>
-              ) : (
-                <p className="text-2xl text-primary font-display mb-4">{price * quantity} TL</p>
+              {SHOW_PRICES && (
+                discount > 0 ? (
+                  <div className="flex items-baseline gap-3 mb-4">
+                    <span className="text-muted-foreground/50 line-through text-lg">{originalPrice * quantity} TL</span>
+                    <span className="text-2xl text-[hsl(43_76%_52%)] font-display">{price * quantity} TL</span>
+                    <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded-sm font-bold">-{discount}%</span>
+                  </div>
+                ) : (
+                  <p className="text-2xl text-primary font-display mb-4">{price * quantity} TL</p>
+                )
               )}
               <button
                 onClick={handleAddToCart}

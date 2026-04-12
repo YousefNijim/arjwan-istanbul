@@ -5,6 +5,7 @@ import { useCartStore } from '@/store/cartStore';
 import { Minus, Plus, Trash2, ShoppingBag, MessageCircle, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
+import { SHOW_PRICES } from '@/lib/config';
 
 const FIELD_CLASS = (hasError: boolean) =>
   `w-full bg-secondary border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none transition-colors rounded-sm ${
@@ -215,7 +216,9 @@ const CartPage = () => {
                       <p className="text-xs text-muted-foreground mt-0.5">
                         {item.size} · {t('products', item.concentration)}
                       </p>
-                      <p className="text-primary font-semibold mt-1.5 text-sm">{item.price * item.quantity} TL</p>
+                      {SHOW_PRICES && (
+                        <p className="text-primary font-semibold mt-1.5 text-sm">{item.price * item.quantity} TL</p>
+                      )}
                     </div>
 
                     <div className="flex flex-col items-end gap-3 flex-shrink-0">
@@ -254,10 +257,12 @@ const CartPage = () => {
               transition={{ delay: 0.3 }}
               className="mt-5 p-5 border border-border rounded-sm bg-card/50"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground text-sm tracking-wider">{t('cart', 'total')}</span>
-                <span className="text-3xl text-primary font-display tracking-wider">{totalPrice()} TL</span>
-              </div>
+              {SHOW_PRICES && (
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground text-sm tracking-wider">{t('cart', 'total')}</span>
+                  <span className="text-3xl text-primary font-display tracking-wider">{totalPrice()} TL</span>
+                </div>
+              )}
             </motion.div>
           </div>
 
