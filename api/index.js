@@ -114613,6 +114613,8 @@ var orders = pgTable("orders", {
   id: serial("id").primaryKey(),
   customerName: text("customer_name").notNull(),
   whatsappPhone: text("whatsapp_phone").notNull().default(""),
+  email: text("email").notNull().default(""),
+  address: text("address").notNull().default(""),
   items: jsonb("items").notNull(),
   subtotal: integer("subtotal").notNull(),
   discountAmount: integer("discount_amount").default(0).notNull(),
