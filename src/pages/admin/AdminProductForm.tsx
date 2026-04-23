@@ -121,7 +121,7 @@ const AdminProductForm = () => {
         <div className="bg-card border border-border rounded-sm p-6 space-y-4">
           <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Image</h2>
           <div className="flex items-center gap-4">
-            <img src={form.imageUrl} alt="" className="w-20 h-24 object-contain bg-white rounded-sm border border-border p-2" />
+            <img src={form.imageUrl} alt="" className="w-20 h-24 object-cover bg-[hsl(0_0%_6%)] rounded-sm border border-border" />
             <div className="space-y-2">
               <Input value={form.imageUrl} onChange={e => set('imageUrl', e.target.value)} placeholder="/bottle-black.png" className="w-72" />
               <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer hover:text-foreground transition-colors">

@@ -72,9 +72,9 @@ const ProductDetailPage = () => {
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="aspect-[3/4] overflow-hidden rounded-sm border border-[hsl(270_52%_34%/0.4)] bg-[hsl(0_0%_96%)] relative"
+            className="aspect-[3/4] overflow-hidden rounded-sm border border-[hsl(270_52%_34%/0.4)] bg-[hsl(0_0%_6%)] relative"
           >
-            <img src={product.image} alt={product.originalPerfume} className="w-full h-full object-contain py-8 px-6" width={800} height={1024} />
+            <img src={product.image} alt={product.originalPerfume} className="w-full h-full object-cover" width={800} height={1024} />
             {discount > 0 && (
               <div className="absolute top-4 left-4 bg-red-500 text-white text-sm font-bold tracking-wider px-3 py-1.5 rounded-sm shadow-lg">
                 -{discount}% OFF
