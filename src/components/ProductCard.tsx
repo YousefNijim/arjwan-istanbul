@@ -41,7 +41,7 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           <div className="aspect-[3/4] overflow-hidden bg-[hsl(0_0%_96%)] relative">
             <img
               src={product.image}
-              alt={product.name[lang]}
+              alt={product.originalPerfume}
               loading="lazy"
               width={400}
               height={533}
@@ -56,10 +56,9 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             )}
           </div>
           <div className="p-5 flex-1 flex flex-col border-t border-[hsl(270_52%_34%/0.3)]">
-            <div className="flex items-baseline gap-2 flex-wrap mb-2">
-              <h3 className="font-display text-lg text-primary tracking-wider">{product.name[lang]}</h3>
-              <span className="text-[10px] text-muted-foreground/50 tracking-widest uppercase shrink-0">{t('brands', 'inspiredBy')}</span>
-              <span className="text-sm tracking-wide text-[hsl(270_52%_70%)] font-semibold shrink-0">{product.originalPerfume}</span>
+            <div className="flex flex-col gap-0.5 mb-2">
+              <h3 className="font-display text-lg text-primary tracking-wider">{product.originalPerfume}</h3>
+              <span className="text-xs text-muted-foreground/70 tracking-widest uppercase">by Arjwan Istanbul</span>
             </div>
             <p className="text-muted-foreground text-sm line-clamp-2 flex-1">{product.description[lang]}</p>
             <div className="mt-3 flex items-center justify-between pt-3 border-t border-border/50">

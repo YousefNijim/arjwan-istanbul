@@ -45,7 +45,7 @@ const ProductDetailPage = () => {
   const handleAddToCart = () => {
     addItem({
       productId: product.id,
-      name: product.name[lang],
+      name: product.originalPerfume,
       size,
       concentration,
       quantity,
@@ -74,7 +74,7 @@ const ProductDetailPage = () => {
             animate={{ opacity: 1, x: 0 }}
             className="aspect-[3/4] overflow-hidden rounded-sm border border-[hsl(270_52%_34%/0.4)] bg-[hsl(0_0%_96%)] relative"
           >
-            <img src={product.image} alt={product.name[lang]} className="w-full h-full object-contain py-8 px-6" width={800} height={1024} />
+            <img src={product.image} alt={product.originalPerfume} className="w-full h-full object-contain py-8 px-6" width={800} height={1024} />
             {discount > 0 && (
               <div className="absolute top-4 left-4 bg-red-500 text-white text-sm font-bold tracking-wider px-3 py-1.5 rounded-sm shadow-lg">
                 -{discount}% OFF
@@ -85,10 +85,10 @@ const ProductDetailPage = () => {
           {/* Details */}
           <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col">
             <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-1">Arjwan Istanbul</p>
-            <h1 className="font-display text-3xl md:text-4xl text-primary tracking-wider mb-2">{product.name[lang]}</h1>
+            <h1 className="font-display text-3xl md:text-4xl text-primary tracking-wider mb-2">{product.originalPerfume}</h1>
             <div className="flex items-center gap-2 mb-4 flex-wrap">
-              <span className="text-xs text-muted-foreground tracking-widest uppercase">{t('brands', 'inspiredBy')}</span>
-              <span className="text-sm tracking-wider text-[hsl(270_52%_65%)] font-medium">{product.originalPerfume}</span>
+              <span className="text-xs text-muted-foreground tracking-widest uppercase">by</span>
+              <span className="text-sm tracking-wider text-[hsl(270_52%_65%)] font-medium">Arjwan Istanbul</span>
               <span className="text-xs text-muted-foreground/50">·</span>
               <span className="text-xs text-muted-foreground border border-[hsl(270_52%_50%/0.3)] px-2 py-0.5 tracking-wider">{product.inspiredBy}</span>
             </div>

@@ -77,7 +77,7 @@ const AdminProducts = () => {
                     <div className="flex items-center gap-3">
                       <img src={p.imageUrl} alt={p.nameEn} className="w-8 h-10 object-contain bg-white/5 rounded-sm" />
                       <div>
-                        <p className="font-medium text-foreground">{p.nameEn}</p>
+                        <p className="font-medium text-foreground">{p.originalPerfume || p.nameEn}</p>
                         <p className="text-xs text-muted-foreground">{p.id}</p>
                       </div>
                       {p.featured && <Star size={12} className="text-[hsl(43_76%_52%)] shrink-0" fill="currentColor" />}
