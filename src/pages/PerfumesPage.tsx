@@ -1,58 +1,66 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from '@/i18n/useTranslation';
-import { brands } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
 import { useProducts } from '@/hooks/useProducts';
-import { Search, SlidersHorizontal, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const menBrands = brands.filter((b) => b.gender === 'men' || b.gender === 'both');
-const womenBrands = brands.filter((b) => b.gender === 'women' || b.gender === 'both');
 
 const PerfumesPage = () => {
   const { t, lang } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState('');
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [brandSearch, setBrandSearch] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [menExpanded, setMenExpanded] = useState(true);
-  const [womenExpanded, setWomenExpanded] = useState(true);
   const category = searchParams.get('category') || 'all';
   const { data: products = [], isLoading: productsLoading } = useProducts();
+
+  // Build dynamic brand list from actual products
+  const allBrands = useMemo(() => {
+    const map: Record<string, number> = {};
+    products.forEach((p) => {
+      if (!p.inspiredBy) return;
+      const catOk = category === 'all' || p.category === category;
+      if (!catOk) return;
+      map[p.inspiredBy] = (map[p.inspiredBy] || 0) + 1;
+    });
+    return Object.entries(map)
+      .sort((a, b) => b[1] - a[1]) // sort by count desc
+      .map(([name, count]) => ({ name, count }));
+  }, [products, category]);
+
+  const filteredBrands = useMemo(() => {
+    if (!brandSearch) return allBrands;
+    const q = brandSearch.toLowerCase();
+    return allBrands.filter((b) => b.name.toLowerCase().includes(q));
+  }, [allBrands, brandSearch]);
 
   const filtered = useMemo(() => {
     return products.filter((p) => {
       const matchCategory = category === 'all' || p.category === category;
       const matchBrand = !selectedBrand || p.inspiredBy === selectedBrand;
       const q = search.toLowerCase();
-      const matchSearch = !search
-        || p.name[lang].toLowerCase().includes(q)
-        || p.originalPerfume.toLowerCase().includes(q)
-        || p.inspiredBy.toLowerCase().includes(q);
+      const matchSearch =
+        !search ||
+        p.name[lang].toLowerCase().includes(q) ||
+        p.originalPerfume.toLowerCase().includes(q) ||
+        p.inspiredBy.toLowerCase().includes(q);
       return matchCategory && matchBrand && matchSearch;
     });
   }, [category, search, lang, selectedBrand, products]);
 
-  const getBrandCount = (brandName: string) => {
-    return products.filter((p) => {
-      const matchCategory = category === 'all' || p.category === category;
-      return matchCategory && p.inspiredBy === brandName;
-    }).length;
-  };
-
-  const totalForCategory = useMemo(() => {
-    return products.filter((p) => category === 'all' || p.category === category).length;
-  }, [category, products]);
+  const totalForCategory = useMemo(
+    () => products.filter((p) => category === 'all' || p.category === category).length,
+    [category, products]
+  );
 
   const setCategory = (cat: string) => {
-    if (cat === 'all') {
-      searchParams.delete('category');
-    } else {
-      searchParams.set('category', cat);
-    }
+    if (cat === 'all') searchParams.delete('category');
+    else searchParams.set('category', cat);
     setSearchParams(searchParams);
     setSelectedBrand(null);
+    setBrandSearch('');
   };
 
   const handleBrandSelect = (brand: string | null) => {
@@ -60,99 +68,32 @@ const PerfumesPage = () => {
     setSidebarOpen(false);
   };
 
-  const BrandList = ({ list, label, isMen }: { list: typeof brands; label: string; isMen: boolean }) => {
-    const isExpanded = isMen ? menExpanded : womenExpanded;
-    const toggle = () => isMen ? setMenExpanded(!menExpanded) : setWomenExpanded(!womenExpanded);
-
-    const activeBrands = list.filter((b) => getBrandCount(b.name) > 0);
-    const inactiveBrands = list.filter((b) => getBrandCount(b.name) === 0);
-
-    return (
-      <div>
-        <button
-          onClick={toggle}
-          className="w-full flex items-center justify-between py-2 mb-1"
-        >
-          <span className="text-[10px] tracking-[0.25em] text-muted-foreground/60 uppercase font-medium">
-            {label}
-          </span>
-          {isExpanded
-            ? <ChevronUp size={12} className="text-muted-foreground/40" />
-            : <ChevronDown size={12} className="text-muted-foreground/40" />
-          }
-        </button>
-        <AnimatePresence initial={false}>
-          {isExpanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden"
-            >
-              <div className="space-y-0.5 mb-4">
-                {activeBrands.map((brand) => {
-                  const count = getBrandCount(brand.name);
-                  const isActive = selectedBrand === brand.name;
-                  return (
-                    <button
-                      key={brand.name}
-                      onClick={() => handleBrandSelect(isActive ? null : brand.name)}
-                      className={`group w-full text-start px-3 py-2 text-sm rounded-sm transition-all duration-200 flex items-center justify-between ${
-                        isActive
-                          ? 'bg-[hsl(270_52%_34%/0.3)] border border-[hsl(270_52%_50%/0.5)] text-primary'
-                          : 'hover:bg-[hsl(270_52%_34%/0.15)] text-foreground/80 hover:text-primary border border-transparent'
-                      }`}
-                    >
-                      <span className="truncate">{brand.name}</span>
-                      <span className={`text-[11px] ml-1 shrink-0 px-1.5 py-0.5 rounded-full ${
-                        isActive
-                          ? 'bg-primary/20 text-primary'
-                          : 'bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary'
-                      }`}>
-                        {count}
-                      </span>
-                    </button>
-                  );
-                })}
-                {inactiveBrands.map((brand) => (
-                  <div
-                    key={brand.name}
-                    className="w-full text-start px-3 py-2 text-sm rounded-sm flex items-center justify-between opacity-30 cursor-not-allowed"
-                  >
-                    <span className="truncate text-foreground/50">{brand.name}</span>
-                    <span className="text-[11px] ml-1 shrink-0 px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground/50">0</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    );
-  };
-
   const SidebarContent = () => (
-    <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between mb-5">
+    <div className="h-full flex flex-col gap-3">
+      {/* Header */}
+      <div className="flex items-center justify-between">
         <div>
-          <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground/50 mb-0.5">{t('brands', 'filterBy')}</p>
-          <h3 className="font-display text-base text-primary tracking-wide">{t('brands', 'inspiration')}</h3>
+          <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground/50 mb-0.5">
+            {t('brands', 'filterBy')}
+          </p>
+          <h3 className="font-display text-base text-primary tracking-wide">
+            {t('brands', 'inspiration')}
+          </h3>
         </div>
         {selectedBrand && (
           <button
-            onClick={() => setSelectedBrand(null)}
+            onClick={() => { setSelectedBrand(null); setBrandSearch(''); }}
             className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
           >
-            <X size={12} />
-            {t('brands', 'clear')}
+            <X size={12} /> {t('brands', 'clear')}
           </button>
         )}
       </div>
 
+      {/* All brands button */}
       <button
         onClick={() => handleBrandSelect(null)}
-        className={`w-full text-start px-3 py-2 text-sm rounded-sm transition-all duration-200 flex items-center justify-between mb-4 border ${
+        className={`w-full text-start px-3 py-2 text-sm rounded-sm transition-all duration-200 flex items-center justify-between border ${
           !selectedBrand
             ? 'bg-primary text-primary-foreground border-primary'
             : 'border-border text-muted-foreground hover:border-primary hover:text-primary'
@@ -161,26 +102,67 @@ const PerfumesPage = () => {
         <span>{t('brands', 'allBrands')}</span>
         <span className={`text-[11px] px-1.5 py-0.5 rounded-full ${
           !selectedBrand ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'
-        }`}>
-          {totalForCategory}
-        </span>
+        }`}>{totalForCategory}</span>
       </button>
 
-      <div className="flex-1 overflow-y-auto space-y-1 pr-0.5 scrollbar-thin">
-        <div className="border-t border-[hsl(270_52%_34%/0.25)] pt-3">
-          <BrandList list={menBrands} label={t('brands', 'forMen')} isMen={true} />
-        </div>
-        <div className="border-t border-[hsl(270_52%_34%/0.25)] pt-3">
-          <BrandList list={womenBrands} label={t('brands', 'forWomen')} isMen={false} />
-        </div>
+      {/* Brand search input */}
+      <div className="relative">
+        <Search size={13} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground/50" />
+        <input
+          type="text"
+          value={brandSearch}
+          onChange={(e) => setBrandSearch(e.target.value)}
+          placeholder={lang === 'ar' ? 'ابحث عن ماركة...' : lang === 'tr' ? 'Marka ara...' : 'Search brand...'}
+          className="w-full bg-secondary border border-border ps-8 pe-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary transition-colors rounded-sm"
+        />
+        {brandSearch && (
+          <button
+            onClick={() => setBrandSearch('')}
+            className="absolute end-2 top-1/2 -translate-y-1/2 text-muted-foreground/40 hover:text-muted-foreground"
+          >
+            <X size={11} />
+          </button>
+        )}
       </div>
 
+      {/* Scrollable brand list */}
+      <div className="flex-1 overflow-y-auto space-y-0.5 pr-0.5" style={{ scrollbarWidth: 'thin' }}>
+        {filteredBrands.length === 0 ? (
+          <p className="text-xs text-muted-foreground/50 text-center py-4">No brands found</p>
+        ) : (
+          filteredBrands.map(({ name, count }) => {
+            const isActive = selectedBrand === name;
+            return (
+              <button
+                key={name}
+                onClick={() => handleBrandSelect(isActive ? null : name)}
+                className={`group w-full text-start px-3 py-1.5 text-sm rounded-sm transition-all duration-150 flex items-center justify-between ${
+                  isActive
+                    ? 'bg-[hsl(270_52%_34%/0.3)] border border-[hsl(270_52%_50%/0.5)] text-primary'
+                    : 'hover:bg-[hsl(270_52%_34%/0.15)] text-foreground/80 hover:text-primary border border-transparent'
+                }`}
+              >
+                <span className="truncate text-sm">{name}</span>
+                <span className={`text-[11px] ml-1 shrink-0 px-1.5 py-0.5 rounded-full ${
+                  isActive
+                    ? 'bg-primary/20 text-primary'
+                    : 'bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary'
+                }`}>{count}</span>
+              </button>
+            );
+          })
+        )}
+      </div>
+
+      {/* Selected brand info */}
       {selectedBrand && (
-        <div className="mt-4 pt-4 border-t border-[hsl(270_52%_34%/0.25)]">
-          <p className="text-[10px] text-muted-foreground/50 tracking-widest uppercase mb-1">{t('brands', 'selected')}</p>
+        <div className="pt-3 border-t border-[hsl(270_52%_34%/0.25)]">
+          <p className="text-[10px] text-muted-foreground/50 tracking-widest uppercase mb-1">
+            {t('brands', 'selected')}
+          </p>
           <p className="text-sm text-primary font-display">{selectedBrand}</p>
           <p className="text-[11px] text-muted-foreground mt-0.5">
-            {brands.find(b => b.name === selectedBrand)?.signature}
+            {filtered.length} {lang === 'ar' ? 'عطر' : lang === 'tr' ? 'parfüm' : 'perfumes'}
           </p>
         </div>
       )}
@@ -201,7 +183,7 @@ const PerfumesPage = () => {
 
         {/* Top filter bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             {/* Mobile sidebar toggle */}
             <button
               onClick={() => setSidebarOpen(true)}
@@ -214,7 +196,7 @@ const PerfumesPage = () => {
               )}
             </button>
 
-            {['all', 'men', 'women'].map((cat) => (
+            {(['all', 'men', 'women'] as const).map((cat) => (
               <button
                 key={cat}
                 onClick={() => setCategory(cat)}
@@ -229,10 +211,10 @@ const PerfumesPage = () => {
             ))}
           </div>
 
-          <div className="relative w-full sm:w-64 flex items-center gap-2">
+          <div className="relative w-full sm:w-72 flex items-center gap-2">
             {selectedBrand && (
-              <div className="hidden sm:flex items-center gap-1.5 text-xs text-primary border border-[hsl(270_52%_50%/0.4)] px-2 py-1 rounded-sm bg-[hsl(270_52%_34%/0.15)] whitespace-nowrap">
-                <span>{selectedBrand}</span>
+              <div className="hidden sm:flex items-center gap-1.5 text-xs text-primary border border-[hsl(270_52%_50%/0.4)] px-2 py-1 rounded-sm bg-[hsl(270_52%_34%/0.15)] whitespace-nowrap max-w-[130px]">
+                <span className="truncate">{selectedBrand}</span>
                 <button onClick={() => setSelectedBrand(null)}>
                   <X size={11} />
                 </button>
@@ -254,7 +236,8 @@ const PerfumesPage = () => {
         <div className="flex gap-8 items-start">
 
           {/* Desktop sidebar */}
-          <aside className="hidden lg:block w-52 shrink-0 sticky top-24 bg-card border border-[hsl(270_52%_34%/0.3)] rounded-sm p-4 max-h-[calc(100vh-7rem)] overflow-hidden flex-col">
+          <aside className="hidden lg:flex w-56 shrink-0 sticky top-24 bg-card border border-[hsl(270_52%_34%/0.3)] rounded-sm p-4 flex-col"
+            style={{ height: 'calc(100vh - 7rem)' }}>
             <SidebarContent />
           </aside>
 
@@ -274,7 +257,7 @@ const PerfumesPage = () => {
                   animate={{ x: 0 }}
                   exit={{ x: '-100%' }}
                   transition={{ type: 'tween', duration: 0.25 }}
-                  className="fixed top-0 bottom-0 left-0 w-72 bg-card border-r border-[hsl(270_52%_34%/0.4)] z-50 lg:hidden p-6 pt-16 overflow-y-auto"
+                  className="fixed top-0 bottom-0 left-0 w-72 bg-card border-r border-[hsl(270_52%_34%/0.4)] z-50 lg:hidden p-6 pt-16 flex flex-col"
                 >
                   <button
                     onClick={() => setSidebarOpen(false)}
@@ -288,25 +271,21 @@ const PerfumesPage = () => {
             )}
           </AnimatePresence>
 
-          {/* Products */}
+          {/* Products grid */}
           <div className="flex-1 min-w-0">
-            {filtered.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center py-20"
-              >
-                <p className="font-display text-xl text-primary mb-2">
-                  {selectedBrand ? t('brands', 'comingSoon') : t('brands', 'noResults')}
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  {selectedBrand
-                    ? `${t('brands', 'comingSoonDesc')} ${selectedBrand}`
-                    : t('brands', 'adjustFilters')}
-                </p>
-                {selectedBrand && (
+            {productsLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="animate-pulse bg-card border border-border rounded-sm aspect-[3/4]" />
+                ))}
+              </div>
+            ) : filtered.length === 0 ? (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+                <p className="font-display text-xl text-primary mb-2">{t('brands', 'noResults')}</p>
+                <p className="text-muted-foreground text-sm">{t('brands', 'adjustFilters')}</p>
+                {(selectedBrand || search) && (
                   <button
-                    onClick={() => setSelectedBrand(null)}
+                    onClick={() => { setSelectedBrand(null); setSearch(''); setBrandSearch(''); }}
                     className="mt-4 text-sm text-primary border border-primary/30 px-4 py-2 hover:bg-primary/10 transition-colors"
                   >
                     {t('brands', 'viewAll')}
@@ -314,11 +293,17 @@ const PerfumesPage = () => {
                 )}
               </motion.div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                {filtered.map((product, i) => (
-                  <ProductCard key={product.id} product={product} index={i} />
-                ))}
-              </div>
+              <>
+                <p className="text-xs text-muted-foreground/50 mb-4 tracking-wider">
+                  {filtered.length} {lang === 'ar' ? 'عطر' : lang === 'tr' ? 'parfüm' : 'perfumes'}
+                  {selectedBrand && ` · ${selectedBrand}`}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                  {filtered.map((product, i) => (
+                    <ProductCard key={product.id} product={product} index={i} />
+                  ))}
+                </div>
+              </>
             )}
           </div>
         </div>
