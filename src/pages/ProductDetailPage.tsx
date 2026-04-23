@@ -89,8 +89,12 @@ const ProductDetailPage = () => {
             <div className="flex items-center gap-2 mb-4 flex-wrap">
               <span className="text-xs text-muted-foreground tracking-widest uppercase">by</span>
               <span className="text-sm tracking-wider text-[hsl(270_52%_65%)] font-medium">Arjwan Istanbul</span>
-              <span className="text-xs text-muted-foreground/50">·</span>
-              <span className="text-xs text-muted-foreground border border-[hsl(270_52%_50%/0.3)] px-2 py-0.5 tracking-wider">{product.inspiredBy}</span>
+              {product.inspiredBy && (
+                <>
+                  <span className="text-xs text-muted-foreground/50">·</span>
+                  <span className="text-xs text-muted-foreground border border-[hsl(270_52%_50%/0.3)] px-2 py-0.5 tracking-wider">{product.inspiredBy}</span>
+                </>
+              )}
             </div>
             <p className="text-foreground/70 leading-relaxed mb-6">{product.description[lang]}</p>
 

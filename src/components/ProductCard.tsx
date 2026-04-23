@@ -58,7 +58,12 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           <div className="p-5 flex-1 flex flex-col border-t border-[hsl(270_52%_34%/0.3)]">
             <div className="flex flex-col gap-0.5 mb-2">
               <h3 className="font-display text-lg text-primary tracking-wider">{product.originalPerfume}</h3>
-              <span className="text-xs text-muted-foreground/70 tracking-widest uppercase">by Arjwan Istanbul</span>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-xs text-muted-foreground/70 tracking-widest uppercase">by Arjwan Istanbul</span>
+                {product.inspiredBy && (
+                  <span className="text-[10px] text-muted-foreground/60 border border-[hsl(270_52%_50%/0.25)] px-1.5 py-0.5 tracking-wider">{product.inspiredBy}</span>
+                )}
+              </div>
             </div>
             <p className="text-muted-foreground text-sm line-clamp-2 flex-1">{product.description[lang]}</p>
             <div className="mt-3 flex items-center justify-between pt-3 border-t border-border/50">

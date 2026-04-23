@@ -1,0 +1,10 @@
+import psycopg2, sys, io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+conn = psycopg2.connect('postgresql://postgres.zsdlifnvprnadznustgt:WLlXnzs9q0JV4ukX@aws-1-us-east-1.pooler.supabase.com:5432/postgres')
+cur = conn.cursor()
+cur.execute("SELECT id, name_en, inspired_by FROM perfumes WHERE inspired_by = '' OR inspired_by IS NULL LIMIT 5")
+print('Empty inspired_by sample:')
+for r in cur.fetchall(): print(r)
+cur.execute("SELECT COUNT(*) FROM perfumes WHERE inspired_by = '' OR inspired_by IS NULL")
+print('Count with empty brand:', cur.fetchone()[0])
+cur.close(); conn.close()

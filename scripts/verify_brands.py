@@ -1,0 +1,11 @@
+import psycopg2, sys, io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+conn = psycopg2.connect('postgresql://postgres.zsdlifnvprnadznustgt:WLlXnzs9q0JV4ukX@aws-1-us-east-1.pooler.supabase.com:5432/postgres')
+cur = conn.cursor()
+print("=== SAMPLE WITH BRANDS ===")
+cur.execute("SELECT name_en, inspired_by, price_50ml, price_100ml FROM perfumes WHERE inspired_by != '' LIMIT 10")
+for r in cur.fetchall(): print(r)
+print("\n=== SAMPLE WITHOUT BRANDS ===")
+cur.execute("SELECT name_en, inspired_by FROM perfumes WHERE inspired_by = '' OR inspired_by IS NULL LIMIT 10")
+for r in cur.fetchall(): print(r)
+cur.close(); conn.close()
