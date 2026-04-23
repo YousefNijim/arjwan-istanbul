@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { SHOW_PRICES } from '@/lib/config';
 
-type Concentration = 'heavy' | 'medium' | 'light';
+type Concentration = 'heavy' | 'light';
 type Size = '50ml' | '100ml';
 
 const ProductDetailPage = () => {
@@ -17,7 +17,7 @@ const ProductDetailPage = () => {
   const { t, lang } = useTranslation();
   const addItem = useCartStore((s) => s.addItem);
   const [concentration, setConcentration] = useState<Concentration>('heavy');
-  const [size, setSize] = useState<Size>('50ml');
+  const [size, setSize] = useState<Size>('100ml');
   const [quantity, setQuantity] = useState(1);
 
   const { data: product, isLoading } = useProduct(id!);
@@ -57,7 +57,6 @@ const ProductDetailPage = () => {
 
   const concentrations: { key: Concentration; label: string }[] = [
     { key: 'heavy', label: t('products', 'heavy') },
-    { key: 'medium', label: t('products', 'medium') },
     { key: 'light', label: t('products', 'light') },
   ];
 

@@ -4,7 +4,7 @@ export interface CartItem {
   productId: string;
   name: string;
   size: '50ml' | '100ml';
-  concentration: 'heavy' | 'medium' | 'light';
+  concentration: 'heavy' | 'light';
   quantity: number;
   price: number;
   image: string;

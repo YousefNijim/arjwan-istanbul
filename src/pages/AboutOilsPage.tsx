@@ -1,13 +1,12 @@
 import { useTranslation } from '@/i18n/useTranslation';
 import { motion } from 'framer-motion';
-import { Droplets, FlaskConical, Sparkles } from 'lucide-react';
+import { Droplets, Sparkles } from 'lucide-react';
 
 const AboutOilsPage = () => {
   const { t } = useTranslation();
 
   const concentrations = [
     { icon: Sparkles, title: t('products', 'heavy'), desc: t('aboutOils', 'heavyDesc') },
-    { icon: FlaskConical, title: t('products', 'medium'), desc: t('aboutOils', 'mediumDesc') },
     { icon: Droplets, title: t('products', 'light'), desc: t('aboutOils', 'lightDesc') },
   ];
 
