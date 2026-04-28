@@ -3,6 +3,8 @@ import { useTranslation } from '@/i18n/useTranslation';
 import { Product } from '@/data/products';
 import { motion } from 'framer-motion';
 import { useOffers, getDiscountForProduct } from '@/hooks/useOffers';
+import { useWishlistStore } from '@/store/wishlistStore';
+import { Heart } from 'lucide-react';
 import { SHOW_PRICES } from '@/lib/config';
 
 interface ProductCardProps {
@@ -20,6 +22,9 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     product.category,
     product.inspiredBy,
   );
+
+  const { toggle, has } = useWishlistStore();
+  const inWishlist = has(product.id);
 
   const discountedPrice50 = discount > 0
     ? Math.round(product.price50ml * (1 - discount / 100))
@@ -49,6 +54,17 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             />
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[hsl(270_52%_50%/0.5)] to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[hsl(43_76%_52%/0.35)] to-transparent" />
+            {/* Wishlist button */}
+            <button
+              onClick={(e) => { e.preventDefault(); toggle(product.id); }}
+              aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+              className="absolute top-3 end-3 w-8 h-8 rounded-full bg-background/70 backdrop-blur-sm flex items-center justify-center transition-all hover:bg-background/90 z-10"
+            >
+              <Heart
+                size={15}
+                className={inWishlist ? 'fill-primary text-primary' : 'text-muted-foreground'}
+              />
+            </button>
             {discount > 0 && (
               <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold tracking-wider px-2 py-1 rounded-sm shadow-lg">
                 -{discount}%

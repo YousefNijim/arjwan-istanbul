@@ -194,6 +194,18 @@ const CartPage = () => {
               <span className="flex-1 h-px bg-border inline-block" />
             </p>
 
+            {/* COD Banner */}
+            <div className="flex items-center gap-3 bg-[hsl(142_60%_20%/0.2)] border border-[hsl(142_60%_40%/0.35)] rounded-sm px-4 py-3 mb-5">
+              <span className="text-lg">💵</span>
+              <p className="text-sm text-green-400">
+                {lang === 'ar'
+                  ? 'الدفع عند الاستلام متاح — ادفع نقداً عند وصول طلبك'
+                  : lang === 'tr'
+                  ? 'Kapıda ödeme mevcut — siparişiniz geldiğinde nakit ödeyin'
+                  : 'Cash on Delivery available — pay when your order arrives'}
+              </p>
+            </div>
+
             <AnimatePresence>
               <div className="space-y-3">
                 {items.map((item, i) => (

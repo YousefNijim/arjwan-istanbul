@@ -13,8 +13,17 @@ const PerfumesPage = () => {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [brandSearch, setBrandSearch] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [scentFamily, setScentFamily] = useState<string | null>(null);
   const category = searchParams.get('category') || 'all';
   const { data: products = [], isLoading: productsLoading } = useProducts();
+
+  const scentFamilies = [
+    { key: 'oud', label: { ar: 'عود', en: 'Oud', tr: 'Oud' }, keywords: ['oud', 'عود', 'agarwood'] },
+    { key: 'oriental', label: { ar: 'شرقي', en: 'Oriental', tr: 'Oriental' }, keywords: ['oriental', 'شرقي', 'amber', 'musk', 'بخور', 'incense', 'resin'] },
+    { key: 'floral', label: { ar: 'زهري', en: 'Floral', tr: 'Çiçeksi' }, keywords: ['rose', 'jasmine', 'floral', 'زهر', 'ورد', 'ياسمين', 'peony', 'lily', 'iris', 'violet'] },
+    { key: 'woody', label: { ar: 'خشبي', en: 'Woody', tr: 'Odunsu' }, keywords: ['cedar', 'sandalwood', 'wood', 'خشب', 'صندل', 'vetiver', 'patchouli'] },
+    { key: 'fresh', label: { ar: 'منعش', en: 'Fresh', tr: 'Ferah' }, keywords: ['citrus', 'fresh', 'منعش', 'bergamot', 'lemon', 'lime', 'aquatic', 'marine', 'green'] },
+  ];
 
   // Build dynamic brand list from actual products
   const allBrands = useMemo(() => {
@@ -46,9 +55,22 @@ const PerfumesPage = () => {
         p.name[lang].toLowerCase().includes(q) ||
         p.originalPerfume.toLowerCase().includes(q) ||
         p.inspiredBy.toLowerCase().includes(q);
-      return matchCategory && matchBrand && matchSearch;
+      const matchScent = !scentFamily
+        ? true
+        : (() => {
+            const sf = scentFamilies.find((f) => f.key === scentFamily);
+            if (!sf) return true;
+            const haystack = [
+              p.description?.en || '',
+              p.notes?.top?.en || '',
+              p.notes?.middle?.en || '',
+              p.notes?.base?.en || '',
+            ].join(' ').toLowerCase();
+            return sf.keywords.some((kw) => haystack.includes(kw.toLowerCase()));
+          })();
+      return matchCategory && matchBrand && matchSearch && matchScent;
     });
-  }, [category, search, lang, selectedBrand, products]);
+  }, [category, search, lang, selectedBrand, scentFamily, products]);
 
   const totalForCategory = useMemo(
     () => products.filter((p) => category === 'all' || p.category === category).length,
@@ -209,6 +231,31 @@ const PerfumesPage = () => {
                 {cat === 'all' ? t('products', 'filterAll') : t('sections', cat)}
               </button>
             ))}
+          </div>
+
+          {/* Scent family filter row */}
+          <div className="flex items-center gap-2 flex-wrap mt-3 sm:mt-0">
+            <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground/40 hidden sm:inline">
+              {lang === 'ar' ? 'العائلة العطرية:' : lang === 'tr' ? 'Koku ailesi:' : 'Scent:'}
+            </span>
+            {scentFamilies.map((sf) => (
+              <button
+                key={sf.key}
+                onClick={() => setScentFamily(scentFamily === sf.key ? null : sf.key)}
+                className={`px-3 py-1.5 text-xs tracking-wider rounded-full border transition-all ${
+                  scentFamily === sf.key
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'border-border/70 text-muted-foreground hover:border-primary hover:text-primary'
+                }`}
+              >
+                {sf.label[lang]}
+              </button>
+            ))}
+            {scentFamily && (
+              <button onClick={() => setScentFamily(null)} className="text-xs text-muted-foreground/50 hover:text-primary transition-colors">
+                <X size={13} />
+              </button>
+            )}
           </div>
 
           <div className="relative w-full sm:w-72 flex items-center gap-2">

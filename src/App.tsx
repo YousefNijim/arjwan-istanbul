@@ -11,6 +11,9 @@ import CartPage from "./pages/CartPage";
 import AboutPage from "./pages/AboutPage";
 import AboutOilsPage from "./pages/AboutOilsPage";
 import ContactPage from "./pages/ContactPage";
+import WishlistPage from "./pages/WishlistPage";
+import ShippingPage from "./pages/ShippingPage";
+import ReturnsPage from "./pages/ReturnsPage";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -38,6 +41,9 @@ const App = () => (
               <Route path="/about" element={<AboutPage />} />
               <Route path="/about-oils" element={<AboutOilsPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/wishlist" element={<WishlistPage />} />
+              <Route path="/shipping" element={<ShippingPage />} />
+              <Route path="/returns" element={<ReturnsPage />} />
             </Route>
 
             <Route path="/admin/login" element={<AdminLogin />} />

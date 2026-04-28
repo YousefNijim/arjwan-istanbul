@@ -1,12 +1,32 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from '@/i18n/useTranslation';
-import { Instagram } from 'lucide-react';
+import { Instagram, ShieldCheck, Truck, Star } from 'lucide-react';
 
 const Footer = () => {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
 
   return (
     <footer className="bg-card border-t border-[hsl(270_52%_34%/0.35)]">
+      {/* Trust badges row */}
+      <div className="border-b border-[hsl(270_52%_34%/0.2)]">
+        <div className="container mx-auto px-4 md:px-8 py-4">
+          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <ShieldCheck size={16} className="text-primary" />
+              <span>{lang === 'ar' ? 'ضمان الأصالة' : lang === 'tr' ? 'Özgünlük Garantisi' : 'Authenticity Guaranteed'}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Truck size={16} className="text-primary" />
+              <span>{lang === 'ar' ? 'شحن سريع لتركيا' : lang === 'tr' ? 'Türkiye Geneli Hızlı Teslimat' : 'Fast Shipping Across Turkey'}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Star size={16} className="text-primary" />
+              <span>{lang === 'ar' ? 'زيوت فرنسية وسويسرية' : lang === 'tr' ? 'Fransız & İsviçre Yağları' : 'French & Swiss Grade Oils'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 md:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {/* Brand */}
@@ -24,13 +44,19 @@ const Footer = () => {
             <Link to="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('nav', 'aboutUs')}</Link>
             <Link to="/about-oils" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('nav', 'aboutOils')}</Link>
             <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('nav', 'contact')}</Link>
+            <Link to="/shipping" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              {lang === 'ar' ? 'الشحن والتوصيل' : lang === 'tr' ? 'Kargo ve Teslimat' : 'Shipping & Delivery'}
+            </Link>
+            <Link to="/returns" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              {lang === 'ar' ? 'سياسة الإرجاع' : lang === 'tr' ? 'İade Politikası' : 'Returns Policy'}
+            </Link>
           </div>
 
           {/* Social */}
           <div className="flex flex-col items-center md:items-end gap-3">
             <p className="text-sm text-muted-foreground">{t('contact', 'followUs')}</p>
             <div className="flex gap-4">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="https://instagram.com/arjwan.istanbul" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                 <Instagram size={20} />
               </a>
               <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
@@ -51,3 +77,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

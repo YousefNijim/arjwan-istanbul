@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ShoppingBag, Globe } from 'lucide-react';
+import { Menu, X, ShoppingBag, Globe, Heart } from 'lucide-react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useTranslation } from '@/i18n/useTranslation';
 import { useCartStore } from '@/store/cartStore';
+import { useWishlistStore } from '@/store/wishlistStore';
 import { Language } from '@/i18n/translations';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -20,6 +21,7 @@ const Navbar = () => {
   const { lang, setLang } = useLanguage();
   const { t } = useTranslation();
   const totalItems = useCartStore((s) => s.totalItems());
+  const wishlistCount = useWishlistStore((s) => s.count());
   const location = useLocation();
 
   useEffect(() => {
@@ -117,6 +119,16 @@ const Navbar = () => {
                 )}
               </AnimatePresence>
             </div>
+
+            {/* Wishlist */}
+            <Link to="/wishlist" className="relative text-foreground/70 hover:text-primary transition-colors">
+              <Heart size={20} />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-2 -end-2 bg-primary text-primary-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
 
             {/* Cart */}
             <Link to="/cart" className="relative text-foreground/70 hover:text-primary transition-colors">

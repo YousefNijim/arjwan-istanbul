@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from '@/i18n/useTranslation';
-import { useProduct } from '@/hooks/useProducts';
+import { useProduct, useProducts } from '@/hooks/useProducts';
 import { useOffers, getDiscountForProduct } from '@/hooks/useOffers';
 import { useCartStore } from '@/store/cartStore';
 import { Minus, Plus, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { SHOW_PRICES } from '@/lib/config';
+import ProductCard from '@/components/ProductCard';
 
 type Concentration = 'heavy' | 'light';
 type Size = '50ml' | '100ml';
@@ -22,6 +23,7 @@ const ProductDetailPage = () => {
 
   const { data: product, isLoading } = useProduct(id!);
   const { data: offers = [] } = useOffers();
+  const { data: allProducts = [] } = useProducts();
 
   if (isLoading) {
     return (
@@ -41,6 +43,10 @@ const ProductDetailPage = () => {
   const discount = getDiscountForProduct(offers, product.id, product.category, product.inspiredBy);
   const originalPrice = size === '50ml' ? product.price50ml : product.price100ml;
   const price = discount > 0 ? Math.round(originalPrice * (1 - discount / 100)) : originalPrice;
+
+  const related = allProducts
+    .filter((p) => p.id !== product.id && p.category === product.category)
+    .slice(0, 4);
 
   const handleAddToCart = () => {
     addItem({
@@ -188,9 +194,25 @@ const ProductDetailPage = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Related Products */}
+        {related.length > 0 && (
+          <div className="mt-20">
+            <h2 className="font-display text-2xl text-primary tracking-wider text-center mb-8">
+              {lang === 'ar' ? 'قد يعجبك أيضاً' : lang === 'tr' ? 'Bunları da Beğenebilirsiniz' : 'You May Also Like'}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {related.map((p, i) => (
+                <ProductCard key={p.id} product={p} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default ProductDetailPage;
+
+
