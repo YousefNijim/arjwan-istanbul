@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from '@/i18n/useTranslation';
 import { Product } from '@/data/products';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useOffers, getDiscountForProduct } from '@/hooks/useOffers';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { Heart } from 'lucide-react';
 import { SHOW_PRICES } from '@/lib/config';
+import { toast } from 'sonner';
 
 interface ProductCardProps {
   product: Product;
@@ -25,6 +26,28 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
   const { toggle, has } = useWishlistStore();
   const inWishlist = has(product.id);
+
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const adding = !inWishlist;
+    toggle(product.id);
+    if (adding) {
+      toast.success(
+        lang === 'ar' ? 'تمت الإضافة إلى المفضلة ❤️' :
+        lang === 'tr' ? 'Favorilere eklendi ❤️' :
+        'Added to wishlist ❤️',
+        { duration: 1800 }
+      );
+    } else {
+      toast(
+        lang === 'ar' ? 'تمت الإزالة من المفضلة' :
+        lang === 'tr' ? 'Favorilerden kaldırıldı' :
+        'Removed from wishlist',
+        { duration: 1500 }
+      );
+    }
+  };
 
   const discountedPrice50 = discount > 0
     ? Math.round(product.price50ml * (1 - discount / 100))
@@ -54,17 +77,34 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             />
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[hsl(270_52%_50%/0.5)] to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[hsl(43_76%_52%/0.35)] to-transparent" />
-            {/* Wishlist button */}
-            <button
-              onClick={(e) => { e.preventDefault(); toggle(product.id); }}
+
+            {/* Wishlist button — always visible, prominent */}
+            <motion.button
+              onClick={handleWishlist}
               aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
-              className="absolute top-3 end-3 w-8 h-8 rounded-full bg-background/70 backdrop-blur-sm flex items-center justify-center transition-all hover:bg-background/90 z-10"
+              whileTap={{ scale: 0.85 }}
+              className={`absolute top-3 end-3 w-9 h-9 rounded-full flex items-center justify-center z-10 shadow-md transition-all duration-200 ${
+                inWishlist
+                  ? 'bg-primary/90 backdrop-blur-sm'
+                  : 'bg-background/75 backdrop-blur-sm hover:bg-background/95'
+              }`}
             >
-              <Heart
-                size={15}
-                className={inWishlist ? 'fill-primary text-primary' : 'text-muted-foreground'}
-              />
-            </button>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={inWishlist ? 'filled' : 'empty'}
+                  initial={{ scale: 0.6, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.6, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <Heart
+                    size={16}
+                    className={inWishlist ? 'fill-primary-foreground text-primary-foreground' : 'text-foreground/80'}
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </motion.button>
+
             {discount > 0 && (
               <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold tracking-wider px-2 py-1 rounded-sm shadow-lg">
                 -{discount}%
