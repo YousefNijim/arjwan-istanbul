@@ -61,7 +61,7 @@ const AdminProducts = () => {
                 <th className="text-start px-4 py-3 text-xs text-muted-foreground tracking-widest uppercase font-normal">Product</th>
                 <th className="text-start px-4 py-3 text-xs text-muted-foreground tracking-widest uppercase font-normal hidden md:table-cell">Inspired By</th>
                 <th className="text-start px-4 py-3 text-xs text-muted-foreground tracking-widest uppercase font-normal hidden lg:table-cell">Category</th>
-                <th className="text-start px-4 py-3 text-xs text-muted-foreground tracking-widest uppercase font-normal">50ml / 100ml</th>
+                <th className="text-start px-4 py-3 text-xs text-muted-foreground tracking-widest uppercase font-normal">Price</th>
                 <th className="text-start px-4 py-3 text-xs text-muted-foreground tracking-widest uppercase font-normal">Status</th>
                 <th className="px-4 py-3"></th>
               </tr>
@@ -93,7 +93,7 @@ const AdminProducts = () => {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {p.price50ml} / {p.price100ml} TL
+                    {p.price50ml} TL
                   </td>
                   <td className="px-4 py-3">
                     <span className={`text-xs px-2 py-0.5 rounded-full border ${p.active ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-border text-muted-foreground bg-secondary'}`}>

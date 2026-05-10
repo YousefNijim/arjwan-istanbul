@@ -52,9 +52,6 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const discountedPrice50 = discount > 0
     ? Math.round(product.price50ml * (1 - discount / 100))
     : null;
-  const discountedPrice100 = discount > 0
-    ? Math.round(product.price100ml * (1 - discount / 100))
-    : null;
 
   return (
     <motion.div
@@ -127,15 +124,15 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                 discount > 0 ? (
                   <div className="flex flex-col gap-0.5">
                     <span className="text-muted-foreground/50 text-xs line-through">
-                      {product.price50ml} – {product.price100ml} TL
+                      {product.price50ml} TL
                     </span>
                     <span className="text-[hsl(43_76%_52%)] text-sm font-semibold">
-                      {discountedPrice50} – {discountedPrice100} TL
+                      {discountedPrice50} TL
                     </span>
                   </div>
                 ) : (
                   <span className="text-primary text-sm font-medium">
-                    {product.price50ml} – {product.price100ml} TL
+                    {product.price50ml} TL
                   </span>
                 )
               )}

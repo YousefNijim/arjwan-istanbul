@@ -98,8 +98,8 @@ const PerfumesPage = () => {
       case 'popular':   list = [...list].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)); break;
       case 'az':        list = [...list].sort((a, b) => a.originalPerfume.localeCompare(b.originalPerfume)); break;
       case 'za':        list = [...list].sort((a, b) => b.originalPerfume.localeCompare(a.originalPerfume)); break;
-      case 'price_asc': list = [...list].sort((a, b) => a.price100ml - b.price100ml); break;
-      case 'price_desc':list = [...list].sort((a, b) => b.price100ml - a.price100ml); break;
+      case 'price_asc': list = [...list].sort((a, b) => a.price50ml - b.price50ml); break;
+      case 'price_desc':list = [...list].sort((a, b) => b.price50ml - a.price50ml); break;
     }
     return list;
   }, [category, search, lang, selectedBrand, scentFamily, sort, products]);
