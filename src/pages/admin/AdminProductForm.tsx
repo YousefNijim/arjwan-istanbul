@@ -22,7 +22,7 @@ const EMPTY: Record<string, any> = {
   id: '', nameAr: '', nameEn: '', nameTr: '',
   descriptionAr: '', descriptionEn: '', descriptionTr: '',
   category: 'men', price50ml: '', price100ml: '',
-  imageUrl: '/bottle-black.png', inspiredBy: '', originalPerfume: '',
+  imageUrl: '', inspiredBy: '', originalPerfume: '',
   notesTopAr: '', notesTopEn: '', notesTopTr: '',
   notesMiddleAr: '', notesMiddleEn: '', notesMiddleTr: '',
   notesBaseAr: '', notesBaseEn: '', notesBaseTr: '',
@@ -123,7 +123,7 @@ const AdminProductForm = () => {
           <div className="flex items-center gap-4">
             <img src={form.imageUrl} alt="" className="w-20 h-24 object-cover bg-[hsl(0_0%_6%)] rounded-sm border border-border" />
             <div className="space-y-2">
-              <Input value={form.imageUrl} onChange={e => set('imageUrl', e.target.value)} placeholder="/bottle-black.png" className="w-72" />
+              <Input value={form.imageUrl} onChange={e => set('imageUrl', e.target.value)} placeholder="Image URL (leave empty for default)" className="w-72" />
               <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
                 <Upload size={14} />
                 {uploadLoading ? 'Uploading…' : 'Upload new image'}

@@ -52,7 +52,7 @@ export const products: Product[] = [
     category: 'men',
     price50ml: 350,
     price100ml: 550,
-    image: '/bottle-black.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/man%20perfume%20car%20pic.png',
     inspiredBy: 'Chanel',
     originalPerfume: 'BLEU DE CHANEL',
     notes: {
@@ -73,7 +73,7 @@ export const products: Product[] = [
     category: 'women',
     price50ml: 380,
     price100ml: 600,
-    image: '/bottle-gold.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/women%20perfume%20card%20pic.png',
     inspiredBy: 'Dior',
     originalPerfume: 'MISS DIOR',
     notes: {
@@ -94,7 +94,7 @@ export const products: Product[] = [
     category: 'men',
     price50ml: 320,
     price100ml: 500,
-    image: '/bottle-black.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/man%20perfume%20car%20pic.png',
     inspiredBy: 'Dior',
     originalPerfume: 'SAUVAGE',
     notes: {
@@ -115,7 +115,7 @@ export const products: Product[] = [
     category: 'women',
     price50ml: 340,
     price100ml: 530,
-    image: '/bottle-gold.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/women%20perfume%20card%20pic.png',
     inspiredBy: 'Lancôme',
     originalPerfume: 'LA VIE EST BELLE',
     notes: {
@@ -136,7 +136,7 @@ export const products: Product[] = [
     category: 'men',
     price50ml: 400,
     price100ml: 650,
-    image: '/bottle-black.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/man%20perfume%20car%20pic.png',
     inspiredBy: 'Tom Ford',
     originalPerfume: 'OUD WOOD',
     notes: {
@@ -156,7 +156,7 @@ export const products: Product[] = [
     category: 'women',
     price50ml: 390,
     price100ml: 620,
-    image: '/bottle-gold.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/women%20perfume%20card%20pic.png',
     inspiredBy: 'YSL',
     originalPerfume: 'BLACK OPIUM',
     notes: {
@@ -176,7 +176,7 @@ export const products: Product[] = [
     category: 'men',
     price50ml: 360,
     price100ml: 570,
-    image: '/bottle-black.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/man%20perfume%20car%20pic.png',
     inspiredBy: 'Versace',
     originalPerfume: 'EROS',
     notes: {
@@ -196,7 +196,7 @@ export const products: Product[] = [
     category: 'women',
     price50ml: 355,
     price100ml: 560,
-    image: '/bottle-gold.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/women%20perfume%20card%20pic.png',
     inspiredBy: 'Gucci',
     originalPerfume: 'BLOOM',
     notes: {
@@ -216,7 +216,7 @@ export const products: Product[] = [
     category: 'men',
     price50ml: 330,
     price100ml: 520,
-    image: '/bottle-black.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/man%20perfume%20car%20pic.png',
     inspiredBy: 'Paco Rabanne',
     originalPerfume: '1 MILLION',
     notes: {
@@ -236,7 +236,7 @@ export const products: Product[] = [
     category: 'women',
     price50ml: 370,
     price100ml: 580,
-    image: '/bottle-gold.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/women%20perfume%20card%20pic.png',
     inspiredBy: 'Viktor & Rolf',
     originalPerfume: 'FLOWERBOMB',
     notes: {
@@ -256,7 +256,7 @@ export const products: Product[] = [
     category: 'men',
     price50ml: 345,
     price100ml: 545,
-    image: '/bottle-black.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/man%20perfume%20car%20pic.png',
     inspiredBy: 'Armani',
     originalPerfume: 'ACQUA DI GIÒ',
     notes: {
@@ -276,7 +276,7 @@ export const products: Product[] = [
     category: 'women',
     price50ml: 395,
     price100ml: 630,
-    image: '/bottle-gold.png',
+    image: 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/women%20perfume%20card%20pic.png',
     inspiredBy: 'Carolina Herrera',
     originalPerfume: 'GOOD GIRL',
     notes: {

@@ -40,15 +40,15 @@ const WishlistPage = () => {
               {lang === 'ar'
                 ? 'قائمة المفضلة فارغة'
                 : lang === 'tr'
-                ? 'Favoriler boş'
-                : 'Your wishlist is empty'}
+                  ? 'Favoriler boş'
+                  : 'Your wishlist is empty'}
             </p>
             <p className="text-muted-foreground text-sm mb-8">
               {lang === 'ar'
                 ? 'أضف عطورك المفضلة لتجدها هنا لاحقاً'
                 : lang === 'tr'
-                ? 'Beğendiğiniz parfümleri favorilere ekleyin'
-                : 'Save perfumes you love to find them here later'}
+                  ? 'Beğendiğiniz parfümleri favorilere ekleyin'
+                  : 'Save perfumes you love to find them here later'}
             </p>
             <Link
               to="/perfumes"
