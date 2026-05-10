@@ -1,9 +1,9 @@
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from '@/i18n/useTranslation';
 import ProductCard from '@/components/ProductCard';
 import { useProducts } from '@/hooks/useProducts';
-import { Search, SlidersHorizontal, X, ChevronDown, ChevronUp, ArrowUpDown, Loader2 } from 'lucide-react';
+import { Search, SlidersHorizontal, X, ChevronDown, ChevronUp, ArrowUpDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const PAGE_SIZE = 12;
@@ -39,8 +39,7 @@ const PerfumesPage = () => {
   const [brandSectionOpen, setBrandSectionOpen] = useState(true);
   const [scentSectionOpen, setScentSectionOpen] = useState(true);
   const [searchStuck, setSearchStuck] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const category = searchParams.get('category') || 'all';
   const { data: products = [], isLoading: productsLoading } = useProducts();
@@ -130,15 +129,10 @@ const PerfumesPage = () => {
   }, [products, category, selectedBrand]);
 
   // Reset pagination when filters change
-  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [category, search, selectedBrand, scentFamily, sort]);
+  useEffect(() => { setCurrentPage(1); }, [category, search, selectedBrand, scentFamily, sort]);
 
-  const loadMore = useCallback(() => {
-    setLoadingMore(true);
-    setTimeout(() => {
-      setVisibleCount((v) => v + PAGE_SIZE);
-      setLoadingMore(false);
-    }, 400);
-  }, []);
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const currentProducts = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   const activeFilterCount = [selectedBrand, scentFamily].filter(Boolean).length;
 
@@ -532,50 +526,32 @@ const PerfumesPage = () => {
             ) : (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                  {filtered.slice(0, visibleCount).map((product, i) => (
+                  {currentProducts.map((product, i) => (
                     <ProductCard key={product.id} product={product} index={i} />
                   ))}
                 </div>
 
-                {/* Load more */}
-                {visibleCount < filtered.length && (
-                  <div className="mt-10 flex flex-col items-center gap-3">
-                    {/* Progress bar */}
-                    <div className="w-48 h-1 bg-border rounded-full overflow-hidden">
-                      <motion.div
-                        className="h-full bg-primary rounded-full"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${Math.min(100, (visibleCount / filtered.length) * 100)}%` }}
-                        transition={{ duration: 0.4 }}
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground/50 tracking-wider">
-                      {lang === 'ar'
-                        ? `${Math.min(visibleCount, filtered.length)} من ${filtered.length}`
-                        : lang === 'tr'
-                        ? `${Math.min(visibleCount, filtered.length)} / ${filtered.length} parfüm`
-                        : `${Math.min(visibleCount, filtered.length)} of ${filtered.length} perfumes`}
-                    </p>
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="mt-12 flex items-center justify-center gap-4">
                     <button
-                      onClick={loadMore}
-                      disabled={loadingMore}
-                      className="flex items-center gap-2 border border-primary/40 text-primary px-8 py-2.5 text-sm tracking-widest uppercase hover:bg-primary/10 transition-all disabled:opacity-60 rounded-sm"
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 border border-border text-sm tracking-wider uppercase disabled:opacity-50 disabled:cursor-not-allowed hover:border-primary hover:text-primary transition-colors rounded-sm"
                     >
-                      {loadingMore ? (
-                        <Loader2 size={15} className="animate-spin" />
-                      ) : null}
-                      {lang === 'ar' ? 'تحميل المزيد' : lang === 'tr' ? 'Daha Fazla' : 'Load More'}
+                      {lang === 'ar' ? 'السابق' : lang === 'tr' ? 'Önceki' : 'Previous'}
+                    </button>
+                    <span className="text-sm text-muted-foreground">
+                      {lang === 'ar' ? `صفحة ${currentPage} من ${totalPages}` : lang === 'tr' ? `Sayfa ${currentPage} / ${totalPages}` : `Page ${currentPage} of ${totalPages}`}
+                    </span>
+                    <button
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 border border-border text-sm tracking-wider uppercase disabled:opacity-50 disabled:cursor-not-allowed hover:border-primary hover:text-primary transition-colors rounded-sm"
+                    >
+                      {lang === 'ar' ? 'التالي' : lang === 'tr' ? 'Sonraki' : 'Next'}
                     </button>
                   </div>
-                )}
-
-                {/* All loaded indicator */}
-                {visibleCount >= filtered.length && filtered.length > PAGE_SIZE && (
-                  <p className="mt-8 text-center text-xs text-muted-foreground/40 tracking-widest">
-                    {lang === 'ar' ? `— تم عرض جميع العطور الـ ${filtered.length} —`
-                     : lang === 'tr' ? `— ${filtered.length} parfümün tamamı gösterildi —`
-                     : `— All ${filtered.length} perfumes shown —`}
-                  </p>
                 )}
               </>
             )}
