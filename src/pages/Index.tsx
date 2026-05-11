@@ -22,6 +22,7 @@ const Index = () => {
   const featured = allProducts.filter((p) => p.featured);
   const { data: siteSettings } = useSettings();
   const homeBanners: string[] = Array.isArray(siteSettings?.homeBanners) ? siteSettings.homeBanners : [];
+  const homeBannersMobile: string[] = Array.isArray(siteSettings?.homeBannersMobile) ? siteSettings.homeBannersMobile : [];
   const bannerHeight = Number(siteSettings?.bannerHeight) || 400;
   const bannerHeightMobile = Number(siteSettings?.bannerHeightMobile) || 220;
 
@@ -119,7 +120,7 @@ const Index = () => {
       {homeBanners.length > 0 && (
         <section className="px-4 py-6">
           <div className="container mx-auto">
-            <BannerSlider banners={homeBanners} height={bannerHeight} heightMobile={bannerHeightMobile} />
+            <BannerSlider banners={homeBanners} bannersMobile={homeBannersMobile} height={bannerHeight} heightMobile={bannerHeightMobile} />
           </div>
         </section>
       )}

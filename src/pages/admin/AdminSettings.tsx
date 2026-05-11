@@ -89,7 +89,9 @@ const AdminSettings = () => {
     logoText: 'ARJWAN', logoSubtext: 'Istanbul', whatsappNumber: '',
     instagramHandle: '', contactEmail: '', heroBackground: '',
     brandStoryBackground: '', customLogoUrl: '',
-    homeBanners: [], perfumeBanners: [], bannerHeight: 400, bannerHeightMobile: 220,
+    homeBanners: [], homeBannersMobile: [],
+    perfumeBanners: [], perfumeBannersMobile: [],
+    bannerHeight: 400, bannerHeightMobile: 220,
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -187,22 +189,47 @@ const AdminSettings = () => {
               />
             </Field>
           </div>
-          <Field label="Home Page Banners" hint="Displayed above the Featured Perfumes section on the home page">
-            <div className="mt-2">
-              <BannerArrayEditor
-                banners={Array.isArray(settings.homeBanners) ? settings.homeBanners : []}
-                onChange={urls => set('homeBanners', urls)}
-              />
-            </div>
-          </Field>
-          <Field label="Perfumes Page Banners" hint="Displayed at the top of the Perfumes page">
-            <div className="mt-2">
-              <BannerArrayEditor
-                banners={Array.isArray(settings.perfumeBanners) ? settings.perfumeBanners : []}
-                onChange={urls => set('perfumeBanners', urls)}
-              />
-            </div>
-          </Field>
+          {/* Home page banners */}
+          <div className="space-y-3">
+            <p className="text-xs text-muted-foreground/70 tracking-widest uppercase border-b border-border pb-2">Home Page</p>
+            <Field label="Desktop Banners" hint="Shown above Featured Perfumes on desktop">
+              <div className="mt-2">
+                <BannerArrayEditor
+                  banners={Array.isArray(settings.homeBanners) ? settings.homeBanners : []}
+                  onChange={urls => set('homeBanners', urls)}
+                />
+              </div>
+            </Field>
+            <Field label="Mobile Banners" hint="Shown on phones — leave empty to fall back to desktop banners">
+              <div className="mt-2">
+                <BannerArrayEditor
+                  banners={Array.isArray(settings.homeBannersMobile) ? settings.homeBannersMobile : []}
+                  onChange={urls => set('homeBannersMobile', urls)}
+                />
+              </div>
+            </Field>
+          </div>
+
+          {/* Perfumes page banners */}
+          <div className="space-y-3">
+            <p className="text-xs text-muted-foreground/70 tracking-widest uppercase border-b border-border pb-2">Perfumes Page</p>
+            <Field label="Desktop Banners" hint="Shown at the top of the Perfumes page on desktop">
+              <div className="mt-2">
+                <BannerArrayEditor
+                  banners={Array.isArray(settings.perfumeBanners) ? settings.perfumeBanners : []}
+                  onChange={urls => set('perfumeBanners', urls)}
+                />
+              </div>
+            </Field>
+            <Field label="Mobile Banners" hint="Shown on phones — leave empty to fall back to desktop banners">
+              <div className="mt-2">
+                <BannerArrayEditor
+                  banners={Array.isArray(settings.perfumeBannersMobile) ? settings.perfumeBannersMobile : []}
+                  onChange={urls => set('perfumeBannersMobile', urls)}
+                />
+              </div>
+            </Field>
+          </div>
         </section>
 
         <button type="submit" disabled={saving}

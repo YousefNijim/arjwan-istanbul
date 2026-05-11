@@ -47,6 +47,7 @@ const PerfumesPage = () => {
   const { data: products = [], isLoading: productsLoading } = useProducts();
   const { data: siteSettings } = useSettings();
   const perfumeBanners: string[] = Array.isArray(siteSettings?.perfumeBanners) ? siteSettings.perfumeBanners : [];
+  const perfumeBannersMobile: string[] = Array.isArray(siteSettings?.perfumeBannersMobile) ? siteSettings.perfumeBannersMobile : [];
   const bannerHeight = Number(siteSettings?.bannerHeight) || 400;
   const bannerHeightMobile = Number(siteSettings?.bannerHeightMobile) || 220;
 
@@ -341,7 +342,7 @@ const PerfumesPage = () => {
         {/* Offer Banners */}
         {perfumeBanners.length > 0 && (
           <div className="mb-6">
-            <BannerSlider banners={perfumeBanners} height={bannerHeight} heightMobile={bannerHeightMobile} />
+            <BannerSlider banners={perfumeBanners} bannersMobile={perfumeBannersMobile} height={bannerHeight} heightMobile={bannerHeightMobile} />
           </div>
         )}
 
