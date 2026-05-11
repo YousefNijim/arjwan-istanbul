@@ -17,7 +17,7 @@ const BannerSlider = ({ banners, className = '' }: BannerSliderProps) => {
   if (!banners.length) return null;
 
   return (
-    <div className={`relative aspect-[2/1] md:aspect-[4/1] overflow-hidden ${className}`}>
+    <div className={`relative aspect-[2800/1550] overflow-hidden ${className}`}>
       {banners.map((src, i) => (
         <div
           key={i}
