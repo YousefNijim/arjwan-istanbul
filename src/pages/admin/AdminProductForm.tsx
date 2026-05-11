@@ -68,7 +68,7 @@ const AdminProductForm = () => {
     setError('');
     setLoading(true);
     try {
-      const data = { ...form, price50ml: Number(form.price50ml), price100ml: Number(form.price50ml), sortOrder: Number(form.sortOrder) };
+      const data = { ...form, price50ml: Number(form.price50ml), price100ml: Number(form.price100ml), sortOrder: Number(form.sortOrder) };
       if (isEdit) await adminApi.updatePerfume(id!, data);
       else await adminApi.createPerfume(data);
       navigate('/admin/products');
@@ -104,6 +104,7 @@ const AdminProductForm = () => {
           <Field label="Inspired By (Brand)"><Input value={form.inspiredBy} onChange={e => set('inspiredBy', e.target.value)} placeholder="e.g. Chanel" /></Field>
           <Field label="Original Perfume Name"><Input value={form.originalPerfume} onChange={e => set('originalPerfume', e.target.value)} placeholder="e.g. BLEU DE CHANEL" /></Field>
           <Field label="Price 50ml (TL)"><Input type="number" value={form.price50ml} onChange={e => set('price50ml', e.target.value)} required /></Field>
+          <Field label="Price 100ml (TL)"><Input type="number" value={form.price100ml} onChange={e => set('price100ml', e.target.value)} required /></Field>
           <Field label="Sort Order"><Input type="number" value={form.sortOrder} onChange={e => set('sortOrder', e.target.value)} /></Field>
           <div className="flex gap-6 items-center">
             <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">

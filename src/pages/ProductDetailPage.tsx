@@ -11,14 +11,14 @@ import { SHOW_PRICES } from '@/lib/config';
 import ProductCard from '@/components/ProductCard';
 
 type Concentration = 'heavy' | 'light';
-type Size = '50ml';
+type Size = '50ml' | '100ml';
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const { t, lang } = useTranslation();
   const addItem = useCartStore((s) => s.addItem);
   const [concentration, setConcentration] = useState<Concentration>('heavy');
-  const size: Size = '50ml';
+  const [size, setSize] = useState<Size>('50ml');
   const [quantity, setQuantity] = useState(1);
 
   const { data: product, isLoading } = useProduct(id!);
@@ -41,7 +41,7 @@ const ProductDetailPage = () => {
   }
 
   const discount = getDiscountForProduct(offers, product.id, product.category, product.inspiredBy);
-  const originalPrice = product.price50ml;
+  const originalPrice = size === '50ml' ? product.price50ml : product.price100ml;
   const price = discount > 0 ? Math.round(originalPrice * (1 - discount / 100)) : originalPrice;
 
   const related = allProducts
@@ -137,7 +137,25 @@ const ProductDetailPage = () => {
               </div>
             </div>
 
-            {/* Size removed */}
+            {/* Size */}
+            <div className="mb-5">
+              <h3 className="text-sm text-muted-foreground tracking-wider uppercase mb-2">{t('products', 'size')}</h3>
+              <div className="flex flex-wrap gap-2">
+                {(['50ml', '100ml'] as const).map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSize(s)}
+                    className={`px-4 py-2 text-xs tracking-wider border transition-all ${
+                      size === s
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'border-border text-muted-foreground hover:border-primary'
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             {/* Quantity */}
             <div className="mb-6">

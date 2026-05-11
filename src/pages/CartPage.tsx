@@ -77,7 +77,7 @@ const CartPage = () => {
 
     const lines = items.map(item => {
       const concLabel = t('products', item.concentration);
-      return `• ${item.name} (${concLabel}) x${item.quantity} = ${item.price * item.quantity} TL`;
+      return `• ${item.name} (${item.size}, ${concLabel}) x${item.quantity} = ${item.price * item.quantity} TL`;
     });
 
     const message = [
@@ -226,7 +226,7 @@ const CartPage = () => {
                     <div className="flex-1 min-w-0">
                       <h3 className="text-primary font-display tracking-wider text-sm truncate">{item.name}</h3>
                       <p className="text-xs text-muted-foreground mt-0.5">
-                        {t('products', item.concentration)}
+                        {item.size} • {t('products', item.concentration)}
                       </p>
                       {SHOW_PRICES && (
                         <p className="text-primary font-semibold mt-1.5 text-sm">{item.price * item.quantity} TL</p>
