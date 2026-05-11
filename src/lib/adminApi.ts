@@ -28,6 +28,34 @@ async function req<T>(method: string, path: string, body?: any): Promise<T> {
   return res.json();
 }
 
+const compressImage = (file: File, maxWidth = 1920, quality = 0.82): Promise<File> =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width);
+        width = maxWidth;
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        blob => {
+          if (!blob) return reject(new Error('Compression failed'));
+          resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
+        },
+        'image/jpeg',
+        quality,
+      );
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+
 export const adminApi = {
   login: (username: string, password: string) =>
     req<{ token: string; username: string }>('POST', '/admin/login', { username, password }),
@@ -52,8 +80,9 @@ export const adminApi = {
   updateSettings: (data: Record<string, any>) => req<any>('PUT', '/admin/settings', data),
 
   uploadImage: async (file: File): Promise<{ url: string }> => {
+    const compressed = await compressImage(file);
     const form = new FormData();
-    form.append('image', file);
+    form.append('image', compressed);
     const res = await fetch(`${BASE}/admin/upload`, {
       method: 'POST',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
