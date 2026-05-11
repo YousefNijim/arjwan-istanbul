@@ -23,6 +23,7 @@ const Index = () => {
   const { data: siteSettings } = useSettings();
   const homeBanners: string[] = Array.isArray(siteSettings?.homeBanners) ? siteSettings.homeBanners : [];
   const bannerHeight = Number(siteSettings?.bannerHeight) || 400;
+  const bannerHeightMobile = Number(siteSettings?.bannerHeightMobile) || 220;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -118,7 +119,7 @@ const Index = () => {
       {homeBanners.length > 0 && (
         <section className="px-4 py-6">
           <div className="container mx-auto">
-            <BannerSlider banners={homeBanners} height={bannerHeight} />
+            <BannerSlider banners={homeBanners} height={bannerHeight} heightMobile={bannerHeightMobile} />
           </div>
         </section>
       )}

@@ -89,7 +89,7 @@ const AdminSettings = () => {
     logoText: 'ARJWAN', logoSubtext: 'Istanbul', whatsappNumber: '',
     instagramHandle: '', contactEmail: '', heroBackground: '',
     brandStoryBackground: '', customLogoUrl: '',
-    homeBanners: [], perfumeBanners: [], bannerHeight: 400,
+    homeBanners: [], perfumeBanners: [], bannerHeight: 400, bannerHeightMobile: 220,
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -165,16 +165,28 @@ const AdminSettings = () => {
 
         <section className="bg-card border border-border rounded-sm p-6 space-y-6">
           <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Offer Banners</h2>
-          <Field label="Banner Height (px)" hint="Controls the display height of the slider on all pages (e.g. 400, 600, 800)">
-            <Input
-              type="number"
-              min="100"
-              max="1200"
-              value={settings.bannerHeight ?? 400}
-              onChange={e => set('bannerHeight', Number(e.target.value))}
-              placeholder="400"
-            />
-          </Field>
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Banner Height — Desktop (px)" hint="e.g. 400, 600, 800">
+              <Input
+                type="number"
+                min="100"
+                max="1200"
+                value={settings.bannerHeight ?? 400}
+                onChange={e => set('bannerHeight', Number(e.target.value))}
+                placeholder="400"
+              />
+            </Field>
+            <Field label="Banner Height — Mobile (px)" hint="e.g. 180, 220, 300">
+              <Input
+                type="number"
+                min="80"
+                max="800"
+                value={settings.bannerHeightMobile ?? 220}
+                onChange={e => set('bannerHeightMobile', Number(e.target.value))}
+                placeholder="220"
+              />
+            </Field>
+          </div>
           <Field label="Home Page Banners" hint="Displayed above the Featured Perfumes section on the home page">
             <div className="mt-2">
               <BannerArrayEditor

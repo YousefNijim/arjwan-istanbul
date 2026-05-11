@@ -3,11 +3,21 @@ import { useState, useEffect } from 'react';
 interface BannerSliderProps {
   banners: string[];
   height?: number;
+  heightMobile?: number;
   className?: string;
 }
 
-const BannerSlider = ({ banners, height = 400, className = '' }: BannerSliderProps) => {
+const BannerSlider = ({ banners, height = 400, heightMobile = 220, className = '' }: BannerSliderProps) => {
   const [current, setCurrent] = useState(0);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    setIsMobile(mq.matches);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   useEffect(() => {
     if (banners.length <= 1) return;
@@ -17,8 +27,10 @@ const BannerSlider = ({ banners, height = 400, className = '' }: BannerSliderPro
 
   if (!banners.length) return null;
 
+  const currentHeight = isMobile ? heightMobile : height;
+
   return (
-    <div className={`relative overflow-hidden ${className}`} style={{ height: `${height}px` }}>
+    <div className={`relative overflow-hidden ${className}`} style={{ height: `${currentHeight}px` }}>
       {banners.map((src, i) => (
         <div
           key={i}
