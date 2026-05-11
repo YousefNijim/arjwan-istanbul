@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from '@/i18n/useTranslation';
 import ProductCard from '@/components/ProductCard';
 import { useProducts } from '@/hooks/useProducts';
+import { useSettings } from '@/hooks/useSettings';
+import BannerSlider from '@/components/BannerSlider';
 import { Search, SlidersHorizontal, X, ChevronDown, ChevronUp, ArrowUpDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -43,6 +45,8 @@ const PerfumesPage = () => {
 
   const category = searchParams.get('category') || 'all';
   const { data: products = [], isLoading: productsLoading } = useProducts();
+  const { data: siteSettings } = useSettings();
+  const perfumeBanners: string[] = Array.isArray(siteSettings?.perfumeBanners) ? siteSettings.perfumeBanners : [];
 
   // Sticky search sentinel
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -331,6 +335,13 @@ const PerfumesPage = () => {
         >
           {t('nav', 'perfumes')}
         </motion.h1>
+
+        {/* Offer Banners */}
+        {perfumeBanners.length > 0 && (
+          <div className="mb-6">
+            <BannerSlider banners={perfumeBanners} />
+          </div>
+        )}
 
         {/* Category pills + sort */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">

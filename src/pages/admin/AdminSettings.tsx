@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { adminApi } from '@/lib/adminApi';
-import { Save } from 'lucide-react';
+import { Save, X } from 'lucide-react';
 
 const Field = ({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) => (
   <div>
@@ -14,11 +14,82 @@ const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input {...props} className={`w-full bg-secondary border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-[hsl(43_76%_52%)] transition-colors ${props.className || ''}`} />
 );
 
+const BannerArrayEditor = ({
+  banners,
+  onChange,
+}: {
+  banners: string[];
+  onChange: (urls: string[]) => void;
+}) => {
+  const [uploading, setUploading] = useState(false);
+  const [urlInput, setUrlInput] = useState('');
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const { url } = await adminApi.uploadImage(file);
+      onChange([...banners, url]);
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  const addUrl = () => {
+    const url = urlInput.trim();
+    if (!url) return;
+    onChange([...banners, url]);
+    setUrlInput('');
+  };
+
+  return (
+    <div className="space-y-3">
+      {banners.map((url, i) => (
+        <div key={i} className="flex items-center gap-3 bg-secondary border border-border p-2">
+          <img src={url} alt="" className="w-16 h-10 object-cover rounded-sm shrink-0" />
+          <span className="text-xs text-muted-foreground truncate flex-1">{url}</span>
+          <button
+            type="button"
+            onClick={() => onChange(banners.filter((_, j) => j !== i))}
+            className="text-red-400 hover:text-red-300 transition-colors shrink-0"
+          >
+            <X size={14} />
+          </button>
+        </div>
+      ))}
+      <label className="flex items-center gap-2 cursor-pointer w-fit">
+        <span className="text-xs bg-secondary border border-border px-3 py-2 hover:border-[hsl(43_76%_52%)] transition-colors text-muted-foreground">
+          {uploading ? 'Uploading…' : '+ Upload Image'}
+        </span>
+        <input type="file" accept="image/*" className="hidden" onChange={handleUpload} disabled={uploading} />
+      </label>
+      <div className="flex gap-2">
+        <Input
+          value={urlInput}
+          onChange={e => setUrlInput(e.target.value)}
+          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter') { e.preventDefault(); addUrl(); } }}
+          placeholder="Or paste image URL…"
+        />
+        <button
+          type="button"
+          onClick={addUrl}
+          className="text-xs bg-secondary border border-border px-3 py-2 text-muted-foreground hover:border-[hsl(43_76%_52%)] hover:text-foreground transition-colors whitespace-nowrap"
+        >
+          Add URL
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const AdminSettings = () => {
   const [settings, setSettings] = useState<Record<string, any>>({
     logoText: 'ARJWAN', logoSubtext: 'Istanbul', whatsappNumber: '',
     instagramHandle: '', contactEmail: '', heroBackground: '',
     brandStoryBackground: '', customLogoUrl: '',
+    homeBanners: [], perfumeBanners: [],
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -89,6 +160,26 @@ const AdminSettings = () => {
           </Field>
           <Field label="Brand Story Section Background URL" hint="Image URL for the 'Our Story' section background">
             <Input value={settings.brandStoryBackground || ''} onChange={e => set('brandStoryBackground', e.target.value)} placeholder="/uploads/story-bg.jpg or https://..." />
+          </Field>
+        </section>
+
+        <section className="bg-card border border-border rounded-sm p-6 space-y-6">
+          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Offer Banners</h2>
+          <Field label="Home Page Banners" hint="Displayed above the Featured Perfumes section on the home page">
+            <div className="mt-2">
+              <BannerArrayEditor
+                banners={Array.isArray(settings.homeBanners) ? settings.homeBanners : []}
+                onChange={urls => set('homeBanners', urls)}
+              />
+            </div>
+          </Field>
+          <Field label="Perfumes Page Banners" hint="Displayed at the top of the Perfumes page">
+            <div className="mt-2">
+              <BannerArrayEditor
+                banners={Array.isArray(settings.perfumeBanners) ? settings.perfumeBanners : []}
+                onChange={urls => set('perfumeBanners', urls)}
+              />
+            </div>
           </Field>
         </section>
 

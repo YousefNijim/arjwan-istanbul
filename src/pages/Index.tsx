@@ -8,6 +8,8 @@ import hero2 from '@/assets/hero-2.jpg';
 import categoryMen from '@/assets/category-men.jpg';
 import categoryWomen from '@/assets/category-women.jpg';
 import { useProducts } from '@/hooks/useProducts';
+import { useSettings } from '@/hooks/useSettings';
+import BannerSlider from '@/components/BannerSlider';
 import { ShieldCheck, Truck, Gem, Star } from 'lucide-react';
 
 const heroImages = [hero1, hero2];
@@ -18,6 +20,8 @@ const Index = () => {
   const [email, setEmail] = useState('');
   const { data: allProducts = [] } = useProducts();
   const featured = allProducts.filter((p) => p.featured);
+  const { data: siteSettings } = useSettings();
+  const homeBanners: string[] = Array.isArray(siteSettings?.homeBanners) ? siteSettings.homeBanners : [];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -108,6 +112,15 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Offer Banners */}
+      {homeBanners.length > 0 && (
+        <section className="px-4 py-6">
+          <div className="container mx-auto">
+            <BannerSlider banners={homeBanners} />
+          </div>
+        </section>
+      )}
 
       {/* Featured Products */}
       <section className="py-20 px-4">
