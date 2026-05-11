@@ -17,13 +17,13 @@ const BannerSlider = ({ banners, className = '' }: BannerSliderProps) => {
   if (!banners.length) return null;
 
   return (
-    <div className={`relative aspect-[2800/1550] overflow-hidden ${className}`}>
+    <div className={`relative aspect-[2/1] md:aspect-[4/1] overflow-hidden ${className}`}>
       {banners.map((src, i) => (
         <div
           key={i}
           className={`absolute inset-0 transition-opacity duration-700 ${i === current ? 'opacity-100' : 'opacity-0'}`}
         >
-          <img src={src} alt="" className="w-full h-full object-cover" loading="lazy" />
+          <img src={src} alt="" className="w-full h-full object-contain" loading="lazy" />
         </div>
       ))}
       {banners.length > 1 && (
