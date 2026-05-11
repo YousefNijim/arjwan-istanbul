@@ -14,6 +14,8 @@ import ContactPage from "./pages/ContactPage";
 import WishlistPage from "./pages/WishlistPage";
 import ShippingPage from "./pages/ShippingPage";
 import ReturnsPage from "./pages/ReturnsPage";
+import CouplesEidBundle from "./pages/bundles/CouplesEidBundle";
+import EidTripleBundle from "./pages/bundles/EidTripleBundle";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -44,6 +46,8 @@ const App = () => (
               <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/shipping" element={<ShippingPage />} />
               <Route path="/returns" element={<ReturnsPage />} />
+              <Route path="/bundles/couples-eid" element={<CouplesEidBundle />} />
+              <Route path="/bundles/eid-triple" element={<EidTripleBundle />} />
             </Route>
 
             <Route path="/admin/login" element={<AdminLogin />} />
