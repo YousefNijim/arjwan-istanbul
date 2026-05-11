@@ -47,6 +47,7 @@ const PerfumesPage = () => {
   const { data: products = [], isLoading: productsLoading } = useProducts();
   const { data: siteSettings } = useSettings();
   const perfumeBanners: string[] = Array.isArray(siteSettings?.perfumeBanners) ? siteSettings.perfumeBanners : [];
+  const bannerHeight = Number(siteSettings?.bannerHeight) || 400;
 
   // Sticky search sentinel
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -339,7 +340,7 @@ const PerfumesPage = () => {
         {/* Offer Banners */}
         {perfumeBanners.length > 0 && (
           <div className="mb-6">
-            <BannerSlider banners={perfumeBanners} />
+            <BannerSlider banners={perfumeBanners} height={bannerHeight} />
           </div>
         )}
 

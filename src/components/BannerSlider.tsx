@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 
 interface BannerSliderProps {
   banners: string[];
+  height?: number;
   className?: string;
 }
 
-const BannerSlider = ({ banners, className = '' }: BannerSliderProps) => {
+const BannerSlider = ({ banners, height = 400, className = '' }: BannerSliderProps) => {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -17,7 +18,7 @@ const BannerSlider = ({ banners, className = '' }: BannerSliderProps) => {
   if (!banners.length) return null;
 
   return (
-    <div className={`relative aspect-[2/1] md:aspect-[4/1] overflow-hidden ${className}`}>
+    <div className={`relative overflow-hidden ${className}`} style={{ height: `${height}px` }}>
       {banners.map((src, i) => (
         <div
           key={i}
