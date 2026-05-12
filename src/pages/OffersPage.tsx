@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useSettings } from '@/hooks/useSettings';
+import { useTranslation } from '@/i18n/useTranslation';
 
 const BADGE_STYLES: Record<string, string> = {
   gold: 'bg-[hsl(43_76%_52%)] text-black',
@@ -14,6 +15,7 @@ const Placeholder = () => (
 );
 
 const OffersPage = () => {
+  const { t, lang } = useTranslation();
   const { data: siteSettings } = useSettings();
   const bundles: any[] = Array.isArray(siteSettings?.bundles) ? siteSettings.bundles : [];
 
@@ -27,18 +29,18 @@ const OffersPage = () => {
           className="text-center mb-12"
         >
           <p className="text-[hsl(43_76%_52%)] text-xs tracking-[0.5em] uppercase mb-3">
-            Limited Time
+            {t('offers', 'limitedTime')}
           </p>
-          <h1 className="font-display text-4xl md:text-5xl text-primary tracking-wider mb-4">
-            Exclusive Offers
+          <h1 className={`font-display text-4xl md:text-5xl text-primary tracking-wider mb-4${lang === 'ar' ? ' font-arabic' : ''}`}>
+            {t('offers', 'title')}
           </h1>
           <p className="text-muted-foreground">
-            Curated bundles crafted for gifting
+            {t('offers', 'subtitle')}
           </p>
         </motion.div>
 
         {bundles.length === 0 ? (
-          <p className="text-center text-muted-foreground/50 py-16">No offers available right now.</p>
+          <p className="text-center text-muted-foreground/50 py-16">{t('offers', 'empty')}</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {bundles.map((bundle, index) => (
@@ -76,7 +78,7 @@ const OffersPage = () => {
                           <span className="text-[hsl(43_76%_52%)] text-sm font-semibold">₺{bundle.price}</span>
                         )}
                         <span className="text-xs text-muted-foreground tracking-wider uppercase group-hover:text-primary transition-colors ms-auto">
-                          View Bundle →
+                          {t('offers', 'viewBundle')} →
                         </span>
                       </div>
                     </div>

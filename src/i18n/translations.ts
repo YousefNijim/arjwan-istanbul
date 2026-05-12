@@ -145,6 +145,14 @@ export const translations = {
     whatsapp: { ar: 'تواصل عبر واتساب', en: 'Chat on WhatsApp', tr: 'WhatsApp\'tan Yazın' },
     followUs: { ar: 'تابعنا', en: 'Follow Us', tr: 'Bizi Takip Edin' },
   },
+  // Offers
+  offers: {
+    limitedTime: { ar: 'عروض محدودة', en: 'Limited Time', tr: 'Sınırlı Süre' },
+    title: { ar: 'عروض حصرية', en: 'Exclusive Offers', tr: 'Özel Teklifler' },
+    subtitle: { ar: 'باقات مختارة لمناسبات لا تُنسى', en: 'Curated bundles crafted for gifting', tr: 'Hediye için özenle seçilmiş paketler' },
+    empty: { ar: 'لا توجد عروض متاحة الآن.', en: 'No offers available right now.', tr: 'Şu an mevcut teklif yok.' },
+    viewBundle: { ar: 'عرض الباقة', en: 'View Bundle', tr: 'Paketi Gör' },
+  },
   // Footer
   footer: {
     rights: { ar: 'جميع الحقوق محفوظة', en: 'All rights reserved', tr: 'Tüm hakları saklıdır' },
