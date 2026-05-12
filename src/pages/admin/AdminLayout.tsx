@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
-  LayoutDashboard, Package, Tag, ShoppingBag, Settings, LogOut, Menu, X, ExternalLink
+  LayoutDashboard, Package, Tag, ShoppingBag, Settings, LogOut, Menu, X, ExternalLink, Gift
 } from 'lucide-react';
 import { getToken, adminApi, setToken } from '@/lib/adminApi';
 
@@ -10,6 +10,7 @@ const navItems = [
   { to: '/admin/products', icon: Package, label: 'Products' },
   { to: '/admin/offers', icon: Tag, label: 'Offers' },
   { to: '/admin/orders', icon: ShoppingBag, label: 'Orders' },
+  { to: '/admin/bundles/couples-eid', icon: Gift, label: 'Couples Bundle' },
   { to: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
 

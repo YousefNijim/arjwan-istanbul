@@ -26,6 +26,7 @@ import AdminProductForm from "./pages/admin/AdminProductForm";
 import AdminOffers from "./pages/admin/AdminOffers";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminCouplesBundle from "./pages/admin/AdminCouplesBundle";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ const App = () => (
               <Route path="offers" element={<AdminOffers />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="settings" element={<AdminSettings />} />
+              <Route path="bundles/couples-eid" element={<AdminCouplesBundle />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
