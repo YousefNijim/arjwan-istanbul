@@ -10,7 +10,7 @@ const navItems = [
   { to: '/admin/products', icon: Package, label: 'Products' },
   { to: '/admin/offers', icon: Tag, label: 'Offers' },
   { to: '/admin/orders', icon: ShoppingBag, label: 'Orders' },
-  { to: '/admin/bundles/couples-eid', icon: Gift, label: 'Couples Bundle' },
+  { to: '/admin/bundles', icon: Gift, label: 'Bundles' },
   { to: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
 

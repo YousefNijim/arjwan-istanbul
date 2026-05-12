@@ -14,9 +14,8 @@ import ContactPage from "./pages/ContactPage";
 import WishlistPage from "./pages/WishlistPage";
 import ShippingPage from "./pages/ShippingPage";
 import ReturnsPage from "./pages/ReturnsPage";
-import CouplesEidBundle from "./pages/bundles/CouplesEidBundle";
-import EidTripleBundle from "./pages/bundles/EidTripleBundle";
 import OffersPage from "./pages/OffersPage";
+import BundlePage from "./pages/bundles/BundlePage";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -26,7 +25,8 @@ import AdminProductForm from "./pages/admin/AdminProductForm";
 import AdminOffers from "./pages/admin/AdminOffers";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminSettings from "./pages/admin/AdminSettings";
-import AdminCouplesBundle from "./pages/admin/AdminCouplesBundle";
+import AdminBundles from "./pages/admin/AdminBundles";
+import AdminBundleEditor from "./pages/admin/AdminBundleEditor";
 
 const queryClient = new QueryClient();
 
@@ -49,8 +49,7 @@ const App = () => (
               <Route path="/shipping" element={<ShippingPage />} />
               <Route path="/returns" element={<ReturnsPage />} />
               <Route path="/offers" element={<OffersPage />} />
-              <Route path="/bundles/couples-eid" element={<CouplesEidBundle />} />
-              <Route path="/bundles/eid-triple" element={<EidTripleBundle />} />
+              <Route path="/bundles/:bundleId" element={<BundlePage />} />
             </Route>
 
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -63,7 +62,8 @@ const App = () => (
               <Route path="offers" element={<AdminOffers />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="settings" element={<AdminSettings />} />
-              <Route path="bundles/couples-eid" element={<AdminCouplesBundle />} />
+              <Route path="bundles" element={<AdminBundles />} />
+              <Route path="bundles/:id" element={<AdminBundleEditor />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
