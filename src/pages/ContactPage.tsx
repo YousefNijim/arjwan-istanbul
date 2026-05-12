@@ -1,6 +1,12 @@
 import { useTranslation } from '@/i18n/useTranslation';
 import { motion } from 'framer-motion';
-import { MessageCircle, Instagram } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
+
+const InstagramIcon = ({ size = 22 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+  </svg>
+);
 
 const ContactPage = () => {
   const { t } = useTranslation();
@@ -42,18 +48,18 @@ const ContactPage = () => {
             <p className="text-muted-foreground text-sm mb-4 tracking-widest uppercase">{t('contact', 'followUs')}</p>
             <div className="flex justify-center gap-8">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/arjwan.istanbul"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
               >
                 <div className="w-12 h-12 border border-border group-hover:border-primary/50 rounded-sm flex items-center justify-center transition-all group-hover:bg-primary/5">
-                  <Instagram size={22} />
+                  <InstagramIcon size={22} />
                 </div>
                 <span className="text-xs tracking-widest">INSTAGRAM</span>
               </a>
               <a
-                href="https://tiktok.com"
+                href="https://www.tiktok.com/@arjwan.istanbul"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"

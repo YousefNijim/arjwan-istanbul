@@ -78,7 +78,7 @@ const Index = () => {
               </span>
               <span className="flex items-center gap-1.5 text-xs tracking-wider text-foreground/60 border border-border/50 px-3 py-1.5 rounded-full bg-background/30 backdrop-blur-sm">
                 <Gem size={12} className="text-primary" />
-                {lang === 'ar' ? 'زيوت فرنسية وسويسرية' : lang === 'tr' ? 'Fransız & İsviçre Yağları' : 'French & Swiss Grade Oils'}
+                {lang === 'ar' ? 'زيوت إسبانية عالية الجودة' : lang === 'tr' ? 'İspanyol Kalite Yağları' : 'Spanish Grade Oils'}
               </span>
               <span className="flex items-center gap-1.5 text-xs tracking-wider text-foreground/60 border border-border/50 px-3 py-1.5 rounded-full bg-background/30 backdrop-blur-sm">
                 <Truck size={12} className="text-primary" />
@@ -244,8 +244,8 @@ const Index = () => {
               },
               {
                 icon: Gem,
-                title: { ar: 'زيوت فرنسية وسويسرية', en: 'French & Swiss Grade Oils', tr: 'Fransız & İsviçre Yağları' },
-                desc: { ar: 'نستخدم أجود الزيوت العطرية المستوردة من فرنسا وسويسرا لثبات لا يُضاهى طوال اليوم', en: "We use the finest fragrance oils imported from France and Switzerland for all-day unmatched longevity", tr: "Gün boyu eşsiz kalıcılık için Fransa ve İsviçre'den ithal en kaliteli parfüm yağlarını kullanıyoruz" },
+                title: { ar: 'زيوت إسبانية عالية الجودة', en: 'Spanish Grade Oils', tr: 'İspanyol Kalite Yağları' },
+                desc: { ar: 'نستخدم أجود الزيوت العطرية المستوردة من إسبانيا لثبات لا يُضاهى طوال اليوم', en: 'We use the finest fragrance oils imported from Spain for all-day unmatched longevity', tr: 'Gün boyu eşsiz kalıcılık için İspanya\'dan ithal en kaliteli parfüm yağlarını kullanıyoruz' },
               },
               {
                 icon: Truck,
@@ -361,7 +361,7 @@ const Index = () => {
               <div className="relative max-w-xs w-full">
                 <div className="absolute inset-0 border border-[hsl(270_52%_34%/0.4)] rounded-sm -translate-x-2 -translate-y-2" />
                 <img
-                  src="/packaging.png"
+                  src={siteSettings?.brandStoryImage || '/packaging.png'}
                   alt="Arjwan Istanbul Packaging"
                   className="relative z-10 w-full rounded-sm object-contain"
                   loading="lazy"

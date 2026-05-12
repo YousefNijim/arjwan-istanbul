@@ -2,6 +2,39 @@ import { useEffect, useState } from 'react';
 import { adminApi } from '@/lib/adminApi';
 import { Save, X } from 'lucide-react';
 
+// ── Single image uploader ─────────────────────────────────────────────────────
+const SingleImageUploader = ({ value, onChange }: { value: string; onChange: (url: string) => void }) => {
+  const [uploading, setUploading] = useState(false);
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const { url } = await adminApi.uploadImage(file);
+      onChange(url);
+    } finally { setUploading(false); e.target.value = ''; }
+  };
+  return (
+    <div className="space-y-2">
+      {value && (
+        <div className="relative w-full h-32 bg-secondary border border-border overflow-hidden rounded-sm">
+          <img src={value} alt="" className="w-full h-full object-cover" />
+          <button type="button" onClick={() => onChange('')} className="absolute top-2 end-2 bg-black/70 text-white rounded-full p-1 hover:bg-black/90 transition-colors"><X size={12} /></button>
+        </div>
+      )}
+      <div className="flex gap-2">
+        <label className="cursor-pointer shrink-0">
+          <span className="block text-xs bg-secondary border border-border px-3 py-2 hover:border-[hsl(43_76%_52%)] transition-colors text-muted-foreground whitespace-nowrap">
+            {uploading ? 'Uploading…' : '↑ Upload'}
+          </span>
+          <input type="file" accept="image/*" className="hidden" onChange={handleUpload} disabled={uploading} />
+        </label>
+        <input value={value} onChange={e => onChange(e.target.value)} placeholder="Or paste image URL…" className="w-full bg-secondary border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-[hsl(43_76%_52%)] transition-colors" />
+      </div>
+    </div>
+  );
+};
+
 const Field = ({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) => (
   <div>
     <label className="text-xs text-muted-foreground tracking-widest uppercase block mb-1.5">{label}</label>
@@ -267,7 +300,7 @@ const AdminSettings = () => {
   const [settings, setSettings] = useState<Record<string, any>>({
     logoText: 'ARJWAN', logoSubtext: 'Istanbul', whatsappNumber: '',
     instagramHandle: '', contactEmail: '', heroBackground: '',
-    brandStoryBackground: '', customLogoUrl: '',
+    brandStoryBackground: '', brandStoryImage: '', customLogoUrl: '',
     homeBanners: [], homeBannersMobile: [],
     perfumeBanners: [], perfumeBannersMobile: [],
     bannerHeight: 400, bannerHeightMobile: 220,
@@ -342,6 +375,9 @@ const AdminSettings = () => {
           </Field>
           <Field label="Brand Story Section Background URL" hint="Image URL for the 'Our Story' section background">
             <Input value={settings.brandStoryBackground || ''} onChange={e => set('brandStoryBackground', e.target.value)} placeholder="/uploads/story-bg.jpg or https://..." />
+          </Field>
+          <Field label="Brand Story Image" hint="Product/packaging image shown on the right side of the Brand Story section">
+            <SingleImageUploader value={settings.brandStoryImage || ''} onChange={v => set('brandStoryImage', v)} />
           </Field>
         </section>
 

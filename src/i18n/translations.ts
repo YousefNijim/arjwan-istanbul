@@ -123,9 +123,9 @@ export const translations = {
     title: { ar: 'عن الزيوت العطرية', en: 'About Fragrance Oils', tr: 'Parfüm Yağları Hakkında' },
     qualityTitle: { ar: 'جودة لا مثيل لها', en: 'Unmatched Quality', tr: 'Eşsiz Kalite' },
     qualityText: {
-      ar: 'نستخدم أجود أنواع الزيوت العطرية المستوردة من فرنسا وسويسرا لضمان ثبات العطر وانتشاره',
-      en: 'We use the finest fragrance oils imported from France and Switzerland to ensure longevity and projection',
-      tr: 'Kalıcılığı ve yayılımı sağlamak için Fransa ve İsviçre\'den ithal edilen en kaliteli parfüm yağlarını kullanıyoruz',
+      ar: 'نستخدم أجود أنواع الزيوت العطرية المستوردة من إسبانيا لضمان ثبات العطر وانتشاره',
+      en: 'We use the finest fragrance oils imported from Spain to ensure longevity and projection',
+      tr: 'Kalıcılığı ve yayılımı sağlamak için İspanya\'dan ithal edilen en kaliteli parfüm yağlarını kullanıyoruz',
     },
     concentrationTitle: { ar: 'الفرق بين التركيزات', en: 'Concentration Differences', tr: 'Konsantrasyon Farkları' },
     heavyDesc: {
