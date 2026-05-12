@@ -14,6 +14,7 @@ const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input {...props} className={`w-full bg-secondary border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-[hsl(43_76%_52%)] transition-colors ${props.className || ''}`} />
 );
 
+// ── Banner array editor ───────────────────────────────────────────────────────
 const BannerArrayEditor = ({
   banners,
   onChange,
@@ -84,6 +85,184 @@ const BannerArrayEditor = ({
   );
 };
 
+// ── Bundle offer editor ───────────────────────────────────────────────────────
+type BundleItem = {
+  id: string;
+  path: string;
+  image: string;
+  name: string;
+  badge: string;
+  badgeStyle: 'red' | 'gold';
+  desc: string;
+  price: number | string;
+  items: string;
+};
+
+const emptyBundle = (): BundleItem => ({
+  id: `bundle-${Date.now()}`,
+  path: '',
+  image: '',
+  name: '',
+  badge: '',
+  badgeStyle: 'gold',
+  desc: '',
+  price: '',
+  items: '',
+});
+
+const BundleEditor = ({
+  bundles,
+  onChange,
+}: {
+  bundles: BundleItem[];
+  onChange: (bundles: BundleItem[]) => void;
+}) => {
+  const [uploading, setUploading] = useState<number | null>(null);
+
+  const update = (i: number, key: keyof BundleItem, value: any) =>
+    onChange(bundles.map((b, j) => (j === i ? { ...b, [key]: value } : b)));
+
+  const handleUpload = async (i: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(i);
+    try {
+      const { url } = await adminApi.uploadImage(file);
+      update(i, 'image', url);
+    } finally {
+      setUploading(null);
+      e.target.value = '';
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      {bundles.map((bundle, i) => (
+        <div key={bundle.id} className="bg-secondary border border-border rounded-sm p-4 space-y-3">
+          {/* Header row */}
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs font-medium text-foreground tracking-wider">
+              {bundle.name || `Bundle ${i + 1}`}
+            </span>
+            <button
+              type="button"
+              onClick={() => onChange(bundles.filter((_, j) => j !== i))}
+              className="text-red-400 hover:text-red-300 transition-colors"
+            >
+              <X size={14} />
+            </button>
+          </div>
+
+          {/* Image */}
+          <div className="flex items-start gap-3">
+            <div className="w-20 h-24 bg-background border border-border overflow-hidden shrink-0 flex items-center justify-center">
+              {bundle.image
+                ? <img src={bundle.image} alt="" className="w-full h-full object-cover" />
+                : <span className="text-muted-foreground/30 text-[10px]">No image</span>
+              }
+            </div>
+            <div className="flex-1 space-y-2">
+              <label className="flex items-center gap-2 cursor-pointer w-fit">
+                <span className="text-xs bg-background border border-border px-3 py-1.5 hover:border-[hsl(43_76%_52%)] transition-colors text-muted-foreground">
+                  {uploading === i ? 'Uploading…' : '↑ Upload Image'}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={e => handleUpload(i, e)}
+                  disabled={uploading !== null}
+                />
+              </label>
+              <Input
+                value={bundle.image}
+                onChange={e => update(i, 'image', e.target.value)}
+                placeholder="Or paste image URL…"
+              />
+            </div>
+          </div>
+
+          {/* Name + Price */}
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Bundle Name">
+              <Input
+                value={bundle.name}
+                onChange={e => update(i, 'name', e.target.value)}
+                placeholder="Eid Couples Collection"
+              />
+            </Field>
+            <Field label="Price (₺)">
+              <Input
+                type="number"
+                value={bundle.price}
+                onChange={e => update(i, 'price', Number(e.target.value))}
+                placeholder="999"
+              />
+            </Field>
+          </div>
+
+          {/* Badge */}
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Badge Text">
+              <Input
+                value={bundle.badge}
+                onChange={e => update(i, 'badge', e.target.value)}
+                placeholder="His & Hers"
+              />
+            </Field>
+            <Field label="Badge Color">
+              <select
+                value={bundle.badgeStyle}
+                onChange={e => update(i, 'badgeStyle', e.target.value as 'red' | 'gold')}
+                className="w-full bg-secondary border border-border px-3 py-2 text-sm text-foreground focus:outline-none focus:border-[hsl(43_76%_52%)] transition-colors"
+              >
+                <option value="gold">Gold</option>
+                <option value="red">Red</option>
+              </select>
+            </Field>
+          </div>
+
+          {/* Description */}
+          <Field label="Description">
+            <Input
+              value={bundle.desc}
+              onChange={e => update(i, 'desc', e.target.value)}
+              placeholder="Aseel + Hürra — 100ml each. The perfect Eid gift."
+            />
+          </Field>
+
+          {/* Items label + path */}
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Items Label" hint="e.g. 2 Bottles · 100ml each">
+              <Input
+                value={bundle.items}
+                onChange={e => update(i, 'items', e.target.value)}
+                placeholder="2 Bottles · 100ml each"
+              />
+            </Field>
+            <Field label="Detail Page Path" hint="e.g. /bundles/couples-eid">
+              <Input
+                value={bundle.path}
+                onChange={e => update(i, 'path', e.target.value)}
+                placeholder="/bundles/couples-eid"
+              />
+            </Field>
+          </div>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={() => onChange([...bundles, emptyBundle()])}
+        className="text-xs bg-secondary border border-border px-4 py-2 text-muted-foreground hover:border-[hsl(43_76%_52%)] hover:text-foreground transition-colors"
+      >
+        + Add Bundle
+      </button>
+    </div>
+  );
+};
+
+// ── Main settings page ────────────────────────────────────────────────────────
 const AdminSettings = () => {
   const [settings, setSettings] = useState<Record<string, any>>({
     logoText: 'ARJWAN', logoSubtext: 'Istanbul', whatsappNumber: '',
@@ -92,6 +271,7 @@ const AdminSettings = () => {
     homeBanners: [], homeBannersMobile: [],
     perfumeBanners: [], perfumeBannersMobile: [],
     bannerHeight: 400, bannerHeightMobile: 220,
+    bundles: [],
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -189,7 +369,6 @@ const AdminSettings = () => {
               />
             </Field>
           </div>
-          {/* Home page banners */}
           <div className="space-y-3">
             <p className="text-xs text-muted-foreground/70 tracking-widest uppercase border-b border-border pb-2">Home Page</p>
             <Field label="Desktop Banners" hint="Shown above Featured Perfumes on desktop">
@@ -209,8 +388,6 @@ const AdminSettings = () => {
               </div>
             </Field>
           </div>
-
-          {/* Perfumes page banners */}
           <div className="space-y-3">
             <p className="text-xs text-muted-foreground/70 tracking-widest uppercase border-b border-border pb-2">Perfumes Page</p>
             <Field label="Desktop Banners" hint="Shown at the top of the Perfumes page on desktop">
@@ -230,6 +407,17 @@ const AdminSettings = () => {
               </div>
             </Field>
           </div>
+        </section>
+
+        <section className="bg-card border border-border rounded-sm p-6 space-y-4">
+          <div>
+            <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Bundle Offers</h2>
+            <p className="text-xs text-muted-foreground/50 mt-1">Manage the offer cards shown on the /offers page</p>
+          </div>
+          <BundleEditor
+            bundles={Array.isArray(settings.bundles) ? settings.bundles : []}
+            onChange={bundles => set('bundles', bundles)}
+          />
         </section>
 
         <button type="submit" disabled={saving}

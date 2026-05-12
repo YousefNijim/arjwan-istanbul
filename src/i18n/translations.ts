@@ -8,6 +8,7 @@ export const translations = {
     aboutUs: { ar: 'من نحن', en: 'About Us', tr: 'Hakkımızda' },
     aboutOils: { ar: 'عن الزيوت', en: 'About Oils', tr: 'Yağlar Hakkında' },
     contact: { ar: 'اتصل بنا', en: 'Contact', tr: 'İletişim' },
+    offers: { ar: 'العروض', en: 'Offers', tr: 'Teklifler' },
     cart: { ar: 'السلة', en: 'Cart', tr: 'Sepet' },
   },
   // Hero

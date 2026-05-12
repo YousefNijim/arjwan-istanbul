@@ -37,6 +37,7 @@ const Navbar = () => {
   const navLinks = [
     { to: '/', label: t('nav', 'home') },
     { to: '/perfumes', label: t('nav', 'perfumes') },
+    { to: '/offers', label: t('nav', 'offers') },
     { to: '/about', label: t('nav', 'aboutUs') },
     { to: '/about-oils', label: t('nav', 'aboutOils') },
     { to: '/contact', label: t('nav', 'contact') },
