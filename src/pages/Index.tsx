@@ -120,7 +120,7 @@ const Index = () => {
       {homeBanners.length > 0 && (
         <section className="px-4 py-6">
           <div className="container mx-auto">
-            <BannerSlider banners={homeBanners} bannersMobile={homeBannersMobile} height={bannerHeight} heightMobile={bannerHeightMobile} links={['/bundles/couples-eid', '/bundles/eid-triple']} />
+            <BannerSlider banners={homeBanners} bannersMobile={homeBannersMobile} height={bannerHeight} heightMobile={bannerHeightMobile} links={['/offers', '/offers']} />
           </div>
         </section>
       )}

@@ -16,6 +16,7 @@ import ShippingPage from "./pages/ShippingPage";
 import ReturnsPage from "./pages/ReturnsPage";
 import CouplesEidBundle from "./pages/bundles/CouplesEidBundle";
 import EidTripleBundle from "./pages/bundles/EidTripleBundle";
+import OffersPage from "./pages/OffersPage";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -46,6 +47,7 @@ const App = () => (
               <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/shipping" element={<ShippingPage />} />
               <Route path="/returns" element={<ReturnsPage />} />
+              <Route path="/offers" element={<OffersPage />} />
               <Route path="/bundles/couples-eid" element={<CouplesEidBundle />} />
               <Route path="/bundles/eid-triple" element={<EidTripleBundle />} />
             </Route>

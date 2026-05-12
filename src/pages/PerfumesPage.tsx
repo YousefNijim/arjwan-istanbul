@@ -342,7 +342,7 @@ const PerfumesPage = () => {
         {/* Offer Banners */}
         {perfumeBanners.length > 0 && (
           <div className="mb-6">
-            <BannerSlider banners={perfumeBanners} bannersMobile={perfumeBannersMobile} height={bannerHeight} heightMobile={bannerHeightMobile} links={['/bundles/couples-eid', '/bundles/eid-triple']} />
+            <BannerSlider banners={perfumeBanners} bannersMobile={perfumeBannersMobile} height={bannerHeight} heightMobile={bannerHeightMobile} links={['/offers', '/offers']} />
           </div>
         )}
 
