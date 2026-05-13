@@ -145,6 +145,17 @@ export const translations = {
     whatsapp: { ar: 'تواصل عبر واتساب', en: 'Chat on WhatsApp', tr: 'WhatsApp\'tan Yazın' },
     followUs: { ar: 'تابعنا', en: 'Follow Us', tr: 'Bizi Takip Edin' },
   },
+  // Bundles (UI chrome)
+  bundles: {
+    addToCart: { ar: 'أضف إلى السلة', en: 'Add to Cart', tr: 'Sepete Ekle' },
+    addedToCart: { ar: 'تمت إضافة الباقة للسلة 🛍️', en: 'Bundle added to cart 🛍️', tr: 'Paket sepete eklendi 🛍️' },
+    giftWrapping: { ar: 'تغليف الهدايا مجاني 🎁', en: 'Free gift wrapping included 🎁', tr: 'Ücretsiz hediye paketi dahil 🎁' },
+    days: { ar: 'يوم', en: 'Days', tr: 'Gün' },
+    hours: { ar: 'ساعة', en: 'Hours', tr: 'Saat' },
+    min: { ar: 'دقيقة', en: 'Min', tr: 'Dak' },
+    sec: { ar: 'ثانية', en: 'Sec', tr: 'Sn' },
+    countdownLabel: { ar: 'ينتهي العرض قريباً', en: 'Offer ends soon', tr: 'Teklif yakında sona eriyor' },
+  },
   // Offers
   offers: {
     limitedTime: { ar: 'عروض محدودة', en: 'Limited Time', tr: 'Sınırlı Süre' },

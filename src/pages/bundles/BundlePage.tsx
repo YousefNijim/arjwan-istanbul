@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
 import { useSettings } from '@/hooks/useSettings';
+import { useTranslation } from '@/i18n/useTranslation';
 import { toast } from 'sonner';
 import { ShoppingBag, Gift } from 'lucide-react';
 
@@ -31,37 +32,105 @@ const GRID_COLS: Record<number, string> = {
   4: 'sm:grid-cols-2 lg:grid-cols-4',
 };
 
-const KNOWN_DEFAULTS: Record<string, any> = {
-  'couples-eid': {
-    heroSubtitle: 'His & Hers · Eid Collection',
-    heroTitle: 'Eid Couples Collection',
-    badgeText: 'Limited Stock · Eid Offer',
-    badgeColor: 'red',
-    title: 'Eid Couples Collection',
-    tagline: 'The Perfect Eid Gift — For Him & For Her',
-    price: 999,
-    cartName: 'Eid Couples Collection — Aseel + Hürra (100ml each)',
-    cartSize: '100ml',
-    perfumes: [
-      { id: 'aseel', image: '', name: 'Aseel | أصيل', description: 'Warm, woody, and boldly masculine. A signature scent that commands presence.', size: '100ml', badge: 'For Him', badgeColor: 'purple' },
-      { id: 'hurra', image: '', name: 'Hürra | حرة',  description: 'Bold, floral, and beautifully free. A scent that celebrates the modern woman.',   size: '100ml', badge: 'For Her', badgeColor: 'gold'   },
-    ],
+const KNOWN_DEFAULTS: Record<string, Record<string, any>> = {
+  en: {
+    'couples-eid': {
+      heroSubtitle: 'His & Hers · Eid Collection',
+      heroTitle: 'Eid Couples Collection',
+      badgeText: 'Limited Stock · Eid Offer',
+      badgeColor: 'red',
+      title: 'Eid Couples Collection',
+      tagline: 'The Perfect Eid Gift — For Him & For Her',
+      price: 999,
+      cartName: 'Eid Couples Collection — Aseel + Hürra (100ml each)',
+      cartSize: '100ml',
+      perfumes: [
+        { id: 'aseel', image: '', name: 'Aseel | أصيل', description: 'Warm, woody, and boldly masculine. A signature scent that commands presence.', size: '100ml', badge: 'For Him', badgeColor: 'purple' },
+        { id: 'hurra', image: '', name: 'Hürra | حرة',  description: 'Bold, floral, and beautifully free. A scent that celebrates the modern woman.',   size: '100ml', badge: 'For Her', badgeColor: 'gold'   },
+      ],
+    },
+    'eid-triple': {
+      heroSubtitle: 'Eid Collection · Three Signature Scents',
+      heroTitle: 'Eid Triple Collection',
+      badgeText: 'Best Value · Eid Offer',
+      badgeColor: 'gold',
+      title: 'Eid Triple Collection',
+      tagline: 'Three Scents. One Unforgettable Gift.',
+      price: 899,
+      cartName: 'Eid Triple Collection — Aseel + Khayaal + Barri (50ml each)',
+      cartSize: '50ml',
+      perfumes: [
+        { id: 'aseel',   image: '', name: 'Aseel | أصيل',   description: 'Warm & woody masculine signature',             size: '50ml', badge: '', badgeColor: 'purple' },
+        { id: 'khayaal', image: '', name: 'Khayaal | خيال', description: 'Dreamy & unisex, for those who imagine beyond', size: '50ml', badge: '', badgeColor: 'gold'   },
+        { id: 'barri',   image: '', name: 'Barri | بري',    description: 'Wild, fresh & boldly free',                    size: '50ml', badge: '', badgeColor: 'gold'   },
+      ],
+    },
   },
-  'eid-triple': {
-    heroSubtitle: 'Eid Collection · Three Signature Scents',
-    heroTitle: 'Eid Triple Collection',
-    badgeText: 'Best Value · Eid Offer',
-    badgeColor: 'gold',
-    title: 'Eid Triple Collection',
-    tagline: 'Three Scents. One Unforgettable Gift.',
-    price: 899,
-    cartName: 'Eid Triple Collection — Aseel + Khayaal + Barri (50ml each)',
-    cartSize: '50ml',
-    perfumes: [
-      { id: 'aseel',   image: '', name: 'Aseel | أصيل',   description: 'Warm & woody masculine signature',             size: '50ml', badge: '', badgeColor: 'purple' },
-      { id: 'khayaal', image: '', name: 'Khayaal | خيال', description: 'Dreamy & unisex, for those who imagine beyond', size: '50ml', badge: '', badgeColor: 'gold'   },
-      { id: 'barri',   image: '', name: 'Barri | بري',    description: 'Wild, fresh & boldly free',                   size: '50ml', badge: '', badgeColor: 'gold'   },
-    ],
+  ar: {
+    'couples-eid': {
+      heroSubtitle: 'له ولها · مجموعة العيد',
+      heroTitle: 'مجموعة العيد للأزواج',
+      badgeText: 'مخزون محدود · عرض العيد',
+      badgeColor: 'red',
+      title: 'مجموعة العيد للأزواج',
+      tagline: 'هدية العيد المثالية — له ولها',
+      price: 999,
+      cartName: 'مجموعة العيد للأزواج — أصيل + حرة (100ml)',
+      cartSize: '100ml',
+      perfumes: [
+        { id: 'aseel', image: '', name: 'Aseel | أصيل', description: 'دافئ، خشبي، وذكوري بجرأة. عطر مميز يفرض حضوره.',           size: '100ml', badge: 'له',  badgeColor: 'purple' },
+        { id: 'hurra', image: '', name: 'Hürra | حرة',  description: 'جريئة، زهرية، وحرة جميلة. عطر يحتفي بالمرأة العصرية.',    size: '100ml', badge: 'لها', badgeColor: 'gold'   },
+      ],
+    },
+    'eid-triple': {
+      heroSubtitle: 'مجموعة العيد · ثلاثة عطور مميزة',
+      heroTitle: 'مجموعة العيد الثلاثية',
+      badgeText: 'أفضل قيمة · عرض العيد',
+      badgeColor: 'gold',
+      title: 'مجموعة العيد الثلاثية',
+      tagline: 'ثلاثة عطور. هدية لا تُنسى.',
+      price: 899,
+      cartName: 'مجموعة العيد الثلاثية — أصيل + خيال + بري (50ml)',
+      cartSize: '50ml',
+      perfumes: [
+        { id: 'aseel',   image: '', name: 'Aseel | أصيل',   description: 'عطر ذكوري دافئ وخشبي',                          size: '50ml', badge: '', badgeColor: 'purple' },
+        { id: 'khayaal', image: '', name: 'Khayaal | خيال', description: 'حالم ومتعدد الأجناس، لمن يتخيل ما وراء الحدود', size: '50ml', badge: '', badgeColor: 'gold'   },
+        { id: 'barri',   image: '', name: 'Barri | بري',    description: 'بري، منعش وجريء',                               size: '50ml', badge: '', badgeColor: 'gold'   },
+      ],
+    },
+  },
+  tr: {
+    'couples-eid': {
+      heroSubtitle: 'Ona ve Ona · Bayram Koleksiyonu',
+      heroTitle: 'Bayram Çiftler Koleksiyonu',
+      badgeText: 'Sınırlı Stok · Bayram Teklifi',
+      badgeColor: 'red',
+      title: 'Bayram Çiftler Koleksiyonu',
+      tagline: 'Mükemmel Bayram Hediyesi — Ona ve Ona',
+      price: 999,
+      cartName: 'Bayram Çiftler Koleksiyonu — Aseel + Hürra (100ml)',
+      cartSize: '100ml',
+      perfumes: [
+        { id: 'aseel', image: '', name: 'Aseel | أصيل', description: 'Sıcak, odunsu ve cesurca eril. Varlığını hissettiren bir imza kokusu.', size: '100ml', badge: 'Erkek', badgeColor: 'purple' },
+        { id: 'hurra', image: '', name: 'Hürra | حرة',  description: 'Cesur, çiçeksi ve güzelce özgür. Modern kadını kutlayan bir koku.',      size: '100ml', badge: 'Kadın', badgeColor: 'gold'   },
+      ],
+    },
+    'eid-triple': {
+      heroSubtitle: 'Bayram Koleksiyonu · Üç İmza Kokusu',
+      heroTitle: 'Bayram Üçlü Koleksiyonu',
+      badgeText: 'En İyi Değer · Bayram Teklifi',
+      badgeColor: 'gold',
+      title: 'Bayram Üçlü Koleksiyonu',
+      tagline: 'Üç Koku. Unutulmaz Bir Hediye.',
+      price: 899,
+      cartName: 'Bayram Üçlü Koleksiyonu — Aseel + Khayaal + Barri (50ml)',
+      cartSize: '50ml',
+      perfumes: [
+        { id: 'aseel',   image: '', name: 'Aseel | أصيل',   description: 'Sıcak ve odunsu eril imza',            size: '50ml', badge: '', badgeColor: 'purple' },
+        { id: 'khayaal', image: '', name: 'Khayaal | خيال', description: 'Hayalci ve unisex, hayal edebilenlere', size: '50ml', badge: '', badgeColor: 'gold'   },
+        { id: 'barri',   image: '', name: 'Barri | بري',    description: 'Vahşi, taze ve cesurca özgür',          size: '50ml', badge: '', badgeColor: 'gold'   },
+      ],
+    },
   },
 };
 
@@ -69,7 +138,7 @@ const BASE_DEFAULTS = {
   heroImage: '', heroSubtitle: '', heroTitle: '',
   badgeText: '', badgeColor: 'gold',
   title: '', tagline: '', price: 0,
-  countdownDate: '2026-05-27', countdownLabel: 'Offer ends soon',
+  countdownDate: '2026-05-27', countdownLabel: '',
   cartName: '', cartSize: '',
   perfumes: [] as any[],
 };
@@ -92,10 +161,12 @@ const Placeholder = () => (
 
 const BundlePage = () => {
   const { bundleId } = useParams<{ bundleId: string }>();
+  const { t, lang } = useTranslation();
   const addItem = useCartStore((s) => s.addItem);
   const { data: siteSettings } = useSettings();
 
-  const knownDefaults = KNOWN_DEFAULTS[bundleId!] || {};
+  const langDefaults = KNOWN_DEFAULTS[lang] || KNOWN_DEFAULTS.en;
+  const knownDefaults = langDefaults[bundleId!] || {};
   const savedConfig = siteSettings?.bundleConfigs?.[bundleId!] || {};
   const b = { ...BASE_DEFAULTS, ...knownDefaults, ...savedConfig };
 
@@ -117,14 +188,14 @@ const BundlePage = () => {
       price: Number(b.price),
       image: b.perfumes[0]?.image || '/bottle-gold.png',
     });
-    toast.success('Bundle added to cart 🛍️');
+    toast.success(t('bundles', 'addedToCart'));
   };
 
   const countdown = [
-    { label: 'Days',  value: timeLeft.days },
-    { label: 'Hours', value: timeLeft.hours },
-    { label: 'Min',   value: timeLeft.minutes },
-    { label: 'Sec',   value: timeLeft.seconds },
+    { label: t('bundles', 'days'),  value: timeLeft.days },
+    { label: t('bundles', 'hours'), value: timeLeft.hours },
+    { label: t('bundles', 'min'),   value: timeLeft.minutes },
+    { label: t('bundles', 'sec'),   value: timeLeft.seconds },
   ];
 
   const colClass = GRID_COLS[b.perfumes.length] ?? GRID_COLS[2];
@@ -214,17 +285,19 @@ const BundlePage = () => {
               className="flex items-center justify-center gap-3 bg-[hsl(43_76%_52%)] text-black px-10 py-4 text-sm tracking-widest uppercase font-semibold hover:bg-[hsl(43_76%_60%)] transition-colors w-full sm:w-auto gold-glow"
             >
               <ShoppingBag size={18} />
-              Add to Cart — ₺{b.price}
+              {t('bundles', 'addToCart')} — ₺{b.price}
             </button>
             <p className="flex items-center gap-2 text-muted-foreground text-sm">
               <Gift size={14} />
-              Free gift wrapping included 🎁
+              {t('bundles', 'giftWrapping')}
             </p>
           </div>
 
           {/* Countdown */}
           <div className="bg-card border border-border rounded-sm p-8 text-center">
-            <p className="text-[10px] tracking-[0.4em] uppercase text-muted-foreground mb-8">{b.countdownLabel}</p>
+            <p className="text-[10px] tracking-[0.4em] uppercase text-muted-foreground mb-8">
+              {b.countdownLabel || t('bundles', 'countdownLabel')}
+            </p>
             <div className="flex items-center justify-center gap-6 sm:gap-10">
               {countdown.map(({ label, value }) => (
                 <div key={label} className="flex flex-col items-center gap-1.5">
