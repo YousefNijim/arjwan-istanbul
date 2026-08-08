@@ -66,7 +66,7 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           <div className="aspect-[3/4] overflow-hidden bg-[hsl(0_0%_6%)] relative">
             <img
               src={product.image}
-              alt={product.originalPerfume}
+              alt={product.originalPerfume || product.name[lang]}
               loading="lazy"
               width={400}
               height={533}
@@ -110,7 +110,7 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           </div>
           <div className="p-5 flex-1 flex flex-col border-t border-[hsl(270_52%_34%/0.3)]">
             <div className="flex flex-col gap-0.5 mb-2">
-              <h3 className="font-display text-lg text-primary tracking-wider">{product.originalPerfume}</h3>
+              <h3 className="font-display text-lg text-primary tracking-wider">{product.originalPerfume || product.name[lang]}</h3>
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="text-xs text-muted-foreground/70 tracking-widest uppercase">by Arjwan Istanbul</span>
                 {product.inspiredBy && (

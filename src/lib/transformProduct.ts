@@ -7,9 +7,9 @@ export const transformPerfume = (p: any): Product => ({
   category: p.category as 'men' | 'women',
   price50ml: p.price50ml,
   price100ml: p.price100ml,
-  image: p.category === 'men' 
+  image: p.imageUrl || (p.category === 'men' 
     ? 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/man%20perfume%20car%20pic.png' 
-    : 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/women%20perfume%20card%20pic.png',
+    : 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/women%20perfume%20card%20pic.png'),
   inspiredBy: p.inspiredBy,
   originalPerfume: p.originalPerfume,
   notes: {
