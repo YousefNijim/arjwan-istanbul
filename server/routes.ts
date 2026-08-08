@@ -24,9 +24,15 @@ export function registerRoutes(app: Express) {
   // ─── Public: Perfumes ────────────────────────────────────────────────
   app.get('/api/perfumes', async (_req, res) => {
     try {
-      const rows = await db.select().from(perfumes)
+      let rows = await db.select().from(perfumes)
         .where(eq(perfumes.active, true))
         .orderBy(perfumes.sortOrder, perfumes.createdAt);
+      rows = rows.map(r => {
+        if (typeof r.additionalImages === 'string') {
+          try { r.additionalImages = JSON.parse(r.additionalImages); } catch (e) {}
+        }
+        return r;
+      });
       res.json(rows);
     } catch (e) {
       res.status(500).json({ error: 'DB error' });
@@ -37,6 +43,9 @@ export function registerRoutes(app: Express) {
     try {
       const [row] = await db.select().from(perfumes).where(eq(perfumes.id, req.params.id));
       if (!row) return res.status(404).json({ error: 'Not found' });
+      if (typeof row.additionalImages === 'string') {
+        try { row.additionalImages = JSON.parse(row.additionalImages); } catch (e) {}
+      }
       res.json(row);
     } catch (e) {
       res.status(500).json({ error: 'DB error' });
@@ -117,7 +126,13 @@ export function registerRoutes(app: Express) {
   // ─── Admin: Perfumes ──────────────────────────────────────────────────
   app.get('/api/admin/perfumes', requireAuth, async (_req, res) => {
     try {
-      const rows = await db.select().from(perfumes).orderBy(perfumes.sortOrder, perfumes.createdAt);
+      let rows = await db.select().from(perfumes).orderBy(perfumes.sortOrder, perfumes.createdAt);
+      rows = rows.map(r => {
+        if (typeof r.additionalImages === 'string') {
+          try { r.additionalImages = JSON.parse(r.additionalImages); } catch (e) {}
+        }
+        return r;
+      });
       res.json(rows);
     } catch (e) {
       res.status(500).json({ error: 'DB error' });

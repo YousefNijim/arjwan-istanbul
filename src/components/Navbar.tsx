@@ -5,6 +5,7 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { useTranslation } from '@/i18n/useTranslation';
 import { useCartStore } from '@/store/cartStore';
 import { useWishlistStore } from '@/store/wishlistStore';
+import { useSettings } from '@/hooks/useSettings';
 import { Language } from '@/i18n/translations';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -22,6 +23,7 @@ const Navbar = () => {
   const totalItems = useCartStore((s) => s.totalItems());
   const wishlistCount = useWishlistStore((s) => s.count());
   const location = useLocation();
+  const { data: siteSettings } = useSettings();
 
   useEffect(() => {
     setIsOpen(false);
@@ -39,7 +41,9 @@ const Navbar = () => {
     <>
       {/* Top Announcement Bar */}
       <div className="bg-muted border-b border-border text-foreground text-[11px] md:text-xs font-semibold tracking-wider uppercase py-2 px-4 text-center">
-        {lang === 'ar' ? 'شحن مجاني للطلبات فوق 600 ليرة!' : lang === 'tr' ? '600 TL ÜZERİ ÜCRETSİZ KARGO!' : 'FREE SHIPPING OVER 600 TL!'}
+        {lang === 'ar' && siteSettings?.announcementAr ? siteSettings.announcementAr :
+         lang === 'tr' && siteSettings?.announcementTr ? siteSettings.announcementTr :
+         siteSettings?.announcementEn ? siteSettings.announcementEn : ''}
       </div>
 
       <nav className="sticky top-0 z-50 bg-background border-b border-border shadow-sm">

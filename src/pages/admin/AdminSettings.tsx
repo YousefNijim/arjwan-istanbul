@@ -299,19 +299,35 @@ const BundleEditor = ({
 const AdminSettings = () => {
   const [settings, setSettings] = useState<Record<string, any>>({
     logoText: 'ARJWAN', logoSubtext: 'Istanbul', whatsappNumber: '',
-    instagramHandle: '', contactEmail: '', heroBackground: '',
+    instagramHandle: '', tiktokHandle: '', contactEmail: '', 
+    heroBackground: '', customLogoUrl: '',
+    
+    // Texts
+    announcementAr: 'شحن مجاني للطلبات فوق 600 ليرة!', announcementEn: 'FREE SHIPPING OVER 600 TL!', announcementTr: '600 TL ÜZERİ ÜCRETSİZ KARGO!',
+    footerTextAr: 'أرجوان إسطنبول', footerTextEn: 'Arjwan Istanbul', footerTextTr: 'Arjwan İstanbul',
     heroTitleAr: '', heroTitleEn: '', heroTitleTr: '',
     heroSubtitleAr: '', heroSubtitleEn: '', heroSubtitleTr: '',
-    customLogoUrl: '',
+    
+    // Sliders & Banners
     homeBanners: [], homeBannersMobile: [],
     perfumeBanners: [], perfumeBannersMobile: [],
     bannerHeight: 400, bannerHeightMobile: 220,
+    
+    // Dynamic Product Sliders
+    productSlider1Category: 'all', productSlider1TitleAr: 'أفضل مبيعاتنا', productSlider1TitleEn: 'BEST SELLERS', productSlider1TitleTr: 'EN ÇOK SATANLAR',
+    productSlider2Category: 'women', productSlider2TitleAr: 'عطور نسائية', productSlider2TitleEn: 'WOMEN\'S PERFUMES', productSlider2TitleTr: 'KADIN PARFÜMLERİ',
+    productSlider3Category: 'men', productSlider3TitleAr: 'عطور رجالية', productSlider3TitleEn: 'MEN\'S PERFUMES', productSlider3TitleTr: 'ERKEK PARFÜMLERİ',
+    
     bundles: [],
   });
+  
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
+
+  // Tabs state
+  const [activeTab, setActiveTab] = useState<'brand' | 'texts' | 'sliders' | 'product_sliders' | 'bundles'>('brand');
 
   useEffect(() => {
     adminApi.getSettings().then(s => {
@@ -337,141 +353,209 @@ const AdminSettings = () => {
 
   if (loading) return <div className="text-muted-foreground py-12 text-center">Loading…</div>;
 
+  const tabs = [
+    { id: 'brand', label: 'Brand & Contact' },
+    { id: 'texts', label: 'Website Texts' },
+    { id: 'sliders', label: 'Image Sliders' },
+    { id: 'product_sliders', label: 'Product Sliders' },
+    { id: 'bundles', label: 'Bundle Offers' }
+  ] as const;
+
   return (
-    <div>
+    <div className="pb-20">
       <h1 className="font-display text-2xl text-foreground tracking-wider mb-6">Site Settings</h1>
+      
+      {/* Tabs */}
+      <div className="flex overflow-x-auto border-b border-border mb-6">
+        {tabs.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2 ${
+              activeTab === tab.id ? 'border-[hsl(43_76%_52%)] text-[hsl(43_76%_52%)]' : 'border-transparent text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       <form onSubmit={handleSave} className="space-y-6 max-w-2xl">
         {error && <p className="text-red-400 text-sm bg-red-400/10 border border-red-400/20 px-3 py-2 rounded-sm">{error}</p>}
-        {saved && <p className="text-green-400 text-sm bg-green-400/10 border border-green-400/20 px-3 py-2 rounded-sm">Settings saved successfully.</p>}
+        {saved && <p className="text-green-500 text-sm bg-green-500/10 border border-green-500/20 px-3 py-2 rounded-sm">Settings saved successfully.</p>}
 
-        <section className="bg-card border border-border rounded-sm p-6 space-y-4">
-          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Brand Identity</h2>
-          <Field label="Logo Text" hint="Main brand name displayed in the header">
-            <Input value={settings.logoText || ''} onChange={e => set('logoText', e.target.value)} placeholder="ARJWAN" />
-          </Field>
-          <Field label="Logo Subtext" hint="City name shown below the main logo">
-            <Input value={settings.logoSubtext || ''} onChange={e => set('logoSubtext', e.target.value)} placeholder="Istanbul" />
-          </Field>
-          <Field label="Custom Logo Image URL" hint="Optional: upload a logo image instead of text (leave empty for text logo)">
-            <Input value={settings.customLogoUrl || ''} onChange={e => set('customLogoUrl', e.target.value)} placeholder="/uploads/logo.png or https://..." />
-          </Field>
-        </section>
+        {/* 1. BRAND & CONTACT */}
+        {activeTab === 'brand' && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+            <section className="bg-card border border-border rounded-sm p-6 space-y-4">
+              <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Brand Identity</h2>
+              <Field label="Logo Text" hint="Main brand name displayed in the header">
+                <Input value={settings.logoText || ''} onChange={e => set('logoText', e.target.value)} placeholder="ARJWAN" />
+              </Field>
+              <Field label="Logo Subtext" hint="City name shown below the main logo">
+                <Input value={settings.logoSubtext || ''} onChange={e => set('logoSubtext', e.target.value)} placeholder="Istanbul" />
+              </Field>
+              <Field label="Custom Logo Image URL" hint="Optional: upload a logo image instead of text">
+                <Input value={settings.customLogoUrl || ''} onChange={e => set('customLogoUrl', e.target.value)} placeholder="/uploads/logo.png" />
+              </Field>
+            </section>
 
-        <section className="bg-card border border-border rounded-sm p-6 space-y-4">
-          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Contact & Social</h2>
-          <Field label="WhatsApp Number" hint="Include country code without + (e.g. 905551234567)">
-            <Input type="tel" value={settings.whatsappNumber || ''} onChange={e => set('whatsappNumber', e.target.value)} placeholder="905551234567" />
-          </Field>
-          <Field label="Instagram Handle" hint="Without the @ symbol">
-            <Input value={settings.instagramHandle || ''} onChange={e => set('instagramHandle', e.target.value)} placeholder="arjwanistanbul" />
-          </Field>
-          <Field label="Contact Email">
-            <Input type="email" value={settings.contactEmail || ''} onChange={e => set('contactEmail', e.target.value)} placeholder="info@arjwanistanbul.com" />
-          </Field>
-        </section>
-
-        <section className="bg-card border border-border rounded-sm p-6 space-y-4">
-          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Homepage Promotion Text</h2>
-          <div className="space-y-2 pt-2">
-            <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Promotion Section Title</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <Input value={settings.heroTitleAr || ''} onChange={e => set('heroTitleAr', e.target.value)} placeholder="العنوان العربي" dir="rtl" />
-              <Input value={settings.heroTitleEn || ''} onChange={e => set('heroTitleEn', e.target.value)} placeholder="English Title" />
-              <Input value={settings.heroTitleTr || ''} onChange={e => set('heroTitleTr', e.target.value)} placeholder="Türkçe Başlık" />
-            </div>
+            <section className="bg-card border border-border rounded-sm p-6 space-y-4">
+              <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Contact & Social</h2>
+              <Field label="WhatsApp Number" hint="Include country code without + (e.g. 905551234567)">
+                <Input type="tel" value={settings.whatsappNumber || ''} onChange={e => set('whatsappNumber', e.target.value)} placeholder="905551234567" />
+              </Field>
+              <Field label="Instagram Handle" hint="Without the @ symbol">
+                <Input value={settings.instagramHandle || ''} onChange={e => set('instagramHandle', e.target.value)} placeholder="arjwanistanbul" />
+              </Field>
+              <Field label="TikTok Handle" hint="Without the @ symbol">
+                <Input value={settings.tiktokHandle || ''} onChange={e => set('tiktokHandle', e.target.value)} placeholder="arjwan.istanbul" />
+              </Field>
+              <Field label="Contact Email">
+                <Input type="email" value={settings.contactEmail || ''} onChange={e => set('contactEmail', e.target.value)} placeholder="info@arjwanistanbul.com" />
+              </Field>
+            </section>
           </div>
+        )}
 
-          <div className="space-y-2 pt-2">
-            <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Promotion Section Subtitle</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <Input value={settings.heroSubtitleAr || ''} onChange={e => set('heroSubtitleAr', e.target.value)} placeholder="النص الفرعي" dir="rtl" />
-              <Input value={settings.heroSubtitleEn || ''} onChange={e => set('heroSubtitleEn', e.target.value)} placeholder="English Subtitle" />
-              <Input value={settings.heroSubtitleTr || ''} onChange={e => set('heroSubtitleTr', e.target.value)} placeholder="Türkçe Alt Başlık" />
-            </div>
+        {/* 2. TEXTS */}
+        {activeTab === 'texts' && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+            <section className="bg-card border border-border rounded-sm p-6 space-y-4">
+              <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Top Announcement Bar</h2>
+              <p className="text-xs text-muted-foreground/50">Appears at the very top of the website</p>
+              <div className="space-y-3">
+                <Input value={settings.announcementAr || ''} onChange={e => set('announcementAr', e.target.value)} placeholder="النص العربي" dir="rtl" />
+                <Input value={settings.announcementEn || ''} onChange={e => set('announcementEn', e.target.value)} placeholder="English Text" />
+                <Input value={settings.announcementTr || ''} onChange={e => set('announcementTr', e.target.value)} placeholder="Türkçe Metin" />
+              </div>
+            </section>
+
+            <section className="bg-card border border-border rounded-sm p-6 space-y-4">
+              <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Footer Brand Text</h2>
+              <p className="text-xs text-muted-foreground/50">Text appearing below the logo in the footer</p>
+              <div className="space-y-3">
+                <Input value={settings.footerTextAr || ''} onChange={e => set('footerTextAr', e.target.value)} placeholder="أرجوان إسطنبول" dir="rtl" />
+                <Input value={settings.footerTextEn || ''} onChange={e => set('footerTextEn', e.target.value)} placeholder="Arjwan Istanbul" />
+                <Input value={settings.footerTextTr || ''} onChange={e => set('footerTextTr', e.target.value)} placeholder="Arjwan İstanbul" />
+              </div>
+            </section>
+
+            <section className="bg-card border border-border rounded-sm p-6 space-y-4">
+              <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Homepage Bottom Promotion</h2>
+              <div className="space-y-2">
+                <h3 className="text-xs text-muted-foreground">Promotion Title</h3>
+                <div className="space-y-3">
+                  <Input value={settings.heroTitleAr || ''} onChange={e => set('heroTitleAr', e.target.value)} placeholder="العنوان العربي" dir="rtl" />
+                  <Input value={settings.heroTitleEn || ''} onChange={e => set('heroTitleEn', e.target.value)} placeholder="English Title" />
+                  <Input value={settings.heroTitleTr || ''} onChange={e => set('heroTitleTr', e.target.value)} placeholder="Türkçe Başlık" />
+                </div>
+              </div>
+              <div className="space-y-2 pt-2 border-t border-border">
+                <h3 className="text-xs text-muted-foreground">Promotion Subtitle</h3>
+                <div className="space-y-3">
+                  <Input value={settings.heroSubtitleAr || ''} onChange={e => set('heroSubtitleAr', e.target.value)} placeholder="النص الفرعي" dir="rtl" />
+                  <Input value={settings.heroSubtitleEn || ''} onChange={e => set('heroSubtitleEn', e.target.value)} placeholder="English Subtitle" />
+                  <Input value={settings.heroSubtitleTr || ''} onChange={e => set('heroSubtitleTr', e.target.value)} placeholder="Türkçe Alt Başlık" />
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
+        )}
 
-        <section className="bg-card border border-border rounded-sm p-6 space-y-6">
-          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Offer Banners</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="Banner Height — Desktop (px)" hint="e.g. 400, 600, 800">
-              <Input
-                type="number"
-                min="100"
-                max="1200"
-                value={settings.bannerHeight ?? 400}
-                onChange={e => set('bannerHeight', Number(e.target.value))}
-                placeholder="400"
+        {/* 3. IMAGE SLIDERS */}
+        {activeTab === 'sliders' && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+            <section className="bg-card border border-border rounded-sm p-6 space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <Field label="Banner Height (Desktop)" hint="e.g. 400">
+                  <Input type="number" min="100" max="1200" value={settings.bannerHeight ?? 400} onChange={e => set('bannerHeight', Number(e.target.value))} />
+                </Field>
+                <Field label="Banner Height (Mobile)" hint="e.g. 220">
+                  <Input type="number" min="80" max="800" value={settings.bannerHeightMobile ?? 220} onChange={e => set('bannerHeightMobile', Number(e.target.value))} />
+                </Field>
+              </div>
+              
+              <div className="space-y-3 pt-4 border-t border-border">
+                <p className="text-xs text-muted-foreground tracking-widest uppercase">Top Sliders (Hero)</p>
+                <Field label="Desktop Banners">
+                  <BannerArrayEditor banners={Array.isArray(settings.homeBanners) ? settings.homeBanners : []} onChange={urls => set('homeBanners', urls)} />
+                </Field>
+                <Field label="Mobile Banners">
+                  <BannerArrayEditor banners={Array.isArray(settings.homeBannersMobile) ? settings.homeBannersMobile : []} onChange={urls => set('homeBannersMobile', urls)} />
+                </Field>
+              </div>
+              
+              <div className="space-y-3 pt-4 border-t border-border">
+                <p className="text-xs text-muted-foreground tracking-widest uppercase">Mid-page Sliders</p>
+                <Field label="Desktop Banners">
+                  <BannerArrayEditor banners={Array.isArray(settings.perfumeBanners) ? settings.perfumeBanners : []} onChange={urls => set('perfumeBanners', urls)} />
+                </Field>
+                <Field label="Mobile Banners">
+                  <BannerArrayEditor banners={Array.isArray(settings.perfumeBannersMobile) ? settings.perfumeBannersMobile : []} onChange={urls => set('perfumeBannersMobile', urls)} />
+                </Field>
+              </div>
+            </section>
+          </div>
+        )}
+
+        {/* 4. PRODUCT SLIDERS */}
+        {activeTab === 'product_sliders' && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+            {[1, 2, 3].map((num) => {
+              const catKey = `productSlider${num}Category`;
+              const titleArKey = `productSlider${num}TitleAr`;
+              const titleEnKey = `productSlider${num}TitleEn`;
+              const titleTrKey = `productSlider${num}TitleTr`;
+              return (
+                <section key={num} className="bg-card border border-border rounded-sm p-6 space-y-4">
+                  <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Product Slider {num}</h2>
+                  <Field label="Filter Category">
+                    <select
+                      value={settings[catKey] || 'all'}
+                      onChange={e => set(catKey, e.target.value)}
+                      className="w-full bg-secondary border border-border px-3 py-2 text-sm text-foreground focus:outline-none focus:border-[hsl(43_76%_52%)] transition-colors"
+                    >
+                      <option value="all">All Products</option>
+                      <option value="women">Women's Perfumes</option>
+                      <option value="men">Men's Perfumes</option>
+                      <option value="hidden">-- Hidden (Do not show) --</option>
+                    </select>
+                  </Field>
+                  <Field label="Slider Title">
+                    <div className="space-y-3">
+                      <Input value={settings[titleArKey] || ''} onChange={e => set(titleArKey, e.target.value)} placeholder="العنوان العربي" dir="rtl" />
+                      <Input value={settings[titleEnKey] || ''} onChange={e => set(titleEnKey, e.target.value)} placeholder="English Title" />
+                      <Input value={settings[titleTrKey] || ''} onChange={e => set(titleTrKey, e.target.value)} placeholder="Türkçe Başlık" />
+                    </div>
+                  </Field>
+                </section>
+              );
+            })}
+          </div>
+        )}
+
+        {/* 5. BUNDLE OFFERS */}
+        {activeTab === 'bundles' && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+            <section className="bg-card border border-border rounded-sm p-6">
+              <BundleEditor
+                bundles={Array.isArray(settings.bundles) ? settings.bundles : []}
+                onChange={bundles => set('bundles', bundles)}
               />
-            </Field>
-            <Field label="Banner Height — Mobile (px)" hint="e.g. 180, 220, 300">
-              <Input
-                type="number"
-                min="80"
-                max="800"
-                value={settings.bannerHeightMobile ?? 220}
-                onChange={e => set('bannerHeightMobile', Number(e.target.value))}
-                placeholder="220"
-              />
-            </Field>
+            </section>
           </div>
-          <div className="space-y-3">
-            <p className="text-xs text-muted-foreground/70 tracking-widest uppercase border-b border-border pb-2">Top Sliders (Hero)</p>
-            <Field label="Desktop Banners" hint="Shown at the very top of the homepage (Desktop)">
-              <div className="mt-2">
-                <BannerArrayEditor
-                  banners={Array.isArray(settings.homeBanners) ? settings.homeBanners : []}
-                  onChange={urls => set('homeBanners', urls)}
-                />
-              </div>
-            </Field>
-            <Field label="Mobile Banners" hint="Shown at the very top of the homepage (Mobile) — leave empty to fall back to desktop banners">
-              <div className="mt-2">
-                <BannerArrayEditor
-                  banners={Array.isArray(settings.homeBannersMobile) ? settings.homeBannersMobile : []}
-                  onChange={urls => set('homeBannersMobile', urls)}
-                />
-              </div>
-            </Field>
-          </div>
-          <div className="space-y-3">
-            <p className="text-xs text-muted-foreground/70 tracking-widest uppercase border-b border-border pb-2">Mid-page Sliders</p>
-            <Field label="Desktop Banners" hint="Shown in the middle of the homepage between products">
-              <div className="mt-2">
-                <BannerArrayEditor
-                  banners={Array.isArray(settings.perfumeBanners) ? settings.perfumeBanners : []}
-                  onChange={urls => set('perfumeBanners', urls)}
-                />
-              </div>
-            </Field>
-            <Field label="Mobile Banners" hint="Shown in the middle of the homepage (Mobile) — leave empty to fall back to desktop">
-              <div className="mt-2">
-                <BannerArrayEditor
-                  banners={Array.isArray(settings.perfumeBannersMobile) ? settings.perfumeBannersMobile : []}
-                  onChange={urls => set('perfumeBannersMobile', urls)}
-                />
-              </div>
-            </Field>
-          </div>
-        </section>
+        )}
 
-        <section className="bg-card border border-border rounded-sm p-6 space-y-4">
-          <div>
-            <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Bundle Offers</h2>
-            <p className="text-xs text-muted-foreground/50 mt-1">Manage the offer cards shown on the /offers page</p>
-          </div>
-          <BundleEditor
-            bundles={Array.isArray(settings.bundles) ? settings.bundles : []}
-            onChange={bundles => set('bundles', bundles)}
-          />
-        </section>
-
-        <button type="submit" disabled={saving}
-          className="flex items-center gap-2 bg-[hsl(43_76%_52%)] text-black px-8 py-3 text-sm tracking-widest uppercase font-medium hover:bg-[hsl(43_76%_60%)] transition-colors disabled:opacity-50"
-        >
-          <Save size={16} />
-          {saving ? 'Saving…' : 'Save Settings'}
-        </button>
+        {/* Floating Save Button */}
+        <div className="fixed bottom-0 left-0 right-0 lg:left-56 p-4 bg-background border-t border-border z-10">
+          <button type="submit" disabled={saving}
+            className="flex items-center justify-center gap-2 w-full md:w-auto bg-[hsl(43_76%_52%)] text-black px-8 py-3 text-sm tracking-widest uppercase font-medium hover:bg-[hsl(43_76%_60%)] transition-colors disabled:opacity-50 shadow-lg"
+          >
+            <Save size={16} />
+            {saving ? 'Saving…' : 'Save Settings'}
+          </button>
+        </div>
       </form>
     </div>
   );

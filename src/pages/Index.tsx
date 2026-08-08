@@ -35,8 +35,21 @@ const Index = () => {
   const heroTitle = getHeroTitle();
   const heroSubtitle = getHeroSubtitle();
 
-  const womensProducts = allProducts.filter(p => p.category === 'women');
-  const mensProducts = allProducts.filter(p => p.category === 'men');
+  const getSliderProducts = (category: string) => {
+    if (!category || category === 'hidden') return [];
+    if (category === 'all') return allProducts;
+    return allProducts.filter(p => p.category === category);
+  };
+
+  const slider1Products = getSliderProducts(siteSettings?.productSlider1Category || 'all');
+  const slider2Products = getSliderProducts(siteSettings?.productSlider2Category || 'women');
+  const slider3Products = getSliderProducts(siteSettings?.productSlider3Category || 'men');
+
+  const getSliderTitle = (num: 1|2|3, defaultAr: string, defaultEn: string, defaultTr: string) => {
+    if (lang === 'ar') return siteSettings?.[`productSlider${num}TitleAr`] || defaultAr;
+    if (lang === 'tr') return siteSettings?.[`productSlider${num}TitleTr`] || defaultTr;
+    return siteSettings?.[`productSlider${num}TitleEn`] || defaultEn;
+  };
 
   return (
     <div className="bg-background min-h-screen pt-0 md:pt-4">
@@ -56,25 +69,27 @@ const Index = () => {
         )}
       </section>
 
-      {/* Product Slider 1: Best Sellers (All) */}
-      <section className="py-8 px-4 bg-background">
-        <div className="container mx-auto max-w-[1400px]">
-          <div className="flex flex-col items-center text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-foreground uppercase tracking-tight mb-3">
-              {lang === 'ar' ? 'أفضل مبيعاتنا' : lang === 'tr' ? 'EN ÇOK SATANLAR' : 'BEST SELLERS'}
-            </h2>
-            <div className="w-16 h-1 bg-foreground mx-auto" />
+      {/* Product Slider 1 */}
+      {slider1Products.length > 0 && (
+        <section className="py-8 px-4 bg-background">
+          <div className="container mx-auto max-w-[1400px]">
+            <div className="flex flex-col items-center text-center mb-10">
+              <h2 className="text-2xl md:text-3xl font-extrabold text-foreground uppercase tracking-tight mb-3">
+                {getSliderTitle(1, 'أفضل مبيعاتنا', 'BEST SELLERS', 'EN ÇOK SATANLAR')}
+              </h2>
+              <div className="w-16 h-1 bg-foreground mx-auto" />
+            </div>
+            
+            <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:overflow-visible" style={{ scrollbarWidth: 'none' }}>
+              {slider1Products.map((product, i) => (
+                <div key={product.id} className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-auto">
+                  <ProductCard product={product} index={i} />
+                </div>
+              ))}
+            </div>
           </div>
-          
-          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:overflow-visible" style={{ scrollbarWidth: 'none' }}>
-            {allProducts.map((product, i) => (
-              <div key={product.id} className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-auto">
-                <ProductCard product={product} index={i} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Mid-page Image Slider */}
       {midBanners.length > 0 && (
@@ -85,19 +100,19 @@ const Index = () => {
         </section>
       )}
 
-      {/* Product Slider 2: Women's Perfumes */}
-      {womensProducts.length > 0 && (
+      {/* Product Slider 2 */}
+      {slider2Products.length > 0 && (
         <section className="py-8 px-4 bg-secondary/50">
           <div className="container mx-auto max-w-[1400px]">
             <div className="flex flex-col items-center text-center mb-10">
               <h2 className="text-2xl md:text-3xl font-extrabold text-foreground uppercase tracking-tight mb-3">
-                {lang === 'ar' ? 'عطور نسائية' : lang === 'tr' ? 'KADIN PARFÜMLERİ' : 'WOMEN\'S PERFUMES'}
+                {getSliderTitle(2, 'عطور نسائية', 'WOMEN\'S PERFUMES', 'KADIN PARFÜMLERİ')}
               </h2>
               <div className="w-16 h-1 bg-foreground mx-auto" />
             </div>
             
             <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:overflow-visible" style={{ scrollbarWidth: 'none' }}>
-              {womensProducts.map((product, i) => (
+              {slider2Products.map((product, i) => (
                 <div key={product.id} className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-auto">
                   <ProductCard product={product} index={i} />
                 </div>
@@ -107,19 +122,19 @@ const Index = () => {
         </section>
       )}
 
-      {/* Product Slider 3: Men's Perfumes */}
-      {mensProducts.length > 0 && (
+      {/* Product Slider 3 */}
+      {slider3Products.length > 0 && (
         <section className="py-8 px-4 bg-background">
           <div className="container mx-auto max-w-[1400px]">
             <div className="flex flex-col items-center text-center mb-10">
               <h2 className="text-2xl md:text-3xl font-extrabold text-foreground uppercase tracking-tight mb-3">
-                {lang === 'ar' ? 'عطور رجالية' : lang === 'tr' ? 'ERKEK PARFÜMLERİ' : 'MEN\'S PERFUMES'}
+                {getSliderTitle(3, 'عطور رجالية', 'MEN\'S PERFUMES', 'ERKEK PARFÜMLERİ')}
               </h2>
               <div className="w-16 h-1 bg-foreground mx-auto" />
             </div>
             
             <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:overflow-visible" style={{ scrollbarWidth: 'none' }}>
-              {mensProducts.map((product, i) => (
+              {slider3Products.map((product, i) => (
                 <div key={product.id} className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-auto">
                   <ProductCard product={product} index={i} />
                 </div>

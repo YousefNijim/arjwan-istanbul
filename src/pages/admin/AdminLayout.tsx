@@ -31,7 +31,7 @@ const AdminLayout = () => {
   const logout = () => { setToken(null); navigate('/admin/login'); };
 
   const Sidebar = () => (
-    <div className="h-full flex flex-col bg-[#0d0d0d] border-r border-border">
+    <div className="h-full flex flex-col bg-card border-r border-border">
       <div className="p-6 border-b border-border">
         <p className="text-[hsl(43_76%_52%)] font-display text-lg tracking-[0.3em]">ARJWAN</p>
         <p className="text-muted-foreground/50 text-[10px] tracking-widest mt-0.5">ADMIN PANEL</p>
@@ -69,7 +69,7 @@ const AdminLayout = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#080808] flex">
+    <div className="min-h-screen bg-background flex">
       <aside className="hidden lg:flex lg:w-56 shrink-0 flex-col fixed top-0 bottom-0 left-0 z-30">
         <Sidebar />
       </aside>
@@ -84,7 +84,7 @@ const AdminLayout = () => {
       )}
 
       <div className="flex-1 lg:ml-56 flex flex-col min-h-screen">
-        <header className="bg-[#0d0d0d] border-b border-border px-4 md:px-6 h-14 flex items-center justify-between lg:justify-end">
+        <header className="bg-card border-b border-border px-4 md:px-6 h-14 flex items-center justify-between lg:justify-end">
           <button className="lg:hidden text-muted-foreground" onClick={() => setSidebarOpen(!sidebarOpen)}>
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>

@@ -114581,6 +114581,7 @@ var perfumes = pgTable("perfumes", {
   price50ml: integer("price_50ml").notNull(),
   price100ml: integer("price_100ml").notNull(),
   imageUrl: text("image_url").notNull(),
+  additionalImages: jsonb("additional_images").default("[]").notNull(),
   inspiredBy: text("inspired_by").notNull(),
   originalPerfume: text("original_perfume").notNull(),
   notesTopAr: text("notes_top_ar").notNull().default(""),
@@ -123324,6 +123325,9 @@ function registerRoutes(app2) {
   app2.post("/api/admin/perfumes", requireAuth, async (req, res) => {
     try {
       const data = req.body;
+      if (Array.isArray(data.additionalImages)) {
+        data.additionalImages = JSON.stringify(data.additionalImages);
+      }
       const [row] = await db.insert(perfumes).values({
         ...data,
         updatedAt: /* @__PURE__ */ new Date()
@@ -123336,6 +123340,9 @@ function registerRoutes(app2) {
   app2.put("/api/admin/perfumes/:id", requireAuth, async (req, res) => {
     try {
       const { id, createdAt, ...data } = req.body;
+      if (Array.isArray(data.additionalImages)) {
+        data.additionalImages = JSON.stringify(data.additionalImages);
+      }
       const [row] = await db.update(perfumes).set({ ...data, updatedAt: /* @__PURE__ */ new Date() }).where(eq(perfumes.id, req.params.id)).returning();
       if (!row) return res.status(404).json({ error: "Not found" });
       res.json(row);
