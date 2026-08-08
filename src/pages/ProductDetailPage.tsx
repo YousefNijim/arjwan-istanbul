@@ -264,11 +264,7 @@ const ProductDetailPage = () => {
               </AccordionItem>
 
               <AccordionItem title={lang === 'ar' ? 'الاستخدام' : lang === 'tr' ? 'Kullanım Önerisi' : 'How to Use'}>
-                {lang === 'ar' 
-                  ? 'يُرش العطر على أماكن النبض: العنق، والصدر، والمعصمين. تجنب فركه بعد الرش للحفاظ على ثبات المكونات العطرية.'
-                  : lang === 'tr'
-                  ? 'Temiz tene veya kıyafete istenilen sıklıkta uygulanır. Kalıcılığı artırmak için nabız noktalarına (bilek içleri, boyun) sıkılması önerilir.'
-                  : 'Apply to clean skin or clothing as often as desired. To increase longevity, it is recommended to spray on pulse points (inner wrists, neck).'}
+                {product.usage?.[lang]}
               </AccordionItem>
             </div>
           </div>

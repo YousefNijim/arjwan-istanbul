@@ -26,6 +26,9 @@ const EMPTY: Record<string, any> = {
   notesTopAr: '', notesTopEn: '', notesTopTr: '',
   notesMiddleAr: '', notesMiddleEn: '', notesMiddleTr: '',
   notesBaseAr: '', notesBaseEn: '', notesBaseTr: '',
+  usageAr: 'يُرش العطر على أماكن النبض: العنق، والصدر، والمعصمين. تجنب فركه بعد الرش للحفاظ على ثبات المكونات العطرية.', 
+  usageEn: 'Apply to clean skin or clothing as often as desired. To increase longevity, it is recommended to spray on pulse points (inner wrists, neck).', 
+  usageTr: 'Temiz tene veya kıyafete istenilen sıklıkta uygulanır. Kalıcılığı artırmak için nabız noktalarına (bilek içleri, boyun) sıkılması önerilir.',
   featured: false, active: true, sortOrder: 0,
 };
 
@@ -213,6 +216,13 @@ const AdminProductForm = () => {
               <Field label="Turkish"><Input value={form.notesBaseTr} onChange={e => set('notesBaseTr', e.target.value)} /></Field>
             </div>
           </div>
+        </div>
+
+        <div className="bg-card border border-border rounded-sm p-6 space-y-4">
+          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">How to Use</h2>
+          <Field label="Usage (English)"><Textarea value={form.usageEn} onChange={e => set('usageEn', e.target.value)} /></Field>
+          <Field label="Usage (Arabic)"><Textarea value={form.usageAr} onChange={e => set('usageAr', e.target.value)} dir="rtl" /></Field>
+          <Field label="Usage (Turkish)"><Textarea value={form.usageTr} onChange={e => set('usageTr', e.target.value)} /></Field>
         </div>
 
         <div className="flex gap-3">

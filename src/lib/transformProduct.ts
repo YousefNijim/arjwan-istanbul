@@ -18,5 +18,11 @@ export const transformPerfume = (p: any): Product => ({
     middle: { ar: p.notesMiddleAr, en: p.notesMiddleEn, tr: p.notesMiddleTr },
     base: { ar: p.notesBaseAr, en: p.notesBaseEn, tr: p.notesBaseTr },
   },
+  usage: {
+    ar: p.usageAr || 'يُرش العطر على أماكن النبض: العنق، والصدر، والمعصمين. تجنب فركه بعد الرش للحفاظ على ثبات المكونات العطرية.',
+    en: p.usageEn || 'Apply to clean skin or clothing as often as desired. To increase longevity, it is recommended to spray on pulse points (inner wrists, neck).',
+    tr: p.usageTr || 'Temiz tene veya kıyafete istenilen sıklıkta uygulanır. Kalıcılığı artırmak için nabız noktalarına (bilek içleri, boyun) sıkılması önerilir.',
+  },
   featured: p.featured ?? false,
+  active: p.active ?? true,
 });

@@ -114593,6 +114593,9 @@ var perfumes = pgTable("perfumes", {
   notesBaseAr: text("notes_base_ar").notNull().default(""),
   notesBaseEn: text("notes_base_en").notNull().default(""),
   notesBaseTr: text("notes_base_tr").notNull().default(""),
+  usageAr: text("usage_ar").notNull().default("\u064A\u064F\u0631\u0634 \u0627\u0644\u0639\u0637\u0631 \u0639\u0644\u0649 \u0623\u0645\u0627\u0643\u0646 \u0627\u0644\u0646\u0628\u0636: \u0627\u0644\u0639\u0646\u0642\u060C \u0648\u0627\u0644\u0635\u062F\u0631\u060C \u0648\u0627\u0644\u0645\u0639\u0635\u0645\u064A\u0646. \u062A\u062C\u0646\u0628 \u0641\u0631\u0643\u0647 \u0628\u0639\u062F \u0627\u0644\u0631\u0634 \u0644\u0644\u062D\u0641\u0627\u0638 \u0639\u0644\u0649 \u062B\u0628\u0627\u062A \u0627\u0644\u0645\u0643\u0648\u0646\u0627\u062A \u0627\u0644\u0639\u0637\u0631\u064A\u0629."),
+  usageEn: text("usage_en").notNull().default("Apply to clean skin or clothing as often as desired. To increase longevity, it is recommended to spray on pulse points (inner wrists, neck)."),
+  usageTr: text("usage_tr").notNull().default("Temiz tene veya k\u0131yafete istenilen s\u0131kl\u0131kta uygulan\u0131r. Kal\u0131c\u0131l\u0131\u011F\u0131 art\u0131rmak i\xE7in nab\u0131z noktalar\u0131na (bilek i\xE7leri, boyun) s\u0131k\u0131lmas\u0131 \xF6nerilir."),
   featured: boolean("featured").default(false).notNull(),
   active: boolean("active").default(true).notNull(),
   sortOrder: integer("sort_order").default(0).notNull(),
@@ -123235,7 +123238,16 @@ function registerRoutes(app2) {
   });
   app2.get("/api/perfumes", async (_req, res) => {
     try {
-      const rows = await db.select().from(perfumes).where(eq(perfumes.active, true)).orderBy(perfumes.sortOrder, perfumes.createdAt);
+      let rows = await db.select().from(perfumes).where(eq(perfumes.active, true)).orderBy(perfumes.sortOrder, perfumes.createdAt);
+      rows = rows.map((r) => {
+        if (typeof r.additionalImages === "string") {
+          try {
+            r.additionalImages = JSON.parse(r.additionalImages);
+          } catch (e) {
+          }
+        }
+        return r;
+      });
       res.json(rows);
     } catch (e) {
       res.status(500).json({ error: "DB error" });
@@ -123245,6 +123257,12 @@ function registerRoutes(app2) {
     try {
       const [row] = await db.select().from(perfumes).where(eq(perfumes.id, req.params.id));
       if (!row) return res.status(404).json({ error: "Not found" });
+      if (typeof row.additionalImages === "string") {
+        try {
+          row.additionalImages = JSON.parse(row.additionalImages);
+        } catch (e) {
+        }
+      }
       res.json(row);
     } catch (e) {
       res.status(500).json({ error: "DB error" });
@@ -123316,7 +123334,16 @@ function registerRoutes(app2) {
   });
   app2.get("/api/admin/perfumes", requireAuth, async (_req, res) => {
     try {
-      const rows = await db.select().from(perfumes).orderBy(perfumes.sortOrder, perfumes.createdAt);
+      let rows = await db.select().from(perfumes).orderBy(perfumes.sortOrder, perfumes.createdAt);
+      rows = rows.map((r) => {
+        if (typeof r.additionalImages === "string") {
+          try {
+            r.additionalImages = JSON.parse(r.additionalImages);
+          } catch (e) {
+          }
+        }
+        return r;
+      });
       res.json(rows);
     } catch (e) {
       res.status(500).json({ error: "DB error" });

@@ -14,7 +14,9 @@ export interface Product {
     middle: { ar: string; en: string; tr: string };
     base: { ar: string; en: string; tr: string };
   };
+  usage: { ar: string; en: string; tr: string };
   featured?: boolean;
+  active: boolean;
 }
 
 export interface Brand {
