@@ -62,8 +62,8 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       className="h-full"
     >
       <Link to={`/perfumes/${product.id}`} className="group block h-full">
-        <div className="rounded-sm overflow-hidden bg-card border border-[hsl(270_52%_34%/0.45)] hover:border-[hsl(43_76%_52%/0.45)] transition-all duration-500 hover:shadow-[0_0_30px_hsl(270_52%_34%/0.2)] h-full flex flex-col">
-          <div className="aspect-[3/4] overflow-hidden bg-[hsl(0_0%_6%)] relative">
+        <div className="rounded-sm overflow-hidden bg-card border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-xl h-full flex flex-col">
+          <div className="aspect-[3/4] overflow-hidden bg-secondary relative">
             <img
               src={product.image}
               alt={product.originalPerfume || product.name[lang]}
@@ -71,8 +71,6 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               width={400}
               className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
             />
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[hsl(270_52%_50%/0.5)] to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[hsl(43_76%_52%/0.35)] to-transparent" />
 
             {/* Wishlist button — always visible, prominent */}
             <motion.button
@@ -107,7 +105,7 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               </div>
             )}
           </div>
-          <div className="p-5 flex-1 flex flex-col border-t border-[hsl(270_52%_34%/0.3)]">
+          <div className="p-5 flex-1 flex flex-col border-t border-border">
             <div className="flex flex-col gap-0.5 mb-2">
               <h3 className="font-display text-lg text-primary tracking-wider">{product.originalPerfume || product.name[lang]}</h3>
               <div className="flex items-center gap-1.5 flex-wrap">

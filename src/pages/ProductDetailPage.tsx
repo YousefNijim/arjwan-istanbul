@@ -78,7 +78,7 @@ const ProductDetailPage = () => {
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="aspect-[3/4] overflow-hidden rounded-sm border border-[hsl(270_52%_34%/0.4)] bg-[hsl(0_0%_6%)] relative"
+            className="aspect-[3/4] overflow-hidden rounded-sm border border-border bg-secondary relative"
           >
             <img src={product.image} alt={product.originalPerfume || product.name[lang]} className="w-full h-full object-contain" width={800} height={1024} />
             {discount > 0 && (
@@ -91,7 +91,7 @@ const ProductDetailPage = () => {
           {/* Details */}
           <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col">
             <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-1">Arjwan Istanbul</p>
-            <h1 className="font-display text-3xl md:text-4xl text-primary tracking-wider mb-2">{product.originalPerfume || product.name[lang]}</h1>
+            <h1 className="font-display text-3xl md:text-4xl text-foreground tracking-wider mb-2">{product.originalPerfume || product.name[lang]}</h1>
             <div className="flex items-center gap-2 mb-4 flex-wrap">
               <span className="text-xs text-muted-foreground tracking-widest uppercase">by</span>
               <span className="text-sm tracking-wider text-[hsl(270_52%_65%)] font-medium">Arjwan Istanbul</span>
@@ -168,7 +168,7 @@ const ProductDetailPage = () => {
               )}
               <button
                 onClick={handleAddToCart}
-                className="w-full bg-primary text-primary-foreground py-4 text-sm tracking-widest uppercase hover:bg-primary/90 transition-all gold-glow flex items-center justify-center gap-2"
+                className="w-full bg-foreground text-background py-4 text-sm tracking-widest uppercase hover:bg-foreground/80 transition-all flex items-center justify-center gap-2 shadow-xl"
               >
                 <ShoppingBag size={18} />
                 {t('products', 'addToCart')}
@@ -180,7 +180,7 @@ const ProductDetailPage = () => {
         {/* Related Products */}
         {related.length > 0 && (
           <div className="mt-20">
-            <h2 className="font-display text-2xl text-primary tracking-wider text-center mb-8">
+            <h2 className="font-display text-2xl text-foreground tracking-wider text-center mb-8">
               {lang === 'ar' ? 'قد يعجبك أيضاً' : lang === 'tr' ? 'Bunları da Beğenebilirsiniz' : 'You May Also Like'}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

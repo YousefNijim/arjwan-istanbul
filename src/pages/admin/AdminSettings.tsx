@@ -300,7 +300,9 @@ const AdminSettings = () => {
   const [settings, setSettings] = useState<Record<string, any>>({
     logoText: 'ARJWAN', logoSubtext: 'Istanbul', whatsappNumber: '',
     instagramHandle: '', contactEmail: '', heroBackground: '',
-    brandStoryBackground: '', brandStoryImage: '', customLogoUrl: '',
+    heroTitleAr: '', heroTitleEn: '', heroTitleTr: '',
+    heroSubtitleAr: '', heroSubtitleEn: '', heroSubtitleTr: '',
+    customLogoUrl: '',
     homeBanners: [], homeBannersMobile: [],
     perfumeBanners: [], perfumeBannersMobile: [],
     bannerHeight: 400, bannerHeightMobile: 220,
@@ -369,16 +371,28 @@ const AdminSettings = () => {
         </section>
 
         <section className="bg-card border border-border rounded-sm p-6 space-y-4">
-          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Visual Backgrounds</h2>
-          <Field label="Hero Section Background URL" hint="Image URL for the homepage hero section (leave empty for default dark bg)">
-            <Input value={settings.heroBackground || ''} onChange={e => set('heroBackground', e.target.value)} placeholder="/uploads/hero-bg.jpg or https://..." />
+          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Hero Section</h2>
+          <Field label="Hero Background URL" hint="Image URL for the homepage hero section (leave empty for solid background)">
+            <SingleImageUploader value={settings.heroBackground || ''} onChange={v => set('heroBackground', v)} />
           </Field>
-          <Field label="Brand Story Section Background URL" hint="Image URL for the 'Our Story' section background">
-            <Input value={settings.brandStoryBackground || ''} onChange={e => set('brandStoryBackground', e.target.value)} placeholder="/uploads/story-bg.jpg or https://..." />
-          </Field>
-          <Field label="Brand Story Image" hint="Product/packaging image shown on the right side of the Brand Story section">
-            <SingleImageUploader value={settings.brandStoryImage || ''} onChange={v => set('brandStoryImage', v)} />
-          </Field>
+          
+          <div className="space-y-2 pt-2">
+            <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Hero Title</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <Input value={settings.heroTitleAr || ''} onChange={e => set('heroTitleAr', e.target.value)} placeholder="العنوان العربي" dir="rtl" />
+              <Input value={settings.heroTitleEn || ''} onChange={e => set('heroTitleEn', e.target.value)} placeholder="English Title" />
+              <Input value={settings.heroTitleTr || ''} onChange={e => set('heroTitleTr', e.target.value)} placeholder="Türkçe Başlık" />
+            </div>
+          </div>
+
+          <div className="space-y-2 pt-2">
+            <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Hero Subtitle</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <Input value={settings.heroSubtitleAr || ''} onChange={e => set('heroSubtitleAr', e.target.value)} placeholder="النص الفرعي" dir="rtl" />
+              <Input value={settings.heroSubtitleEn || ''} onChange={e => set('heroSubtitleEn', e.target.value)} placeholder="English Subtitle" />
+              <Input value={settings.heroSubtitleTr || ''} onChange={e => set('heroSubtitleTr', e.target.value)} placeholder="Türkçe Alt Başlık" />
+            </div>
+          </div>
         </section>
 
         <section className="bg-card border border-border rounded-sm p-6 space-y-6">
