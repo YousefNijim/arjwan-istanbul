@@ -371,13 +371,13 @@ const AdminSettings = () => {
         </section>
 
         <section className="bg-card border border-border rounded-sm p-6 space-y-4">
-          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Hero Section</h2>
-          <Field label="Hero Background URL" hint="Image URL for the homepage hero section (leave empty for solid background)">
+          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Homepage Promotion</h2>
+          <Field label="Homepage Banner Image URL" hint="Main large image at the top of the homepage">
             <SingleImageUploader value={settings.heroBackground || ''} onChange={v => set('heroBackground', v)} />
           </Field>
           
           <div className="space-y-2 pt-2">
-            <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Hero Title</h3>
+            <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Promotion Section Title</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <Input value={settings.heroTitleAr || ''} onChange={e => set('heroTitleAr', e.target.value)} placeholder="العنوان العربي" dir="rtl" />
               <Input value={settings.heroTitleEn || ''} onChange={e => set('heroTitleEn', e.target.value)} placeholder="English Title" />
@@ -386,7 +386,7 @@ const AdminSettings = () => {
           </div>
 
           <div className="space-y-2 pt-2">
-            <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Hero Subtitle</h3>
+            <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Promotion Section Subtitle</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <Input value={settings.heroSubtitleAr || ''} onChange={e => set('heroSubtitleAr', e.target.value)} placeholder="النص الفرعي" dir="rtl" />
               <Input value={settings.heroSubtitleEn || ''} onChange={e => set('heroSubtitleEn', e.target.value)} placeholder="English Subtitle" />

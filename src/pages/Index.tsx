@@ -47,12 +47,6 @@ const Index = () => {
           {heroBg ? (
             <div className="relative w-full aspect-[4/5] md:aspect-[21/9] bg-secondary overflow-hidden rounded-sm">
               <img src={heroBg} alt="Promotion" className="w-full h-full object-cover" />
-              {(heroTitle || heroSubtitle) && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-black/30">
-                  {heroTitle && <h1 className="text-3xl md:text-6xl font-bold text-white mb-2 md:mb-4 drop-shadow-md uppercase tracking-tight">{heroTitle}</h1>}
-                  {heroSubtitle && <p className="text-lg md:text-2xl text-white font-medium drop-shadow-md">{heroSubtitle}</p>}
-                </div>
-              )}
             </div>
           ) : (
             <div className="w-full aspect-[4/5] md:aspect-[21/9] bg-muted flex items-center justify-center rounded-sm">
@@ -91,17 +85,23 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Promotional Banner (Hardcoded example matching commercial style) */}
-      <section className="px-4 py-12 bg-secondary mt-8 mb-20">
-        <div className="container mx-auto text-center">
-          <h2 className="text-2xl md:text-4xl font-extrabold text-foreground uppercase tracking-tight mb-4">
-            {lang === 'ar' ? 'اكتشف الفرق مع أرجوان' : lang === 'tr' ? 'ARJWAN FARKIYLA TANIŞIN' : 'DISCOVER THE ARJWAN DIFFERENCE'}
-          </h2>
-          <p className="text-muted-foreground font-medium max-w-2xl mx-auto mb-8">
-            {lang === 'ar' ? 'عطور مركزة ومستوحاة من أرقى الماركات العالمية بثبات يدوم طويلاً.' : lang === 'tr' ? 'Dünyanın en iyi markalarından ilham alan, uzun süre kalıcı ve yoğun parfümler.' : 'Highly concentrated perfumes inspired by the best global brands with long-lasting projection.'}
-          </p>
-        </div>
-      </section>
+      {/* Promotional Banner (Dynamic from Admin Settings) */}
+      {(heroTitle || heroSubtitle) && (
+        <section className="px-4 py-12 bg-secondary mt-8 mb-20">
+          <div className="container mx-auto text-center">
+            {heroTitle && (
+              <h2 className="text-2xl md:text-4xl font-extrabold text-foreground uppercase tracking-tight mb-4">
+                {heroTitle}
+              </h2>
+            )}
+            {heroSubtitle && (
+              <p className="text-muted-foreground font-medium max-w-2xl mx-auto mb-8">
+                {heroSubtitle}
+              </p>
+            )}
+          </div>
+        </section>
+      )}
     </div>
   );
 };
