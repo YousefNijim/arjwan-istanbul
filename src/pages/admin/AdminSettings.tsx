@@ -371,12 +371,7 @@ const AdminSettings = () => {
         </section>
 
         <section className="bg-card border border-border rounded-sm p-6 space-y-4">
-          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Homepage Promotion</h2>
-          <Field label="Homepage Banner Image URL" hint="Main large image at the top of the homepage">
-            <SingleImageUploader value={settings.heroBackground || ''} onChange={v => set('heroBackground', v)} />
-          </Field>
-          
-          <div className="space-y-2 pt-2">
+          <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Homepage Promotion Text</h2>
             <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Promotion Section Title</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <Input value={settings.heroTitleAr || ''} onChange={e => set('heroTitleAr', e.target.value)} placeholder="العنوان العربي" dir="rtl" />
@@ -420,8 +415,8 @@ const AdminSettings = () => {
             </Field>
           </div>
           <div className="space-y-3">
-            <p className="text-xs text-muted-foreground/70 tracking-widest uppercase border-b border-border pb-2">Home Page</p>
-            <Field label="Desktop Banners" hint="Shown above Featured Perfumes on desktop">
+            <p className="text-xs text-muted-foreground/70 tracking-widest uppercase border-b border-border pb-2">Top Sliders (Hero)</p>
+            <Field label="Desktop Banners" hint="Shown at the very top of the homepage (Desktop)">
               <div className="mt-2">
                 <BannerArrayEditor
                   banners={Array.isArray(settings.homeBanners) ? settings.homeBanners : []}
@@ -429,7 +424,7 @@ const AdminSettings = () => {
                 />
               </div>
             </Field>
-            <Field label="Mobile Banners" hint="Shown on phones — leave empty to fall back to desktop banners">
+            <Field label="Mobile Banners" hint="Shown at the very top of the homepage (Mobile) — leave empty to fall back to desktop banners">
               <div className="mt-2">
                 <BannerArrayEditor
                   banners={Array.isArray(settings.homeBannersMobile) ? settings.homeBannersMobile : []}
@@ -439,8 +434,8 @@ const AdminSettings = () => {
             </Field>
           </div>
           <div className="space-y-3">
-            <p className="text-xs text-muted-foreground/70 tracking-widest uppercase border-b border-border pb-2">Perfumes Page</p>
-            <Field label="Desktop Banners" hint="Shown at the top of the Perfumes page on desktop">
+            <p className="text-xs text-muted-foreground/70 tracking-widest uppercase border-b border-border pb-2">Mid-page Sliders</p>
+            <Field label="Desktop Banners" hint="Shown in the middle of the homepage between products">
               <div className="mt-2">
                 <BannerArrayEditor
                   banners={Array.isArray(settings.perfumeBanners) ? settings.perfumeBanners : []}
@@ -448,7 +443,7 @@ const AdminSettings = () => {
                 />
               </div>
             </Field>
-            <Field label="Mobile Banners" hint="Shown on phones — leave empty to fall back to desktop banners">
+            <Field label="Mobile Banners" hint="Shown in the middle of the homepage (Mobile) — leave empty to fall back to desktop">
               <div className="mt-2">
                 <BannerArrayEditor
                   banners={Array.isArray(settings.perfumeBannersMobile) ? settings.perfumeBannersMobile : []}
