@@ -69,8 +69,7 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               alt={product.originalPerfume || product.name[lang]}
               loading="lazy"
               width={400}
-              height={533}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[hsl(270_52%_50%/0.5)] to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[hsl(43_76%_52%/0.35)] to-transparent" />
