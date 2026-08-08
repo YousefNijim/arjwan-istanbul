@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from '@/i18n/useTranslation';
 import { useProduct, useProducts } from '@/hooks/useProducts';
@@ -50,6 +50,16 @@ const ProductDetailPage = () => {
   const [concentration, setConcentration] = useState<Concentration>('heavy');
   const [size, setSize] = useState<Size>('50ml');
   const [quantity, setQuantity] = useState(1);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeImage, setActiveImage] = useState(0);
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const scrollLeft = scrollRef.current.scrollLeft;
+    const width = scrollRef.current.offsetWidth;
+    const newActive = Math.round(scrollLeft / width);
+    setActiveImage(newActive);
+  };
 
   const { data: product, isLoading } = useProduct(id!);
   const { data: offers = [] } = useOffers();
@@ -119,8 +129,13 @@ const ProductDetailPage = () => {
 
         <div className="flex flex-col md:flex-row gap-0 md:gap-12 lg:gap-16">
           {/* Images (Mobile full width swipeable, Desktop grid) */}
-          <div className="w-full md:w-1/2">
-            <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 md:gap-4 md:overflow-visible" style={{ scrollbarWidth: 'none' }}>
+          <div className="w-full md:w-1/2 relative">
+            <div 
+              ref={scrollRef}
+              onScroll={handleScroll}
+              className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 md:gap-4 md:overflow-visible" 
+              style={{ scrollbarWidth: 'none' }}
+            >
               {allImages.map((img, idx) => (
                 <div key={idx} className={`snap-center shrink-0 w-full md:w-auto aspect-[4/5] bg-secondary relative flex items-center justify-center p-8 md:rounded-sm ${idx === 0 ? 'md:col-span-2' : ''}`}>
                   <img src={img} alt={`${product.originalPerfume || product.name[lang]} - ${idx+1}`} className="w-full h-full object-contain mix-blend-multiply" />
@@ -132,6 +147,18 @@ const ProductDetailPage = () => {
                 </div>
               ))}
             </div>
+            
+            {/* Mobile Pagination Dots */}
+            {allImages.length > 1 && (
+              <div className="md:hidden absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
+                {allImages.map((_, idx) => (
+                  <div 
+                    key={idx} 
+                    className={`h-1.5 rounded-full transition-all duration-300 ${activeImage === idx ? 'bg-foreground w-4' : 'bg-foreground/20 w-1.5'}`} 
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Details */}
