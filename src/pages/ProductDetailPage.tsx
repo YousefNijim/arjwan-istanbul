@@ -117,25 +117,7 @@ const ProductDetailPage = () => {
               </div>
             </div>
 
-            {/* Concentration */}
-            <div className="mb-5">
-              <h3 className="text-sm text-muted-foreground tracking-wider uppercase mb-2">{t('products', 'concentration')}</h3>
-              <div className="flex flex-wrap gap-2">
-                {concentrations.map((c) => (
-                  <button
-                    key={c.key}
-                    onClick={() => setConcentration(c.key)}
-                    className={`px-4 py-2 text-xs tracking-wider border transition-all ${
-                      concentration === c.key
-                        ? 'bg-primary text-primary-foreground border-primary'
-                        : 'border-border text-muted-foreground hover:border-primary'
-                    }`}
-                  >
-                    {c.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+
 
             {/* Size */}
             <div className="mb-5">

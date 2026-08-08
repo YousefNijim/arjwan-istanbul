@@ -22,7 +22,7 @@ const EMPTY: Record<string, any> = {
   id: '', nameAr: '', nameEn: '', nameTr: '',
   descriptionAr: '', descriptionEn: '', descriptionTr: '',
   category: 'men', price50ml: '', price100ml: '',
-  imageUrl: '', inspiredBy: '', originalPerfume: '',
+  imageUrl: '/bottle-black.png', inspiredBy: '', originalPerfume: '',
   notesTopAr: '', notesTopEn: '', notesTopTr: '',
   notesMiddleAr: '', notesMiddleEn: '', notesMiddleTr: '',
   notesBaseAr: '', notesBaseEn: '', notesBaseTr: '',
@@ -96,7 +96,17 @@ const AdminProductForm = () => {
           <Field label="Name (Arabic)"><Input value={form.nameAr} onChange={e => set('nameAr', e.target.value)} dir="rtl" required /></Field>
           <Field label="Name (Turkish)"><Input value={form.nameTr} onChange={e => set('nameTr', e.target.value)} required /></Field>
           <Field label="Category">
-            <select value={form.category} onChange={e => set('category', e.target.value)} className="w-full bg-secondary border border-border px-3 py-2 text-sm text-foreground focus:outline-none focus:border-[hsl(43_76%_52%)] transition-colors">
+            <select value={form.category} onChange={e => {
+              const newCategory = e.target.value;
+              setForm(f => {
+                const isDefault = f.imageUrl === '' || f.imageUrl === '/bottle-black.png' || f.imageUrl === '/bottle-gold.png';
+                return {
+                  ...f,
+                  category: newCategory,
+                  imageUrl: isDefault ? (newCategory === 'men' ? '/bottle-black.png' : '/bottle-gold.png') : f.imageUrl
+                };
+              });
+            }} className="w-full bg-secondary border border-border px-3 py-2 text-sm text-foreground focus:outline-none focus:border-[hsl(43_76%_52%)] transition-colors">
               <option value="men">Men</option>
               <option value="women">Women</option>
             </select>
