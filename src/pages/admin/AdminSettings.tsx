@@ -372,6 +372,7 @@ const AdminSettings = () => {
 
         <section className="bg-card border border-border rounded-sm p-6 space-y-4">
           <h2 className="text-xs tracking-widest uppercase text-muted-foreground">Homepage Promotion Text</h2>
+          <div className="space-y-2 pt-2">
             <h3 className="text-xs tracking-widest uppercase text-muted-foreground">Promotion Section Title</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <Input value={settings.heroTitleAr || ''} onChange={e => set('heroTitleAr', e.target.value)} placeholder="العنوان العربي" dir="rtl" />
