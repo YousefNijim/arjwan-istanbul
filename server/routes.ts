@@ -127,6 +127,12 @@ export function registerRoutes(app: Express) {
   app.post('/api/admin/perfumes', requireAuth, async (req, res) => {
     try {
       const data = req.body;
+      
+      // Fix pg array conversion bug for array of strings in jsonb
+      if (Array.isArray(data.additionalImages)) {
+        data.additionalImages = JSON.stringify(data.additionalImages);
+      }
+
       const [row] = await db.insert(perfumes).values({
         ...data,
         updatedAt: new Date(),
@@ -140,6 +146,12 @@ export function registerRoutes(app: Express) {
   app.put('/api/admin/perfumes/:id', requireAuth, async (req, res) => {
     try {
       const { id, createdAt, ...data } = req.body;
+      
+      // Fix pg array conversion bug for array of strings in jsonb
+      if (Array.isArray(data.additionalImages)) {
+        data.additionalImages = JSON.stringify(data.additionalImages);
+      }
+
       const [row] = await db.update(perfumes)
         .set({ ...data, updatedAt: new Date() })
         .where(eq(perfumes.id, req.params.id))
