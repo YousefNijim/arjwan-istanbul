@@ -1,19 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from '@/i18n/useTranslation';
 import ProductCard from '@/components/ProductCard';
-import { motion } from 'framer-motion';
-import hero1 from '@/assets/hero-1.jpg';
-import hero2 from '@/assets/hero-2.jpg';
 import { useProducts } from '@/hooks/useProducts';
 import { useSettings } from '@/hooks/useSettings';
 import BannerSlider from '@/components/BannerSlider';
-
-const heroImages = [hero1, hero2];
+import { Helmet } from 'react-helmet-async';
 
 const Index = () => {
-  const { t, lang } = useTranslation();
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const { lang } = useTranslation();
   const { data: allProducts = [] } = useProducts();
   const { data: siteSettings } = useSettings();
   
@@ -22,20 +16,13 @@ const Index = () => {
   const bannerHeight = Number(siteSettings?.bannerHeight) || 400;
   const bannerHeightMobile = Number(siteSettings?.bannerHeightMobile) || 220;
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const heroBg = siteSettings?.heroBackground;
+  const heroBg = siteSettings?.heroBackground || '/hero-bg-default.jpg'; // We can use a default if we want
   
   const getHeroTitle = () => {
     if (lang === 'ar' && siteSettings?.heroTitleAr) return siteSettings.heroTitleAr;
     if (lang === 'tr' && siteSettings?.heroTitleTr) return siteSettings.heroTitleTr;
     if (siteSettings?.heroTitleEn) return siteSettings.heroTitleEn;
-    return t('hero', 'tagline');
+    return '';
   };
 
   const getHeroSubtitle = () => {
@@ -44,95 +31,75 @@ const Index = () => {
     return siteSettings?.heroSubtitleEn || '';
   };
 
+  const heroTitle = getHeroTitle();
+  const heroSubtitle = getHeroSubtitle();
+
   return (
-    <div className="bg-background min-h-screen">
-      {/* Hero */}
-      <section className="relative h-[80vh] min-h-[600px] overflow-hidden bg-secondary">
-        {heroBg ? (
-          <div className="absolute inset-0">
-            <img src={heroBg} alt="Hero" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px]" />
-          </div>
-        ) : (
-          heroImages.map((img, i) => (
-            <div
-              key={i}
-              className={`absolute inset-0 transition-opacity duration-1000 ${
-                i === currentSlide ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
-              <img
-                src={img}
-                alt="Arjwan Istanbul"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px]" />
+    <div className="bg-background min-h-screen pt-4 md:pt-8">
+      <Helmet>
+        <title>Arjwan Istanbul | Uzun Süre Kalıcı Kaliteli Parfümler</title>
+        <meta name="description" content="Arjwan Istanbul - En kaliteli esanslarla üretilmiş, uzun süre kalıcı ve etkileyici niş ve tasarımcı muadili parfümler." />
+      </Helmet>
+      
+      {/* Hero Section (Commercial Banner Style) */}
+      <section className="px-4 mb-10">
+        <div className="container mx-auto">
+          {heroBg ? (
+            <div className="relative w-full aspect-[4/5] md:aspect-[21/9] bg-secondary overflow-hidden rounded-sm">
+              <img src={heroBg} alt="Promotion" className="w-full h-full object-cover" />
+              {(heroTitle || heroSubtitle) && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-black/30">
+                  {heroTitle && <h1 className="text-3xl md:text-6xl font-bold text-white mb-2 md:mb-4 drop-shadow-md uppercase tracking-tight">{heroTitle}</h1>}
+                  {heroSubtitle && <p className="text-lg md:text-2xl text-white font-medium drop-shadow-md">{heroSubtitle}</p>}
+                </div>
+              )}
             </div>
-          ))
-        )}
-
-        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="max-w-3xl mx-auto"
-          >
-            <img
-              src={siteSettings?.customLogoUrl || "/arjwan_logo_transparent.png"}
-              alt="Arjwan Istanbul"
-              className="h-32 md:h-48 w-auto object-contain mx-auto mb-8 opacity-90"
-            />
-            
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display text-foreground mb-6 leading-tight">
-              {getHeroTitle()}
-            </h1>
-            
-            {getHeroSubtitle() && (
-              <p className="text-foreground/70 text-lg md:text-xl mb-10 font-body max-w-2xl mx-auto">
-                {getHeroSubtitle()}
-              </p>
-            )}
-
-            <Link
-              to="/perfumes"
-              className="inline-block bg-foreground text-background px-10 py-4 text-sm tracking-widest uppercase hover:bg-foreground/80 transition-all shadow-xl"
-            >
-              {t('hero', 'shopNow')}
-            </Link>
-          </motion.div>
+          ) : (
+            <div className="w-full aspect-[4/5] md:aspect-[21/9] bg-muted flex items-center justify-center rounded-sm">
+              <p className="text-muted-foreground uppercase font-bold tracking-widest text-sm">Arjwan Istanbul</p>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Offer Banners */}
+      {/* Dynamic Offer Banners (If added by admin) */}
       {homeBanners.length > 0 && (
-        <section className="px-4 py-8">
+        <section className="px-4 mb-10">
           <div className="container mx-auto">
             <BannerSlider banners={homeBanners} bannersMobile={homeBannersMobile} height={bannerHeight} heightMobile={bannerHeightMobile} links={['/offers', '/offers']} />
           </div>
         </section>
       )}
 
-      {/* Perfumes Collection */}
-      <section className="py-24 px-4 bg-background">
-        <div className="container mx-auto max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="font-display text-3xl md:text-4xl text-foreground tracking-wider mb-4">
-              {lang === 'ar' ? 'مجموعة العطور الخاصة بنا' : lang === 'tr' ? 'Parfüm Koleksiyonumuz' : 'Our Perfume Collection'}
+      {/* Perfumes Collection (Commercial Layout) */}
+      <section className="py-8 px-4 bg-background">
+        <div className="container mx-auto max-w-[1400px]">
+          <div className="flex flex-col items-center text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-foreground uppercase tracking-tight mb-3">
+              {lang === 'ar' ? 'أفضل مبيعاتنا' : lang === 'tr' ? 'EN ÇOK SATANLAR' : 'BEST SELLERS'}
             </h2>
-            <div className="w-12 h-0.5 bg-primary mx-auto" />
-          </motion.div>
+            <div className="w-16 h-1 bg-foreground mx-auto" />
+          </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 md:gap-8">
+          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:overflow-visible" style={{ scrollbarWidth: 'none' }}>
             {allProducts.map((product, i) => (
-              <ProductCard key={product.id} product={product} index={i} />
+              <div key={product.id} className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-auto">
+                <ProductCard product={product} index={i} />
+              </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Promotional Banner (Hardcoded example matching commercial style) */}
+      <section className="px-4 py-12 bg-secondary mt-8 mb-20">
+        <div className="container mx-auto text-center">
+          <h2 className="text-2xl md:text-4xl font-extrabold text-foreground uppercase tracking-tight mb-4">
+            {lang === 'ar' ? 'اكتشف الفرق مع أرجوان' : lang === 'tr' ? 'ARJWAN FARKIYLA TANIŞIN' : 'DISCOVER THE ARJWAN DIFFERENCE'}
+          </h2>
+          <p className="text-muted-foreground font-medium max-w-2xl mx-auto mb-8">
+            {lang === 'ar' ? 'عطور مركزة ومستوحاة من أرقى الماركات العالمية بثبات يدوم طويلاً.' : lang === 'tr' ? 'Dünyanın en iyi markalarından ilham alan, uzun süre kalıcı ve yoğun parfümler.' : 'Highly concentrated perfumes inspired by the best global brands with long-lasting projection.'}
+          </p>
         </div>
       </section>
     </div>

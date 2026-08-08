@@ -6,6 +6,7 @@ export interface Product {
   price50ml: number;
   price100ml: number;
   image: string;
+  additionalImages?: string[];
   inspiredBy: string;
   originalPerfume: string;
   notes: {

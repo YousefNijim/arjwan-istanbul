@@ -21,6 +21,7 @@ export const perfumes = pgTable('perfumes', {
   price50ml: integer('price_50ml').notNull(),
   price100ml: integer('price_100ml').notNull(),
   imageUrl: text('image_url').notNull(),
+  additionalImages: jsonb('additional_images').default('[]').notNull(),
   inspiredBy: text('inspired_by').notNull(),
   originalPerfume: text('original_perfume').notNull(),
   notesTopAr: text('notes_top_ar').notNull().default(''),

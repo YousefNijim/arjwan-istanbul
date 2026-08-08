@@ -1,3 +1,4 @@
+import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -31,7 +32,8 @@ import AdminBundleEditor from "./pages/admin/AdminBundleEditor";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
     <LanguageProvider>
       <TooltipProvider>
         <Sonner />
@@ -72,6 +74,7 @@ const App = () => (
       </TooltipProvider>
     </LanguageProvider>
   </QueryClientProvider>
+  </HelmetProvider>
 );
 
 export default App;

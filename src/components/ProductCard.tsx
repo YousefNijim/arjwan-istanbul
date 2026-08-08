@@ -1,142 +1,112 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from '@/i18n/useTranslation';
 import { Product } from '@/data/products';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useOffers, getDiscountForProduct } from '@/hooks/useOffers';
 import { useWishlistStore } from '@/store/wishlistStore';
-import { Heart } from 'lucide-react';
+import { useCartStore } from '@/store/cartStore';
+import { Heart, ShoppingBag } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { SHOW_PRICES } from '@/lib/config';
 import { toast } from 'sonner';
 
-interface ProductCardProps {
+interface Props {
   product: Product;
-  index?: number;
+  index: number;
 }
 
-const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
-  const { t, lang } = useTranslation();
+const ProductCard = ({ product, index }: Props) => {
+  const { lang, t } = useTranslation();
   const { data: offers = [] } = useOffers();
-
-  const discount = getDiscountForProduct(
-    offers,
-    product.id,
-    product.category,
-    product.inspiredBy,
-  );
-
   const { toggle, has } = useWishlistStore();
-  const inWishlist = has(product.id);
+  const addItem = useCartStore((s) => s.addItem);
+  
+  const discount = getDiscountForProduct(offers, product.id, product.category, product.inspiredBy);
+  const isWishlisted = has(product.id);
 
-  const handleWishlist = (e: React.MouseEvent) => {
+  // Default to 50ml price for display
+  const price = discount > 0 
+    ? Math.round(product.price50ml * (1 - discount / 100))
+    : product.price50ml;
+
+  const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const adding = !inWishlist;
-    toggle(product.id);
-    if (adding) {
-      toast.success(
-        lang === 'ar' ? 'تمت الإضافة إلى المفضلة ❤️' :
-        lang === 'tr' ? 'Favorilere eklendi ❤️' :
-        'Added to wishlist ❤️',
-        { duration: 1800 }
-      );
-    } else {
-      toast(
-        lang === 'ar' ? 'تمت الإزالة من المفضلة' :
-        lang === 'tr' ? 'Favorilerden kaldırıldı' :
-        'Removed from wishlist',
-        { duration: 1500 }
-      );
-    }
+    addItem({
+      productId: product.id,
+      name: product.originalPerfume || product.name[lang],
+      size: '50ml',
+      concentration: 'heavy',
+      quantity: 1,
+      price: price,
+      image: product.image,
+    });
+    toast.success(lang === 'ar' ? 'تمت الإضافة إلى السلة' : lang === 'tr' ? 'Sepete eklendi' : 'Added to cart');
   };
-
-  const discountedPrice50 = discount > 0
-    ? Math.round(product.price50ml * (1 - discount / 100))
-    : null;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="h-full"
     >
-      <Link to={`/perfumes/${product.id}`} className="group block h-full">
-        <div className="rounded-sm overflow-hidden bg-card border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-xl h-full flex flex-col">
-          <div className="aspect-[3/4] overflow-hidden bg-secondary relative">
-            <img
-              src={product.image}
-              alt={product.originalPerfume || product.name[lang]}
-              loading="lazy"
-              width={400}
-              className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
-            />
+      <Link to={`/perfumes/${product.id}`} className="group block h-full bg-white border border-border hover:border-foreground/20 transition-all duration-300 rounded-sm overflow-hidden flex flex-col relative shadow-sm hover:shadow-md">
+        
+        {/* Image Container */}
+        <div className="aspect-[4/5] bg-secondary relative overflow-hidden p-4 flex items-center justify-center">
+          <img
+            src={product.image}
+            alt={product.originalPerfume || product.name[lang]}
+            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+          />
+          
+          {/* Discount Badge */}
+          {discount > 0 && (
+            <div className="absolute top-2 left-2 bg-red-600 text-white text-[10px] md:text-xs font-bold tracking-wider px-2 py-1 uppercase rounded-sm">
+              % {discount} {lang === 'ar' ? 'خصم' : lang === 'tr' ? 'İNDİRİM' : 'OFF'}
+            </div>
+          )}
 
-            {/* Wishlist button — always visible, prominent */}
-            <motion.button
-              onClick={handleWishlist}
-              aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
-              whileTap={{ scale: 0.85 }}
-              className={`absolute top-3 end-3 w-9 h-9 rounded-full flex items-center justify-center z-10 shadow-md transition-all duration-200 ${
-                inWishlist
-                  ? 'bg-primary/90 backdrop-blur-sm'
-                  : 'bg-background/75 backdrop-blur-sm hover:bg-background/95'
-              }`}
-            >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={inWishlist ? 'filled' : 'empty'}
-                  initial={{ scale: 0.6, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.6, opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  <Heart
-                    size={16}
-                    className={inWishlist ? 'fill-primary-foreground text-primary-foreground' : 'text-foreground/80'}
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </motion.button>
+          {/* Wishlist Button */}
+          <button
+            onClick={(e) => { e.preventDefault(); toggle(product.id); }}
+            className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 hover:bg-white text-foreground shadow-sm transition-colors"
+          >
+            <Heart size={16} fill={isWishlisted ? 'currentColor' : 'none'} className={isWishlisted ? 'text-red-500' : ''} />
+          </button>
+        </div>
 
-            {discount > 0 && (
-              <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold tracking-wider px-2 py-1 rounded-sm shadow-lg">
-                -{discount}%
-              </div>
-            )}
-          </div>
-          <div className="p-5 flex-1 flex flex-col border-t border-border">
-            <div className="flex flex-col gap-0.5 mb-2">
-              <h3 className="font-display text-lg text-primary tracking-wider">{product.originalPerfume || product.name[lang]}</h3>
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-xs text-muted-foreground/70 tracking-widest uppercase">by Arjwan Istanbul</span>
-                {product.inspiredBy && (
-                  <span className="text-[10px] text-muted-foreground/60 border border-[hsl(270_52%_50%/0.25)] px-1.5 py-0.5 tracking-wider">{product.inspiredBy}</span>
+        {/* Content */}
+        <div className="p-4 flex-1 flex flex-col text-center">
+          <h3 className="font-bold text-sm md:text-base text-foreground mb-1 uppercase tracking-tight line-clamp-1">
+            {product.originalPerfume || product.name[lang]}
+          </h3>
+          <p className="text-xs text-muted-foreground font-medium mb-3 line-clamp-1 uppercase tracking-wider">
+            {product.inspiredBy ? `${product.inspiredBy} MUADİLİ` : 'ARJWAN ISTANBUL'}
+          </p>
+          
+          <div className="mt-auto">
+            {SHOW_PRICES && (
+              <div className="flex flex-col items-center justify-center gap-1 mb-4">
+                {discount > 0 ? (
+                  <>
+                    <span className="text-xs text-muted-foreground line-through font-medium">{product.price50ml} TL</span>
+                    <span className="text-lg md:text-xl font-extrabold text-foreground">{price} TL</span>
+                  </>
+                ) : (
+                  <span className="text-lg md:text-xl font-extrabold text-foreground">{product.price50ml} TL</span>
                 )}
               </div>
-            </div>
-            <p className="text-muted-foreground text-sm line-clamp-2 flex-1">{product.description[lang]}</p>
-            <div className="mt-3 flex items-center justify-between pt-3 border-t border-border/50">
-              {SHOW_PRICES && (
-                discount > 0 ? (
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-muted-foreground/50 text-xs line-through">
-                      {product.price50ml} TL
-                    </span>
-                    <span className="text-[hsl(43_76%_52%)] text-sm font-semibold">
-                      {discountedPrice50} TL
-                    </span>
-                  </div>
-                ) : (
-                  <span className="text-primary text-sm font-medium">
-                    {product.price50ml} TL
-                  </span>
-                )
-              )}
-              <span className="text-xs text-muted-foreground tracking-wider uppercase group-hover:text-primary transition-colors ms-auto">
-                {t('products', 'viewDetails')} →
-              </span>
-            </div>
+            )}
+            
+            <button
+              onClick={handleAddToCart}
+              className="w-full bg-foreground text-background py-2.5 text-xs md:text-sm font-bold tracking-widest uppercase hover:bg-foreground/80 transition-colors flex items-center justify-center gap-2 rounded-sm"
+            >
+              <ShoppingBag size={16} />
+              {lang === 'ar' ? 'أضف للسلة' : lang === 'tr' ? 'SEPETE EKLE' : 'ADD TO CART'}
+            </button>
           </div>
         </div>
       </Link>

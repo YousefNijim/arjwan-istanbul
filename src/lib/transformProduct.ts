@@ -10,6 +10,7 @@ export const transformPerfume = (p: any): Product => ({
   image: p.imageUrl || (p.category === 'men' 
     ? 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/man%20perfume%20car%20pic.png' 
     : 'https://zsdlifnvprnadznustgt.supabase.co/storage/v1/object/public/perfume-images/women%20perfume%20card%20pic.png'),
+  additionalImages: Array.isArray(p.additionalImages) ? p.additionalImages : [],
   inspiredBy: p.inspiredBy,
   originalPerfume: p.originalPerfume,
   notes: {
