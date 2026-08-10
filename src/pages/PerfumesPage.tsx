@@ -519,7 +519,7 @@ const PerfumesPage = () => {
           {/* Products grid */}
           <div className="flex-1 min-w-0">
             {productsLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+              <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-5">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div key={i} className="animate-pulse bg-card border border-border rounded-sm aspect-[3/4]" />
                 ))}
@@ -539,7 +539,7 @@ const PerfumesPage = () => {
               </motion.div>
             ) : (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-5">
                   {currentProducts.map((product, i) => (
                     <ProductCard key={product.id} product={product} index={i} />
                   ))}
