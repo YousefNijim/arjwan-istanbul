@@ -9,6 +9,7 @@ const EMPTY_OFFER = {
 
 const typeLabels: Record<string, string> = {
   all: 'All Products', category: 'Category', brand: 'Brand', perfume: 'Specific Product',
+  buy_x: 'Cart Quantity (Buy X get Y)',
 };
 
 const AdminOffers = () => {
@@ -93,8 +94,16 @@ const AdminOffers = () => {
                   <option value="category">Category (Men/Women)</option>
                   <option value="brand">Specific Brand</option>
                   <option value="perfume">Specific Product</option>
+                  <option value="buy_x">Cart Quantity (e.g. 3rd item is discounted)</option>
                 </select>
               </div>
+              {form.type === 'buy_x' && (
+                <div>
+                  <label className="text-xs text-muted-foreground tracking-widest uppercase block mb-1.5">Trigger Quantity (X)</label>
+                  <input type="number" min={2} max={100} value={form.targetValue} onChange={e => set('targetValue', e.target.value)} required placeholder="e.g. 3 for 3rd item" className="w-full bg-secondary border border-border px-3 py-2 text-sm text-foreground focus:outline-none focus:border-[hsl(43_76%_52%)]" />
+                  <p className="text-[10px] text-muted-foreground mt-1">If 3, every 3rd (cheapest) item gets the discount below.</p>
+                </div>
+              )}
               {form.type === 'category' && (
                 <div>
                   <label className="text-xs text-muted-foreground tracking-widest uppercase block mb-1.5">Category</label>

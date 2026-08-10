@@ -5,6 +5,7 @@ import { useCartStore } from '@/store/cartStore';
 import { Minus, Plus, Trash2, ShoppingBag, MessageCircle, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
+import { useCartTotal } from '@/hooks/useCartTotal';
 import { SHOW_PRICES } from '@/lib/config';
 
 const FIELD_CLASS = (hasError: boolean) =>
@@ -14,7 +15,8 @@ const FIELD_CLASS = (hasError: boolean) =>
 
 const CartPage = () => {
   const { t, lang } = useTranslation();
-  const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCartStore();
+  const { items, removeItem, updateQuantity, clearCart } = useCartStore();
+  const { subtotal, discountAmount, total } = useCartTotal(items);
   const [form, setForm] = useState({ name: '', phone: '', email: '', address: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -48,7 +50,8 @@ const CartPage = () => {
     if (!validate()) return;
     setSubmitting(true);
 
-    const total = totalPrice();
+    setSubmitting(true);
+
     const orderItems = items.map(item => ({
       productId: item.productId,
       name: item.name,
@@ -68,9 +71,9 @@ const CartPage = () => {
           email: form.email,
           address: form.address,
           items: orderItems,
-          subtotal: total,
-          discountAmount: 0,
-          total,
+          subtotal: subtotal,
+          discountAmount: discountAmount,
+          total: total,
         }),
       });
     } catch {}
@@ -91,8 +94,10 @@ const CartPage = () => {
       `*Items:*`,
       ...lines,
       ``,
+      discountAmount > 0 ? `🛒 *Subtotal: ${subtotal} TL*` : '',
+      discountAmount > 0 ? `🎁 *Discount: -${discountAmount} TL*` : '',
       `💰 *Total: ${total} TL*`,
-    ].join('\n');
+    ].filter(Boolean).join('\n');
 
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     setWhatsappUrl(url);
@@ -270,9 +275,24 @@ const CartPage = () => {
               className="mt-5 p-5 border border-border rounded-sm bg-card/50"
             >
               {SHOW_PRICES && (
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground text-sm tracking-wider">{t('cart', 'total')}</span>
-                  <span className="text-3xl text-primary font-display tracking-wider">{totalPrice()} TL</span>
+                <div className="space-y-3">
+                  {discountAmount > 0 && (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground text-sm tracking-wider">{lang === 'ar' ? 'المجموع الفرعي' : lang === 'tr' ? 'Ara Toplam' : 'Subtotal'}</span>
+                        <span className="text-xl text-foreground font-medium">{subtotal} TL</span>
+                      </div>
+                      <div className="flex items-center justify-between text-green-500">
+                        <span className="text-sm tracking-wider font-medium">{lang === 'ar' ? 'الخصم' : lang === 'tr' ? 'İndirim' : 'Discount'}</span>
+                        <span className="text-xl font-bold">-{discountAmount} TL</span>
+                      </div>
+                      <div className="h-px bg-border my-2" />
+                    </>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground text-sm tracking-wider">{t('cart', 'total')}</span>
+                    <span className="text-3xl text-primary font-display tracking-wider">{total} TL</span>
+                  </div>
                 </div>
               )}
             </motion.div>
