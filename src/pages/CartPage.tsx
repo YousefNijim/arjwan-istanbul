@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '@/i18n/useTranslation';
 import { useCartStore } from '@/store/cartStore';
-import { Minus, Plus, Trash2, ShoppingBag, MessageCircle, CheckCircle2 } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingBag, MessageCircle, CheckCircle2, Tag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useCartTotal } from '@/hooks/useCartTotal';
@@ -16,7 +16,7 @@ const FIELD_CLASS = (hasError: boolean) =>
 const CartPage = () => {
   const { t, lang } = useTranslation();
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
-  const { subtotal, discountAmount, total } = useCartTotal(items);
+  const { subtotal, discountAmount, total, itemsWithDiscounts } = useCartTotal(items);
   const [form, setForm] = useState({ name: '', phone: '', email: '', address: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -213,7 +213,7 @@ const CartPage = () => {
 
             <AnimatePresence>
               <div className="space-y-3">
-                {items.map((item, i) => (
+                {itemsWithDiscounts.map((item, i) => (
                   <motion.div
                     key={`${item.productId}-${item.size}-${item.concentration}`}
                     initial={{ opacity: 0, x: isRtl ? 20 : -20 }}
@@ -234,7 +234,22 @@ const CartPage = () => {
                         {item.size} • {t('products', item.concentration)}
                       </p>
                       {SHOW_PRICES && (
-                        <p className="text-primary font-semibold mt-1.5 text-sm">{item.price * item.quantity} TL</p>
+                        <div className="mt-1.5 space-y-1">
+                          {item.cartDiscounts.length > 0 ? (
+                            <>
+                              <p className="text-muted-foreground text-xs line-through">{item.price * item.quantity} TL</p>
+                              {item.cartDiscounts.map((d, idx) => (
+                                <p key={idx} className="text-[11px] text-[hsl(43_76%_52%)] flex items-center gap-1">
+                                  <Tag size={10} />
+                                  {d.label} (-{d.amount} TL)
+                                </p>
+                              ))}
+                              <p className="text-primary font-semibold text-sm">{item.rowTotal} TL</p>
+                            </>
+                          ) : (
+                            <p className="text-primary font-semibold text-sm">{item.price * item.quantity} TL</p>
+                          )}
+                        </div>
                       )}
                     </div>
 
