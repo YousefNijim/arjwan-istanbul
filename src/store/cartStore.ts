@@ -5,7 +5,6 @@ export interface CartItem {
   productId: string;
   name: string;
   size: '50ml' | '100ml';
-  concentration: 'heavy' | 'light';
   quantity: number;
   price: number;
   image: string;
@@ -14,8 +13,8 @@ export interface CartItem {
 interface CartStore {
   items: CartItem[];
   addItem: (item: CartItem) => void;
-  removeItem: (productId: string, size: string, concentration: string) => void;
-  updateQuantity: (productId: string, size: string, concentration: string, quantity: number) => void;
+  removeItem: (productId: string, size: string) => void;
+  updateQuantity: (productId: string, size: string, quantity: number) => void;
   clearCart: () => void;
   totalPrice: () => number;
   totalItems: () => number;
@@ -27,12 +26,12 @@ export const useCartStore = create<CartStore>()(
       items: [],
       addItem: (item) => set((state) => {
     const existing = state.items.find(
-      (i) => i.productId === item.productId && i.size === item.size && i.concentration === item.concentration
+      (i) => i.productId === item.productId && i.size === item.size
     );
     if (existing) {
       return {
         items: state.items.map((i) =>
-          i.productId === item.productId && i.size === item.size && i.concentration === item.concentration
+          i.productId === item.productId && i.size === item.size
             ? { ...i, quantity: i.quantity + item.quantity }
             : i
         ),
@@ -40,20 +39,20 @@ export const useCartStore = create<CartStore>()(
     }
     return { items: [...state.items, item] };
   }),
-  removeItem: (productId, size, concentration) =>
+  removeItem: (productId, size) =>
     set((state) => ({
       items: state.items.filter(
-        (i) => !(i.productId === productId && i.size === size && i.concentration === concentration)
+        (i) => !(i.productId === productId && i.size === size)
       ),
     })),
-  updateQuantity: (productId, size, concentration, quantity) =>
+  updateQuantity: (productId, size, quantity) =>
     set((state) => ({
       items: quantity <= 0
         ? state.items.filter(
-            (i) => !(i.productId === productId && i.size === size && i.concentration === concentration)
+            (i) => !(i.productId === productId && i.size === size)
           )
         : state.items.map((i) =>
-            i.productId === productId && i.size === size && i.concentration === concentration
+            i.productId === productId && i.size === size
               ? { ...i, quantity }
               : i
           ),

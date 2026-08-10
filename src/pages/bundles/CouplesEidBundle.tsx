@@ -69,8 +69,7 @@ const CouplesEidBundle = () => {
     addItem({
       productId: 'bundle-couples-eid',
       name: b.cartName,
-      size: b.cartSize,
-      concentration: 'heavy',
+      size: '50ml',
       quantity: 1,
       price: Number(b.price),
       image: (b.perfumes[0]?.image) || '/bottle-gold.png',

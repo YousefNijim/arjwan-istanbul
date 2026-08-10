@@ -124,8 +124,8 @@ const AdminOrders = () => {
                     {(order.items as any[]).map((item: any, i: number) => (
                       <div key={i} className="flex items-center justify-between text-sm">
                         <div>
-                          <span className="text-foreground">{item.name}</span>
-                          <span className="text-muted-foreground ml-2">{item.size} · {item.concentration} × {item.quantity}</span>
+                          <span className="font-medium">{item.name}</span>
+                          <span className="text-muted-foreground ml-2">{item.size} × {item.quantity}</span>
                         </div>
                         <span className="text-[hsl(43_76%_52%)]">{item.price * item.quantity} TL</span>
                       </div>

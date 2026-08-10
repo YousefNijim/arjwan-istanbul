@@ -182,8 +182,7 @@ const BundlePage = () => {
     addItem({
       productId: `bundle-${bundleId}`,
       name: b.cartName || b.title,
-      size: b.cartSize,
-      concentration: 'heavy',
+      size: '50ml',
       quantity: 1,
       price: Number(b.price),
       image: b.perfumes[0]?.image || '/bottle-gold.png',

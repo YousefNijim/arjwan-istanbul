@@ -35,7 +35,6 @@ const ProductCard = ({ product, index }: Props) => {
       productId: product.id,
       name: product.originalPerfume || product.name[lang],
       size: '50ml',
-      concentration: 'heavy',
       quantity: 1,
       price: price,
       image: product.image,

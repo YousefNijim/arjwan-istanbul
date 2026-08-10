@@ -68,7 +68,6 @@ const EidTripleBundle = () => {
       productId: 'bundle-eid-triple',
       name: 'Eid Triple Collection — Aseel + Khayaal + Barri (50ml each)',
       size: '50ml',
-      concentration: 'heavy',
       quantity: 1,
       price: BUNDLE_PRICE,
       image: ASEEL_IMAGE || '/bottle-gold.png',

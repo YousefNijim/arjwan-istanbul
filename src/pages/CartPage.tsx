@@ -56,7 +56,6 @@ const CartPage = () => {
       productId: item.productId,
       name: item.name,
       size: item.size,
-      concentration: item.concentration,
       quantity: item.quantity,
       price: item.price,
     }));
@@ -79,8 +78,7 @@ const CartPage = () => {
     } catch {}
 
     const lines = items.map(item => {
-      const concLabel = t('products', item.concentration);
-      return `• ${item.name} (${item.size}, ${concLabel}) x${item.quantity} = ${item.price * item.quantity} TL`;
+      return `• ${item.name} (${item.size}) x${item.quantity} = ${item.price * item.quantity} TL`;
     });
 
     const message = [
@@ -215,7 +213,7 @@ const CartPage = () => {
               <div className="space-y-3">
                 {itemsWithDiscounts.map((item, i) => (
                   <motion.div
-                    key={`${item.productId}-${item.size}-${item.concentration}`}
+                    key={`${item.productId}-${item.size}`}
                     initial={{ opacity: 0, x: isRtl ? 20 : -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
@@ -231,7 +229,7 @@ const CartPage = () => {
                     <div className="flex-1 min-w-0">
                       <h3 className="text-primary font-display tracking-wider text-sm truncate">{item.name}</h3>
                       <p className="text-xs text-muted-foreground mt-0.5">
-                        {item.size} • {t('products', item.concentration)}
+                        {item.size}
                       </p>
                       {SHOW_PRICES && (
                         <div className="mt-1.5 space-y-1">
@@ -255,7 +253,7 @@ const CartPage = () => {
 
                     <div className="flex flex-col items-end gap-3 flex-shrink-0">
                       <button
-                        onClick={() => removeItem(item.productId, item.size, item.concentration)}
+                        onClick={() => removeItem(item.productId, item.size)}
                         className="text-muted-foreground hover:text-red-400 transition-colors"
                         aria-label="Remove"
                       >
@@ -263,14 +261,14 @@ const CartPage = () => {
                       </button>
                       <div className="flex items-center gap-1.5">
                         <button
-                          onClick={() => updateQuantity(item.productId, item.size, item.concentration, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.productId, item.size, item.quantity - 1)}
                           className="w-6 h-6 border border-border rounded-sm flex items-center justify-center hover:border-primary transition-colors"
                         >
                           <Minus size={10} />
                         </button>
                         <span className="text-sm w-5 text-center tabular-nums">{item.quantity}</span>
                         <button
-                          onClick={() => updateQuantity(item.productId, item.size, item.concentration, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.productId, item.size, item.quantity + 1)}
                           className="w-6 h-6 border border-border rounded-sm flex items-center justify-center hover:border-primary transition-colors"
                         >
                           <Plus size={10} />

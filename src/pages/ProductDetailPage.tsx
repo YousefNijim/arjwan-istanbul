@@ -47,7 +47,6 @@ const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const { t, lang } = useTranslation();
   const addItem = useCartStore((s) => s.addItem);
-  const [concentration, setConcentration] = useState<Concentration>('heavy');
   const [size, setSize] = useState<Size>('50ml');
   const [quantity, setQuantity] = useState(1);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -93,7 +92,6 @@ const ProductDetailPage = () => {
       productId: product.id,
       name: product.originalPerfume || product.name[lang],
       size,
-      concentration,
       quantity,
       price,
       image: product.image,
@@ -194,19 +192,30 @@ const ProductDetailPage = () => {
                 <h3 className="text-sm text-foreground font-bold tracking-tight uppercase">{lang === 'ar' ? 'الحجم' : lang === 'tr' ? 'Hacim' : 'Size'}</h3>
               </div>
               <div className="flex flex-wrap gap-3">
-                {(['50ml', '100ml'] as const).map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => setSize(s)}
-                    className={`flex-1 py-3 text-sm font-bold tracking-wider border rounded-sm transition-all uppercase ${
-                      size === s
-                        ? 'bg-foreground text-background border-foreground'
-                        : 'bg-white border-border text-foreground hover:border-foreground/40'
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
+                {(['50ml', '100ml'] as const).map((s) => {
+                  const isDisabled = s === '100ml';
+                  return (
+                    <button
+                      key={s}
+                      onClick={() => !isDisabled && setSize(s)}
+                      disabled={isDisabled}
+                      className={`relative flex-1 py-3 text-sm font-bold tracking-wider border rounded-sm transition-all uppercase overflow-hidden ${
+                        isDisabled
+                          ? 'bg-secondary/50 border-border text-muted-foreground cursor-not-allowed opacity-60'
+                          : size === s
+                          ? 'bg-foreground text-background border-foreground'
+                          : 'bg-white border-border text-foreground hover:border-foreground/40'
+                      }`}
+                    >
+                      {s}
+                      {isDisabled && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-full h-px bg-muted-foreground/30 absolute -rotate-12" />
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
