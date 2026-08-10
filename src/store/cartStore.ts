@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export interface CartItem {
   productId: string;
@@ -20,9 +21,11 @@ interface CartStore {
   totalItems: () => number;
 }
 
-export const useCartStore = create<CartStore>((set, get) => ({
-  items: [],
-  addItem: (item) => set((state) => {
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      addItem: (item) => set((state) => {
     const existing = state.items.find(
       (i) => i.productId === item.productId && i.size === item.size && i.concentration === item.concentration
     );
@@ -58,4 +61,9 @@ export const useCartStore = create<CartStore>((set, get) => ({
   clearCart: () => set({ items: [] }),
   totalPrice: () => get().items.reduce((sum, item) => sum + item.price * item.quantity, 0),
   totalItems: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
-}));
+    }),
+    {
+      name: 'arjwan-cart-storage', // unique name in localStorage
+    }
+  )
+);
